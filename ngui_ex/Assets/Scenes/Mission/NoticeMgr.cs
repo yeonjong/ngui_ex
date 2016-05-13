@@ -42,6 +42,12 @@ public class NoticeMgr : MonoBehaviour{
     }
 
     private void Show(string msg) {
+        if (!noticeGrid.activeSelf) {
+            noticeGrid.SetActive(true);
+            noticeGrid.GetComponent<TweenScale>().enabled = true;
+            noticeGrid.GetComponent<TweenAlpha>().enabled = true;
+        }
+
         GameObject mail = noticeGrid.AddChild(noticeMsgPrefab);
         mail.GetComponentInChildren<UILabel>().text = msg;
         noticeGrid.GetComponent<UIGrid>().Reposition();
@@ -53,6 +59,8 @@ public class NoticeMgr : MonoBehaviour{
     private IEnumerator DequeNoticeMsgQueue() {
         yield return new WaitForSeconds(destroyedTime);
         Destroy(noticeMsgQueue.Dequeue() as GameObject);
+
+        if (noticeMsgQueue.Count == 0) noticeGrid.SetActive(false);
     }
 
 }
