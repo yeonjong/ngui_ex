@@ -3,6 +3,6 @@
 public class BattlePanel : MonoBehaviour {
 
     public void ClickForwardToLobbyBtn() {
-        GameStateMgr.getInst().ForwardState(GAME_STATE.LobbyState);
+        GameStateMgr.GetInst().ForwardState(GAME_STATE.LobbyState);
     }
 }

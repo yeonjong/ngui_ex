@@ -37,7 +37,7 @@ public class IntroPanel : MonoBehaviour {
     }
 
     public void ClickWelcomeBtn() {
-        GameStateMgr.getInst().ForwardState(GAME_STATE.LobbyState);
+        GameStateMgr.GetInst().ForwardState(GAME_STATE.LobbyState);
     }
 
 }

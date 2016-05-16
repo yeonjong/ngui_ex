@@ -25,7 +25,7 @@ public class GameStateMgr {
 
     private GameStateMgr() { }
 
-    public static GameStateMgr getInst() {
+    public static GameStateMgr GetInst() {
         return inst;
     }
 

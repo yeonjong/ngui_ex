@@ -15,13 +15,14 @@ public class LoginChecker {
     //?시작문자가 알파벳인지 확인한다. (아이디)
     //?특수문자가 포함됬는지 확인한다. (비밀번호)
     //?알파벳, 숫자, 한글, 특수문자 중 2가지 이상의 조합인지 확인한다. (비밀번호)
+    // a-z, 0-9, 특수문자 // 중 2가지 이상으로 구성되는지 확인.
 
     ///^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,16}$/;
     //(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,16}
     //조건식이 8~16자 영문/숫자/특수문자(!@$%^&* 만 허용) 중 3종류를 조합으로 사용하실 수 있습니다.
     //@"^[a-zA-Z]+[0-9]*$");
     //private string idPattern = @"^[a-zA-Z0-9]*$";
-    
+
     // 테스트 정규식.
     //private string aPattern = @"^[a-zA-Z0-9]{4,20}$";   //영문&숫자로 제한, 길이 4~20으로 제한. -> idPattern
     private string bPattern = @"[a-zA-Z]";              //영문이 있는지.
@@ -36,9 +37,7 @@ public class LoginChecker {
         // HttpReqMgr.inst.Req("login", "{ "id" : "hello", "pa" : "hello"}", System.Action act_on_complete)
         // 로그인되면 {"result" : "yes"}
         // 로그인실패 {"result" : "no"}
-
-
-
+        HttpReqMgr.GetInst().Req("login", "body", OnLoginComplete);
 
 
         if (id == null || pw == null) {

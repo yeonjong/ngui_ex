@@ -6,65 +6,50 @@ public class GuiMgr : MonoBehaviour {
 
     private static GuiMgr inst;
 
-    private GameObject panelsRoot;
-
     private GameObject pnl_intro;
     private GameObject pnl_lobby;
     private GameObject pnl_battle;
 
     void Awake() {
         if (!inst) { inst = this; }
-
-        panelsRoot = transform.FindChild("Panels").gameObject;
-
-        //pnl_intro = panelsRoot.AddChild(Resources.Load("pnl_intro") as GameObject);
-
-        //pnl_lobby = panelsRoot.AddChild(Resources.Load("pnl_lobby") as GameObject);
-        //pnl_lobby.SetActive(false);
-
-        //pnl_battle = panelsRoot.AddChild(Resources.Load("pnl_battle") as GameObject);
-        //pnl_battle.SetActive(false);
-
-        // tODO:
-        //pnl_intro = GameObjectPoolMgr.inst.Load("pnl_intro", Vector3.zero, Quaternion.identity);
-        //pnl_intro.transform.parent = ...;
-
-
     }
-
+    
     private GuiMgr() { }
 
     public static GuiMgr GetInst() {
         return inst;
     }
 
-    /*
-	void Start () {
-        // TODO: pnl_login 을 생성해서 Panels의 자식으로 생성하자.
-        // a-z, 0-9, 특수문자 // 중 2가지 이상으로 구성되는지 확인.
-        MakeLoginPanel();
-    }
-    */
-
     public void ShowBattleUI()
     {
+        if (pnl_battle == null)
+            pnl_battle = GameObjectPoolMgr.GetInst().Load("pnl_battle", Vector3.zero, Quaternion.identity);
+
         pnl_battle.SetActive(true);
     }
 
     public void HideBattleUI()
     {
-        pnl_battle.SetActive(false);
+        if (pnl_battle != null)
+            pnl_battle.SetActive(false);
     }
 
     public void ShowLobbyUI() {
+        if (pnl_lobby == null)
+            pnl_lobby = GameObjectPoolMgr.GetInst().Load("pnl_lobby", Vector3.zero, Quaternion.identity);
+
         pnl_lobby.SetActive(true);
     }
 
     public void HideLobbyUI() {
-        pnl_lobby.SetActive(false);
+        if (pnl_lobby != null)
+            pnl_lobby.SetActive(false);
     }
 
     public void ShowIntroUI() {
+        if (pnl_intro == null)
+            pnl_intro = GameObjectPoolMgr.GetInst().Load("pnl_intro", Vector3.zero, Quaternion.identity);
+        
         pnl_intro.SetActive(true);
 
         string userID = LoginChecker.GetUserID();
@@ -76,7 +61,8 @@ public class GuiMgr : MonoBehaviour {
     }
 
     public void HideIntroUI() {
-        pnl_intro.SetActive(false);
+        if (pnl_intro != null)
+            pnl_intro.SetActive(false);
     }
 
     private void ShowWelcomSubPanel(string userID) {
@@ -93,7 +79,7 @@ public class GuiMgr : MonoBehaviour {
     private void SuccessLogin(string log) {
         Debug.Log(log);
         pnl_intro.SetActive(false);
-        GameStateMgr.getInst().ForwardState(GAME_STATE.LobbyState);
+        GameStateMgr.GetInst().ForwardState(GAME_STATE.LobbyState);
     }
 
     private void FailLogin(string log) {
