@@ -76,24 +76,20 @@ public class GuiMgr : MonoBehaviour {
         pnl_intro.GetComponent<IntroPanel>().ShowLoginPanel();
     }
 
-    private void SuccessLogin(string log) {
+    public void SuccessLogin(string log) {
         Debug.Log(log);
         pnl_intro.SetActive(false);
         GameStateMgr.GetInst().ForwardState(GAME_STATE.LobbyState);
     }
 
-    private void FailLogin(string log) {
+    public void FailLogin(string log) {
         Debug.Log(log);
         pnl_intro.GetComponent<IntroPanel>().InitLoginInputFields();
     }
     
     public void TryLogin(string id, string pw) {
         LoginChecker loginChecker = new LoginChecker();
-        string log = null;
-        bool isSuccess = loginChecker.CheckLoginInfomation(id, pw, ref log);
-
-        if (isSuccess) SuccessLogin(log);
-        else FailLogin(log);
+        loginChecker.CheckLoginInfomation(id, pw);
     }
 	
 }
