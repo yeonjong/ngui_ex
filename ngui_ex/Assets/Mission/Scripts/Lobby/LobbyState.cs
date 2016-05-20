@@ -2,6 +2,7 @@
 
     public override void OnEnter(GAME_STATE prev_gs) {
         base.OnEnter(prev_gs);
+        
         GuiMgr.GetInst().ShowLobbyUI();
     }
 

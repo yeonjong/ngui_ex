@@ -31,13 +31,6 @@ public class NoticeMgr : MonoBehaviour{
     // 만약 이전 msg가 표시중이라면 이전 msg를 위로 올린다.
     // msg 유지기간은 5초로 하자.
     public void ShowNotice(string msg) {
-
-        /*
-        if (noticeMsgQueue.Count > noticeLimit) {
-            //끝부터 바로 삭제. //앞선 코루틴을 취소해야되...
-            //Destroy(noticeMsgQueue.Dequeue() as GameObject);
-        }
-        */
         Show(msg);
     }
 

@@ -2,6 +2,7 @@
 
 public enum GAME_STATE {
     IntroState,
+    PatchState,
     LobbyState,
     BattleState,
 }
@@ -17,6 +18,7 @@ public class GameStateMgr {
 
         gameStates = new GameStateBase[Enum.GetValues(typeof(GAME_STATE)).Length];
         gameStates[(int)GAME_STATE.IntroState] = new IntroState();
+        gameStates[(int)GAME_STATE.PatchState] = new PatchState();
         gameStates[(int)GAME_STATE.LobbyState] = new LobbyState();
         gameStates[(int)GAME_STATE.BattleState] = new BattleState();
 

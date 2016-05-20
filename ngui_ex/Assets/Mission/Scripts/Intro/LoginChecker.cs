@@ -43,26 +43,27 @@ public class LoginChecker {
             } else {
                 userID = null;
                 candidateID = id;
-                
-                // HttpReqMgr.inst.Req("login", "{ "id" : "hello", "pa" : "hello"}", System.Action act_on_complete)
-                // 로그인되면 {"result" : "yes"}
-                // 로그인실패 {"result" : "no"}
-                string requestJson = JsonParser.MakeLoginJson(id, pw);
+
+                string requestJson = JsonParser.MakeJson(new UserInfo(id, pw));
                 HttpReqMgr.GetInst().Req("login", requestJson, OnLoginComplete); return;
             }
         }
     }
 
-    private void OnLoginComplete(string result)
+    private void OnLoginComplete(string responseJson)
     {
-        if (result == null) Debug.Log("fail");
+        if (responseJson == null) {
+            GuiMgr.GetInst().FailLogin("Server connection failed.. please retry"); //please recover
+            //GuiMgr.GetInst().SuccessLogin("Login success! Wellcome TEST_ID"); //imsi
+            return;
+        }
 
-        result = JsonParser.GetLoginJsonsResult(result);
-        if ("ok".Equals(result)) {
+        LoginResponse loginResponse = JsonParser.GetResponseJsonClassObject<LoginResponse>(responseJson);
+        if ("ok".Equals(loginResponse.result)) {
             userID = candidateID;
             GuiMgr.GetInst().SuccessLogin("Login success! Wellcome " + userID); return;
         } else {
-            GuiMgr.GetInst().FailLogin("Fail server connection"); return;
+            GuiMgr.GetInst().FailLogin("Login denied.. please retry"); return;
         }
     }
 

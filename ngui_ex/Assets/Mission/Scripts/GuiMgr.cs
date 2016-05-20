@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Text;
-//using System.Collections;
 
 public class GuiMgr : MonoBehaviour {
 
@@ -9,15 +8,35 @@ public class GuiMgr : MonoBehaviour {
     private GameObject pnl_intro;
     private GameObject pnl_lobby;
     private GameObject pnl_battle;
+    private GameObject pnl_patch;
+
+    private PatchPanel patchPanel;
 
     void Awake() {
         if (!inst) { inst = this; }
     }
-    
+
     private GuiMgr() { }
 
     public static GuiMgr GetInst() {
         return inst;
+    }
+
+    public void ShowPatchUI()
+    {
+        if (pnl_patch == null)
+            pnl_patch = GameObjectPoolMgr.GetInst().Load("pnl_patch", Vector3.zero, Quaternion.identity);
+
+        pnl_patch.SetActive(true);
+        patchPanel = pnl_patch.GetComponent<PatchPanel>();
+    }
+
+
+    public void HidePatchUI() {
+        if (pnl_patch != null) {
+            pnl_patch.SetActive(false);
+            patchPanel = null;
+        }
     }
 
     public void ShowBattleUI()
@@ -79,7 +98,7 @@ public class GuiMgr : MonoBehaviour {
     public void SuccessLogin(string log) {
         Debug.Log(log);
         pnl_intro.SetActive(false);
-        GameStateMgr.GetInst().ForwardState(GAME_STATE.LobbyState);
+        GameStateMgr.GetInst().ForwardState(GAME_STATE.PatchState);
     }
 
     public void FailLogin(string log) {
@@ -90,6 +109,14 @@ public class GuiMgr : MonoBehaviour {
     public void TryLogin(string id, string pw) {
         LoginChecker loginChecker = new LoginChecker();
         loginChecker.CheckLoginInfomation(id, pw);
+    }
+
+    public void OnPatchProgressChanged(float percent) {
+        patchPanel.SetPatchProgress(percent);
+    }
+
+    public void OnPatchCompleted() {
+        patchPanel.ShowLobbyBtn();
     }
 	
 }

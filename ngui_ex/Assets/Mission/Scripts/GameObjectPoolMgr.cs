@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-//using System.Collections;
 using System.Collections.Generic;
 
 public class GameObjectPoolMgr : MonoBehaviour {
@@ -30,6 +29,29 @@ public class GameObjectPoolMgr : MonoBehaviour {
     // 1. 현재 해당 인스턴스가 없다면
     //   0. 프리팹을 로드한다. 그리고 리스트에 삽입한다.
     //   1. 인스턴스를 제작하고 리턴한다. 끝...
+    public bool CheckObject(string prf_name)
+    {
+        switch (prf_name)
+        {
+            case "pnl_lobby":
+            case "pnl_battle":
+                if (gameObjectDictionary.ContainsKey(prf_name)) {
+                    return true;
+                } else if (prefabDictionary.ContainsKey(prf_name)) {
+                    return true;
+                }
+                return false;
+
+            default:
+                return true;
+        }
+    }
+
+    public void Reg(string name, GameObject pref) {
+        if (pref == null) return;
+        prefabDictionary.Add(name, pref);
+    }
+
     public GameObject Load(string prf_name, Vector3 v3, Quaternion q) {
         GameObject temp;
 
@@ -37,7 +59,19 @@ public class GameObjectPoolMgr : MonoBehaviour {
             temp = gameObjectDictionary[prf_name];
         } else {
             if (!prefabDictionary.ContainsKey(prf_name)) {
-                temp = Resources.Load(prf_name) as GameObject;
+
+                switch (prf_name) {
+                    case "pnl_lobby":
+                    case "pnl_battle":
+                        temp = AssetBundleMgr.GetInst().LoadAsset(prf_name);
+                        break;
+
+                    default:
+                        temp = Resources.Load(prf_name) as GameObject;
+                        break;
+                }
+
+                
                 if (temp == null) {
                     return null; //prf_name에 해당하는 프리팹이 Resources 폴더에 없다.
                 }
