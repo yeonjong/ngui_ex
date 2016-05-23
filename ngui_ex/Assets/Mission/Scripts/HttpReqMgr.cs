@@ -10,11 +10,11 @@ public class HttpReqMgr : MonoBehaviour {
 
     private static HttpReqMgr inst;
 
-    private static string localRepository = new Uri(Application.persistentDataPath).LocalPath;
+    private static string localRepository;
 
 #if UNITY_EDITOR
-    private const string ROOT_URI_DOWNLOADSERVER = "http://192.168.0.179:9192/";
-    private const string ROOT_URI_WEBSERVER = "http://192.168.0.179:9292/";
+    private const string ROOT_URI_DOWNLOADSERVER = "http://192.168.0.165:9192/";
+    private const string ROOT_URI_WEBSERVER = "http://192.168.0.165:9292/";
 #elif UNITY_ANDROID
     private const string ROOT_URI_DOWNLOADSERVER = "http://192.168.0.179:9192/";
     private const string ROOT_URI_WEBSERVER = "http://192.168.0.179:9292/";
@@ -33,6 +33,8 @@ public class HttpReqMgr : MonoBehaviour {
     
     void Awake() {
         if (!inst) { inst = this; }
+
+        localRepository = new Uri(Application.persistentDataPath).LocalPath;
     }
 
     public string GetJsonData(string method) {
@@ -85,7 +87,7 @@ public class HttpReqMgr : MonoBehaviour {
         act_on_complete.Invoke(responseJson); //act_on_complete(responseJson); //이렇게 사용해도 된다.
     }
 
-    public void AsyncDownloadAssetBundle(string method)
+    public void AsyncDownloadAssetBundle(string method)//, UpdateProgress up, DoNextDownload nd)
     {
         uri = new StringBuilder(ROOT_URI_DOWNLOADSERVER);
         uri.Append(method);
@@ -106,7 +108,7 @@ public class HttpReqMgr : MonoBehaviour {
         try
         {
             WebClient webClient = new WebClient();
-            webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler((sender, e) => ProgressChanged(sender, e, method));
+            webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler((sender, e) => ProgressChanged(sender, e, method));//, up));
             webClient.DownloadFileCompleted += new AsyncCompletedEventHandler((sender, e) => Completed(sender, e, method));
             webClient.DownloadFileAsync(new Uri(uri.ToString()), downloadRepositoryPath);
         }
@@ -123,7 +125,8 @@ public class HttpReqMgr : MonoBehaviour {
         Debug.Log("download " + downloadTarget);
         AssetBundleMgr.GetInst().OnDownloaded(downloadTarget);
     }
-    private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e, string downlaodTarget) {
+    private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e, string downlaodTarget) {//, UpdateProgress up) {
+        //up(e.ProgressPercentage);
         AssetBundleMgr.GetInst().OnProgressChanged(e.ProgressPercentage, downlaodTarget);
     }
 

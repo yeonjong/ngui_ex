@@ -4,7 +4,7 @@ public class IntroPanel : MonoBehaviour {
 
     private string id;
     private string pw;
-
+    
     public void SetID(string id) {
         this.id = id;
     }

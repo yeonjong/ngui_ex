@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System;
@@ -49,50 +48,6 @@ public class LoadingHelper : MonoBehaviour
             }
             return count;
         //}
-    }
-    
-    void FixedUpdate()
-    {
-        try
-        {
-
-            count = 0;
-            if (max != 0)
-            {
-
-                count = test();
-
-
-                if (beforeCount != count)
-                {
-                    GuiMgr.GetInst().OnPatchProgressChanged((float)count / (float)max);
-
-                    if (count >= max)
-                    {
-                        AssetBundleMgr.GetInst().Complete();
-                        GuiMgr.GetInst().OnPatchCompleted();
-                        Destroy(this.gameObject);
-                        return;
-                    }
-                    else if (updated)
-                    {
-                        AssetBundleMgr.GetInst().Down();
-                        updated = false;
-                    }
-                    beforeCount = count;
-                }
-            }
-
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.Message);
-        }
-        finally {
-
-        }
-
-
     }
 
 }

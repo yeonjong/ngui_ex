@@ -3,7 +3,7 @@ import BaseHTTPServer
 
 import json
 
-HOST_NAME = '192.168.0.179' #'127.0.0.1' # !!!REMEMBER TO CHANGE THIS!!!
+HOST_NAME = '192.168.0.165' #'127.0.0.1' # !!!REMEMBER TO CHANGE THIS!!!
 PORT_NUMBER = 9292 # Maybe set this to 9000.
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):

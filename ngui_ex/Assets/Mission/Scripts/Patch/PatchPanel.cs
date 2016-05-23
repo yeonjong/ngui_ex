@@ -8,6 +8,13 @@ public class PatchPanel : MonoBehaviour {
         transform.FindChild("btn_forward_to_lobby").gameObject.SetActive(false);
         patchProgress = transform.FindChild("progress_bar_patch_persent").GetComponent<UISlider>();
     }
+    
+    /*
+    public void Open()
+    {
+        AssetBundleMgr.GetInst().function1 += SetPatchProgress;
+    }
+    */
 
     public void ClickForwardToIntroBtn() {
         GameStateMgr.GetInst().ForwardState(GAME_STATE.IntroState);

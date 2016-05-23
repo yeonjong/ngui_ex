@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Text;
+using System.Collections;
 
 public class GuiMgr : MonoBehaviour {
 
@@ -29,6 +30,9 @@ public class GuiMgr : MonoBehaviour {
 
         pnl_patch.SetActive(true);
         patchPanel = pnl_patch.GetComponent<PatchPanel>();
+        /*
+        patchPanel.Open();
+        */
     }
 
 
@@ -70,7 +74,7 @@ public class GuiMgr : MonoBehaviour {
             pnl_intro = GameObjectPoolMgr.GetInst().Load("pnl_intro", Vector3.zero, Quaternion.identity);
         
         pnl_intro.SetActive(true);
-
+        
         string userID = LoginChecker.GetUserID();
         if (userID == null) {
             ShowLoginSubPanel();
@@ -78,7 +82,7 @@ public class GuiMgr : MonoBehaviour {
             ShowWelcomSubPanel(userID);
         }
     }
-
+    
     public void HideIntroUI() {
         if (pnl_intro != null)
             pnl_intro.SetActive(false);
