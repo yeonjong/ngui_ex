@@ -30,9 +30,6 @@ public class GuiMgr : MonoBehaviour {
 
         pnl_patch.SetActive(true);
         patchPanel = pnl_patch.GetComponent<PatchPanel>();
-        /*
-        patchPanel.Open();
-        */
     }
 
 

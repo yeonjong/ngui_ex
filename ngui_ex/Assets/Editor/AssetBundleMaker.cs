@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 public class AssetBundleMaker {
 
-    private const string OUTPUT_PATH = "Assets/@AssetBundle";
+    private const string OUTPUT_PATH_ANDROID = "Assets/@AssetBundle/Android";
+	private const string OUTPUT_PATH_IOS = "Assets/@AssetBundle/iOS";
 
-    /*
+/* (unity4) 옛날 버전의 빌드 방법. */
+/*
     [MenuItem("Tools/AssetBundle/MakeAssetBundle - Track dependencies (v4)")]
     static void ExportResource()
     {
@@ -16,12 +19,11 @@ public class AssetBundleMaker {
         Debug.Log(path);
         if (path.Length != 0)
         {
-            Object[] selection = Selection.GetFiltered(typeof(Object), SelectionMode.DeepAssets);
+            UnityEngine.Object[] selection = Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets);
             BuildPipeline.BuildAssetBundle(Selection.activeObject, selection, path, 0);
             Selection.objects = selection;
         }
     }
-
     [MenuItem("Tools/AssetBundle/MakeAssetBundle - No dependency tracking (v4)")]
     static void ExportResourceNoTrack()
     {
@@ -31,9 +33,12 @@ public class AssetBundleMaker {
             BuildPipeline.BuildAssetBundle(Selection.activeObject, Selection.objects, path);
         }
     }
-    */
+*/
 
-    [MenuItem("Tools/AssetBundle/CheckAssetDatabase - with editor (v5)")]
+
+/* (unity5) 에디터 스타일의 AssetBundle 만들기. */
+/*
+	[MenuItem("Tools/AssetBundle/Editor Type/CheckAssetDatabase - with editor (v5)")]
     static void CheckAssetDatabase()
     {
         StringBuilder sb = new StringBuilder("[Check Asset Database]");
@@ -69,7 +74,7 @@ public class AssetBundleMaker {
         sb.Length = 0; sb.Capacity = 0;
     }
 
-    [MenuItem("Tools/AssetBundle/RemoveUnusedAssetBundleNames on AssetDatabase - with editor (v5) (be careful !!)")]
+	[MenuItem("Tools/AssetBundle/Editor Type/RemoveUnusedAssetBundleNames on AssetDatabase - with editor (v5) (be careful !!)")]
     static void RemoveAllUnusedAssetBundleNames()
     {
         StringBuilder sb = new StringBuilder("[Show unused AssetBundles]");
@@ -101,7 +106,7 @@ public class AssetBundleMaker {
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Tools/AssetBundle/MakeAssetBundle - with editor (v5)")]
+	[MenuItem("Tools/AssetBundle/Editor Type/MakeAssetBundle - with editor (v5)")]
     static void CreateNewAssetBundleFromAssetDatabase()
     {
         CheckAssetDatabase();
@@ -117,8 +122,11 @@ public class AssetBundleMaker {
 
         AssetDatabase.Refresh();
     }
+*/
 
-    /*
+
+/* (unity5) 스크립트 스타일의 AssetBundle 만들기. */
+	/* 
     [MenuItem("Tools/AssetBundle/MakeAssetBundle - with script, just one target prefab (v5)")]
     static void CreateNewAssetBundleFromScript()
     {
@@ -146,16 +154,21 @@ public class AssetBundleMaker {
     }
     */
 
-    [MenuItem("Tools/AssetBundle/MakeAssetBundle - with script, many target prefabs (v5)")]
+	[MenuItem("Tools/Make AssetBundle for iOS")]// - with script, many target prefabs (v5)")]
     static void CreateNewAssetBundleFromAssetBundleBuild()
     {
-        string outputPath = OUTPUT_PATH; //"AssetBundlesFromBuildInfo";
-        if (!Directory.Exists(outputPath)) {
-            Debug.Log("Directory not exist: " + outputPath);
-        }
+		if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.iOS) {
+			Debug.LogError ("<b>Build for iOS</b> requires <b>iOS Platform</b> to be selected.");
+			return;
+		}
+
+		if (!Directory.Exists(OUTPUT_PATH_IOS)) {
+			Debug.Log("Directory not exist: " + OUTPUT_PATH_IOS);
+			return;
+		}
         
         List<string> targetPrefabList = new List<string>();
-        foreach (Object obj in Selection.objects) {
+        foreach (UnityEngine.Object obj in Selection.objects) {
             targetPrefabList.Add(AssetDatabase.GetAssetPath(obj));
         }
 
@@ -170,35 +183,62 @@ public class AssetBundleMaker {
         buildMap[0].assetBundleName = assetBundleName;
         buildMap[0].assetNames = targetPrefabList.ToArray();
         
-        BuildPipeline.BuildAssetBundles(outputPath, buildMap, BuildAssetBundleOptions.None, BuildTarget.Android);
-        Debug.Log("Make one AssetBundle: " + assetBundleName);
-
-        AssetDatabase.Refresh();
+		try {
+			BuildPipeline.BuildAssetBundles (OUTPUT_PATH_IOS, buildMap, BuildAssetBundleOptions.None, BuildTarget.iOS);
+			Debug.Log("Made one AssetBundle for iOS: " + assetBundleName);
+		} catch (Exception e) {
+			Debug.Log ("Failure make some assetBundles");
+			Debug.Log (e.Message);
+		} finally {
+			AssetDatabase.Refresh();
+		}
     }
 
-        /* AssetBundleBuild 참고
-         * 
-            AssetBundleBuild[] buildMap = new[] {
-                new AssetBundleBuild { assetBundleName = "test.unity3d", assetNames = new[] { "Assets/Test.prefab"} },
-            };
-         * 
-         * 
-            // Create the array of bundle build details.
-            AssetBundleBuild[] buildMap = new AssetBundleBuild[2];
+	[MenuItem("Tools/Make AssetBundle for Android")]// - with script, many target prefabs (v5)")]
+	static void CreateNewAssetBundleFromAssetBundleBuild2()
+	{
+		if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.Android) {
+			Debug.LogError ("<b>Build for Android</b> requires <b>Android Platform</b> to be selected.");
+			return;
+		}
+			
+		if (!Directory.Exists(OUTPUT_PATH_ANDROID)) {
+			Debug.Log("Directory not exist: " + OUTPUT_PATH_ANDROID);
+			return;
+		}
 
-            buildMap[0].assetBundleName = "EnemyBundle";
-            string[] enemyAssets = new[] { "EnemyAlienShip", "EnemyAlienShipDamaged" };
-            buildMap[0].assetNames = enemyAssets;
+		List<string> targetPrefabList = new List<string>();
+		foreach (UnityEngine.Object obj in Selection.objects) {
+			targetPrefabList.Add(AssetDatabase.GetAssetPath(obj));
+		}
 
-            buildMap[1].assetBundleName = "HeroBundle";
-            string[] heroAssets = new[] { "HeroShip", "HeroShipDamaged" };
-            buildMap[1].assetNames = heroAssets;
+		// ex) Assets/Test.prefab => test.unity3d
+		string activePrefabPath = AssetDatabase.GetAssetPath(Selection.activeObject);
+		int lastSlashIndex = activePrefabPath.LastIndexOf('/');
+		string assetBundleName = activePrefabPath.Substring(lastSlashIndex + 1, activePrefabPath.Length - lastSlashIndex - 1);
+		assetBundleName = assetBundleName.Replace(".prefab", ".unity3d");
+		assetBundleName = assetBundleName.ToLower();
 
-            // Put the bundles in a folder called "AssetBundles" within the Assets folder.
-            BuildPipeline.BuildAssetBundles("Assets/AssetBundles", buildMap, BuildAssetBundleOptions.None);
-         * 
-         */
+		AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
+		buildMap[0].assetBundleName = assetBundleName;
+		buildMap[0].assetNames = targetPrefabList.ToArray();
 
+		try {
+			BuildPipeline.BuildAssetBundles (OUTPUT_PATH_ANDROID, buildMap, BuildAssetBundleOptions.None, BuildTarget.Android);
+			Debug.Log("Made one AssetBundle for Android: " + assetBundleName);
+		} catch (Exception e) {
+			Debug.Log ("Failure make some assetBundles");
+			Debug.Log (e.Message);
+		} finally {
+			AssetDatabase.Refresh();
+		}
+	}
 
+/* AssetBundleBuild 참고.
+* 
+AssetBundleBuild[] buildMap = new[] {
+	new AssetBundleBuild { assetBundleName = "test.unity3d", assetNames = new[] { "Assets/Test.prefab"} },
+* 
+*/
 
-    }
+}

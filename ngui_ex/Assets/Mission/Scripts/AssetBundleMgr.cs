@@ -15,86 +15,73 @@ public delegate void DoNextDownload();
 public class AssetBundleMgr : MonoBehaviour {
 
     /* test area */
-
     private Dictionary<string, int> progressDic = new Dictionary<string, int>();
     int count = 0;
     int beforeCount = 0;
     int max = 0;
     bool updated = false;
 
-    public void SetDownloadList(string[] list)
-    {
-        for (int i = 0; i < list.Length; i++)
-        {
+    public void SetDownloadList(string[] list) {
+        for (int i = 0; i < list.Length; i++) {
             progressDic.Add(list[i], 0);
         }
         max = progressDic.Count * 100;
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)]
-    public void Repo(int percent, string name)
-    {
+	public void OnProgressChanged(int percent, string name) {
         //lock (lockObject)
         //{
-        progressDic[name] = percent;
+        //progressDic[name] = percent;
         //}
     }
 
-    public void ReportDownloaded(string name)
-    {
+	public void OnDownloaded(string name) {
+		progressDic[name] = 100;
         updated = true;
-        //progressDic[name] = 100;
     }
 
     IEnumerator UpdateUI() {
         while (true) {
             try {
                 count = 0;
-                if (max != 0) { 
+                if (max != 0) {
+					//lock (lockObject)
+					//{
                     foreach (int percent in progressDic.Values) {
                         count += percent;
                     }
+					//}
+
                     if (beforeCount != count) {
                         GuiMgr.GetInst().OnPatchProgressChanged((float)count / (float)max);
 
                         if (count >= max) {
                             break;
                         } else if (updated) {
-                            AssetBundleMgr.GetInst().Down();
+							DownloadNextAssetBundle();
                             updated = false;
                         }
                         beforeCount = count;
                     }
                 }
             } catch (Exception e) {
-                Debug.Log(e.Message);
-            } finally {
-            }
+                Debug.LogError (e.Message);
+            } finally { }
             yield return null;
         }
 
-        AssetBundleMgr.GetInst().Complete();
+		CompleteDownloadAssetBundles();
         GuiMgr.GetInst().OnPatchCompleted();
-        //Destroy(this.gameObject); //코루틴 정지 함수 호출.
     }
-
-
     /* end */
-
-
-
-
-    //public UpdateProgress function1;
 
     private static AssetBundleMgr inst;
     private static DateTime devicesPatchDateTime = Convert.ToDateTime("5/17/2016 4:43:00 PM"); //TODO: device에 저장되어 있어야함.
-    private static DateTime recentPatchDateTime;
+    private static DateTime candidatePatchDateTime;
 
-    private int downloadedCount;
-    private string[] patchList;
-
-    //public GameObject loadingHelper;
-    //private LoadingHelper helper;
+    private int downloadedAssetCount;
+    private string[] downloadAssetList;
 
     void Awake() {
         if (!inst) inst = this;
@@ -107,15 +94,14 @@ public class AssetBundleMgr : MonoBehaviour {
     }
 
     public void CheckIsPatched() {
-        HttpReqMgr.GetInst().Req2("info/patchdate", CheckPatchDateTime_imsi);
+        HttpReqMgr.GetInst().ReqHttpGet("info/patchdate", CheckPatchDateTime);
     }
 
-    private void CheckPatchDateTime_imsi(string responseJson)
-    {
+    private void CheckPatchDateTime(string responseJson) {
         PatchDateTimeResponse response = JsonParser.GetResponseJsonClassObject<PatchDateTimeResponse>(responseJson);
-        recentPatchDateTime = Convert.ToDateTime(response.recent_patch_date);
+		candidatePatchDateTime = Convert.ToDateTime(response.recent_patch_date);
 
-        if (devicesPatchDateTime.CompareTo(recentPatchDateTime) < 0) {
+		if (devicesPatchDateTime.CompareTo(candidatePatchDateTime) < 0) {
             GuiMgr.GetInst().ShowPatchUI();
             TryPatch();
             return;
@@ -126,91 +112,56 @@ public class AssetBundleMgr : MonoBehaviour {
     }
 
     public void TryPatch() {
-        HttpReqMgr.GetInst().Req2("info/patchdate", CheckPatchDateTime);
-    }
-
-    private void CheckPatchDateTime(string responseJson) {
-        PatchDateTimeResponse response = JsonParser.GetResponseJsonClassObject<PatchDateTimeResponse>(responseJson);
-        recentPatchDateTime = Convert.ToDateTime(response.recent_patch_date);
-
-        if (devicesPatchDateTime.CompareTo(recentPatchDateTime) < 0) {
-            HttpReqMgr.GetInst().Req2("info/patchlist", DownloadAssetBundles);
-            return;
-        }
-        else {
-            Debug.Log("Already patched");
-            GameStateMgr.GetInst().ForwardState(GAME_STATE.LobbyState);
-        }
+		HttpReqMgr.GetInst().ReqHttpGet("info/patchlist", DownloadAssetBundles);
     }
 
     private void DownloadAssetBundles(string responseJson) {
         PatchListResponse patchListResponse = JsonParser.GetResponseJsonClassObject<PatchListResponse>(responseJson);
 
-        patchList = patchListResponse.patch_list;
-        downloadedCount = 0;
-
-        //helper = Instantiate(loadingHelper).GetComponent<LoadingHelper>();
-        //helper.SetDownloadList(patchListResponse.patch_list);
+		downloadAssetList = patchListResponse.patch_list;
+		downloadedAssetCount = 0;
 
         SetDownloadList(patchListResponse.patch_list);
-        StartCoroutine(UpdateUI());
+        StartCoroutine(UpdateUI()); //TODO: 완료, 에러, back버튼 cancle coroutine.
 
-        if (patchList.Length != 0)
-            HttpReqMgr.GetInst().AsyncDownloadAssetBundle(patchList[downloadedCount]);//, function1, TryNextDownload);
-
+		if (downloadAssetList.Length != 0)
+			DownloadNextAssetBundle ();
+		else {
+			Debug.LogError ("info/patchlist is empty");
+		}
     }
 
-    /*
-    private void TryNextDownload() {
-
-    }
-    */
-
-
-    public void OnProgressChanged(int percent, string downloadTarget) {
-        //helper.Repo(percent, downloadTarget);
-        Repo(percent, downloadTarget);
+    public void DownloadNextAssetBundle() {
+		HttpReqMgr.GetInst().ReqDownloadAssetBundle(downloadAssetList[downloadedAssetCount]);//, function1, TryNextDownload);
+		downloadedAssetCount++;
     }
 
-    public void OnDownloaded(string downloadTarget) {
-        //helper.ReportDownloaded(downloadTarget);
-        ReportDownloaded(downloadTarget);
-    }
-
-    public void Down() {
-        downloadedCount++;
-
-        try {
-            HttpReqMgr.GetInst().AsyncDownloadAssetBundle(patchList[downloadedCount]);//, function1, TryNextDownload);
-        } catch (Exception e) {
-            Debug.Log("에러" + downloadedCount + "/" + patchList.Length);
-            Debug.Log(e.Message);
-        }
-    }
-
-    public void Complete() {
-        patchList = null;
-        devicesPatchDateTime = recentPatchDateTime;
+	public void CompleteDownloadAssetBundles() {
+		downloadAssetList = null;
+        devicesPatchDateTime = candidatePatchDateTime;
         GuiMgr.GetInst().OnPatchCompleted();
         
-        Debug.Log("Download Complete");
+        Debug.Log("download complete");
     }
     
-    //note: http://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromFile.html
+    //reference: http://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromFile.html
     public GameObject LoadAsset(string name) {
-        StringBuilder sb = new StringBuilder(Application.persistentDataPath);
-        sb.Append('/');
+		StringBuilder sb = new StringBuilder(Application.persistentDataPath);
+		sb.Append('/');
         sb.Append(name);
         sb.Append(".unity3d");
-        AssetBundle myLoadedAssetBundle = AssetBundle.LoadFromFile(sb.ToString());
 
-        if (myLoadedAssetBundle == null) {
-            Debug.Log("Failed to load AssetBundle!");
-            return null;
-        }
-        GameObject prefab = myLoadedAssetBundle.LoadAsset<GameObject>(name + ".prefab");
-        
-        myLoadedAssetBundle.Unload(false);
+		GameObject prefab = null;
+		try {
+			//Debug.Log("load Path: " + sb.ToString());
+			AssetBundle myLoadedAssetBundle = AssetBundle.LoadFromFile(sb.ToString());
+        	prefab = myLoadedAssetBundle.LoadAsset<GameObject>(name + ".prefab");
+			myLoadedAssetBundle.Unload(false);
+		} catch (Exception e) {
+			Debug.Log("failed to load AssetBundle!");
+			Debug.LogError (e.Message);
+			return null;
+		}
         return prefab;
     }
 

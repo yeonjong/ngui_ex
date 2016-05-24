@@ -45,7 +45,7 @@ public class LoginChecker {
                 candidateID = id;
 
                 string requestJson = JsonParser.MakeJson(new UserInfo(id, pw));
-                HttpReqMgr.GetInst().Req("login", requestJson, OnLoginComplete); return;
+                HttpReqMgr.GetInst().ReqPost("login", requestJson, OnLoginComplete); return;
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class LobbyPanel : MonoBehaviour {
+public class LobbyPanel : PanelBase{
 
     public void ClickForwardToIntroBtn() {
         GameStateMgr.GetInst().ForwardState(GAME_STATE.IntroState);
