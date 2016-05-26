@@ -1,23 +1,17 @@
 ManifestFileVersion: 0
-CRC: 3409170436
+CRC: 1856479604
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2aa12018c24e2d6ce04012634edd379c
+    Hash: e17588a0b911cc5908b6e628292edd07
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0d25a79135bf4ad7d6f09ee5a5fac1da
+    Hash: 356e1edac0435ccabc00d03d6d508391
 HashAppended: 0
 ClassTypes:
 - Class: 1
   Script: {instanceID: 0}
 - Class: 4
-  Script: {instanceID: 0}
-- Class: 21
-  Script: {instanceID: 0}
-- Class: 28
-  Script: {instanceID: 0}
-- Class: 48
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
@@ -39,4 +33,7 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Media/gui/@outcome/pnl_battle.prefab
-Dependencies: []
+Dependencies:
+- Assets/@AssetBundle/iOS/atl_wooden.unity3d
+- Assets/@AssetBundle/iOS/font_bmp_arimo20.unity3d
+- Assets/@AssetBundle/iOS/atl_scifi.unity3d

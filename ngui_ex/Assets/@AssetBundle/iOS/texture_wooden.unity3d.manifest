@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 2884087844
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 81db7443a923420543e6a29f30effe61
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/3rdparty/NGUI/Examples/Atlases/Wooden/Wooden Atlas.png
+Dependencies: []

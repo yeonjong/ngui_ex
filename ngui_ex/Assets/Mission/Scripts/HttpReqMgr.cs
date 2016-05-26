@@ -101,6 +101,7 @@ public class HttpReqMgr : MonoBehaviour {
 			uri.Append("iOS/");
 		} else {
 			Debug.LogError ("please change build target (Android or iOS)");
+			return;
 		}
 #elif UNITY_ANDROID
 		uri.Append("Android/");

@@ -32,13 +32,21 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.wfile.write(json.dumps(d))
             s.wfile.close()
 
-        elif s.path.endswith("info/patchlist"):
+        elif s.path.endswith("info/ios/patchlist"):
             s.send_response(200)
             s.send_header("Content-type", "text/json")
             s.end_headers()
 
-            #d = { "patch_list" : [ "test.unity3d", "test2.unity3d","test3.unity3d", "test4.unity3d", "test5.unity3d", "test6.unity3d", "test7.unity3d", "pnl_lobby.unity3d", "pnl_battle.unity3d"] }            
-            d = { "patch_list" : [ "test.unity3d", "test2.unity3d","test3.unity3d", "test4.unity3d", "pnl_lobby.unity3d", "pnl_battle.unity3d"] } 
+            d = { "patch_list" : [ "iOS", "pnl_lobby.unity3d", "atl_wooden.unity3d","texture_wooden.unity3d", "font_bmp_arimo20.unity3d", "atl_scifi.unity3d", "texture_scifi.unity3d", "pnl_battle.unity3d", "tap.unity3d", "scifi atlas.unity3d", "unlit - transparent colored.unity3d", "wooden atlas.unity3d" ] }
+            s.wfile.write(json.dumps(d))
+            s.wfile.close()
+        
+        elif s.path.endswith("info/android/patchlist"):
+            s.send_response(200)
+            s.send_header("Content-type", "text/json")
+            s.end_headers()
+            
+            d = { "patch_list" : [ "Android", "pnl_lobby.unity3d", "atl_wooden.unity3d","texture_wooden.unity3d", "font_bmp_arimo20.unity3d", "atl_scifi.unity3d", "texture_scifi.unity3d", "pnl_battle.unity3d", "tap.unity3d", "scifi atlas.unity3d", "unlit - transparent colored.unity3d", "wooden atlas.unity3d" ] }
             s.wfile.write(json.dumps(d))
             s.wfile.close()
             

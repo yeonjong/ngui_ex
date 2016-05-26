@@ -1,0 +1,8 @@
+1. python 스크립트 및 assetBundles가 위치한 폴더로 이동한다.
+cd ~/prj/ngui_ex/ngui_ex/Assets/@AssetBundle
+
+2. assetBundles 다운로드를 위한 서버를 실행한다.
+python -m SimpleHTTPServer 9192
+
+3. 기타 get 또는 post 요청을 위한 서버를 실행한다.
+python webserver.py

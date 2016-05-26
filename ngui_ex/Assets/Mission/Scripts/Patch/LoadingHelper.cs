@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System;
@@ -51,3 +52,4 @@ public class LoadingHelper : MonoBehaviour
     }
 
 }
+*/
