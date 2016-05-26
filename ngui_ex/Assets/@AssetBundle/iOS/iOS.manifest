@@ -2,46 +2,37 @@ ManifestFileVersion: 0
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: pnl_lobby.unity3d
-      Dependencies:
-        Dependency_0: atl_wooden.unity3d
-        Dependency_1: font_bmp_arimo20.unity3d
-        Dependency_2: atl_scifi.unity3d
-        Dependency_3: tap.unity3d
-    Info_1:
-      Name: atl_wooden.unity3d
-      Dependencies:
-        Dependency_0: wooden atlas.unity3d
-    Info_2:
-      Name: texture_wooden.unity3d
-      Dependencies: {}
-    Info_3:
-      Name: font_bmp_arimo20.unity3d
-      Dependencies:
-        Dependency_0: atl_wooden.unity3d
-        Dependency_1: wooden atlas.unity3d
-    Info_4:
-      Name: atl_scifi.unity3d
-      Dependencies:
-        Dependency_0: scifi atlas.unity3d
-    Info_5:
       Name: pnl_battle.unity3d
       Dependencies:
-        Dependency_0: atl_wooden.unity3d
-        Dependency_1: font_bmp_arimo20.unity3d
-        Dependency_2: atl_scifi.unity3d
-    Info_6:
+        Dependency_0: tap.unity3d
+        Dependency_1: arimo20.unity3d
+        Dependency_2: wooden atlas.unity3d
+    Info_1:
       Name: tap.unity3d
       Dependencies: {}
-    Info_7:
-      Name: scifi atlas.unity3d
-      Dependencies:
-        Dependency_0: unlit - transparent colored.unity3d
-    Info_8:
+    Info_2:
       Name: unlit - transparent colored.unity3d
       Dependencies: {}
-    Info_9:
+    Info_3:
+      Name: arimo20.unity3d
+      Dependencies:
+        Dependency_0: wooden atlas.unity3d
+        Dependency_1: mat_wooden atlas.unity3d
+    Info_4:
       Name: wooden atlas.unity3d
       Dependencies:
-        Dependency_0: texture_wooden.unity3d
-        Dependency_1: unlit - transparent colored.unity3d
+        Dependency_0: mat_wooden atlas.unity3d
+    Info_5:
+      Name: mat_wooden atlas.unity3d
+      Dependencies:
+        Dependency_0: unlit - transparent colored.unity3d
+        Dependency_1: tex_wooden atlas.unity3d
+    Info_6:
+      Name: tex_wooden atlas.unity3d
+      Dependencies: {}
+    Info_7:
+      Name: pnl_lobby.unity3d
+      Dependencies:
+        Dependency_0: tap.unity3d
+        Dependency_1: arimo20.unity3d
+        Dependency_2: wooden atlas.unity3d

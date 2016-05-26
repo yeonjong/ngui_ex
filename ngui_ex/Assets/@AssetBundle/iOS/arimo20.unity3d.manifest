@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 566600782
+CRC: 598754167
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a0c095619f8a51317d5b12c29e77e4a4
+    Hash: 3196b8841de6e467219f82b5641c2a32
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7a8becec1d197c8ad30ef65e4815a480
+    Hash: 39e79a6477aadf2762525c9530c76052
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -16,10 +16,13 @@ ClassTypes:
 - Class: 21
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 0b4eb3a400afab046abb8471a9d746d6, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 Assets:
-- Assets/Media/3rdparty/NGUI/Examples/Atlases/SciFi/atl_scifi.prefab
+- Assets/Media/3rdparty/NGUI/Examples/Atlases/Wooden/Arimo20.prefab
 Dependencies:
-- Assets/@AssetBundle/iOS/scifi atlas.unity3d
+- Assets/@AssetBundle/iOS/wooden atlas.unity3d
+- Assets/@AssetBundle/iOS/mat_wooden atlas.unity3d

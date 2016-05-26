@@ -37,7 +37,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_header("Content-type", "text/json")
             s.end_headers()
 
-            d = { "patch_list" : [ "iOS", "pnl_lobby.unity3d", "atl_wooden.unity3d","texture_wooden.unity3d", "font_bmp_arimo20.unity3d", "atl_scifi.unity3d", "texture_scifi.unity3d", "pnl_battle.unity3d", "tap.unity3d", "scifi atlas.unity3d", "unlit - transparent colored.unity3d", "wooden atlas.unity3d" ] }
+            d = { "patch_list" : [ "iOS", "pnl_battle.unity3d", "tap.unity3d", "unlit - transparent colored.unity3d", "arimo20.unity3d", "wooden atlas.unity3d", "mat_wooden atlas.unity3d", "tex_wooden atlas.unity3d", "pnl_lobby.unity3d" ] }
             s.wfile.write(json.dumps(d))
             s.wfile.close()
         
@@ -46,7 +46,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_header("Content-type", "text/json")
             s.end_headers()
             
-            d = { "patch_list" : [ "Android", "pnl_lobby.unity3d", "atl_wooden.unity3d","texture_wooden.unity3d", "font_bmp_arimo20.unity3d", "atl_scifi.unity3d", "texture_scifi.unity3d", "pnl_battle.unity3d", "tap.unity3d", "scifi atlas.unity3d", "unlit - transparent colored.unity3d", "wooden atlas.unity3d" ] }
+            d = { "patch_list" : [ "Android", "pnl_battle.unity3d", "tap.unity3d", "unlit - transparent colored.unity3d", "arimo20.unity3d", "wooden atlas.unity3d", "mat_wooden atlas.unity3d", "tex_wooden atlas.unity3d", "pnl_lobby.unity3d" ] }
             s.wfile.write(json.dumps(d))
             s.wfile.close()
             
