@@ -27,7 +27,7 @@ public class TestTween : MonoBehaviour {
 		//Debug.Log (this.transform.position);
 		//Debug.Log ("FROM" + from + " TO" + to);
 		//transform.position = from;
-		TweenScale tweenScale = TweenScale.Begin (gameObject, 0.3f, new Vector3(112f/240f, 112f/240f, 0f));
+		/*TweenScale tweenScale = */TweenScale.Begin (gameObject, 0.3f, new Vector3(112f/240f, 112f/240f, 0f));
 		//tweenScale.value = Vector3.one;
 		TweenAlpha tweenAlpha = TweenAlpha.Begin (gameObject, 0.3f, 0f);
 		//tweenAlpha.value = 1f;

@@ -34,7 +34,7 @@ public class FormationEditPanel : MonoBehaviour {
 			Debug.LogError ("inject formationObject to button on click.");
 			return;
 		}
-		GameData.Inst.SetFormation(formationNumber);
+		GameData.Inst.SetCurrentFormation(formationNumber);
 		GuiMgr.GetInst ().OnSelectFormation ();
 
 		ClickForwardToPartyEditBtn ();

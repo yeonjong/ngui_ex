@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameData {
+/* GameData */
+partial class GameData {
 
 	private GameData() { }
 	private static GameData inst;
@@ -19,17 +20,112 @@ public class GameData {
 	// TODO: please make some json files and get those from HttpMgr class.
 	private void Initialize() {
 		/* dummy character data */
-		for (int i = 0; i < 52; i++) {
-			SetCharInfo (new CharInfo (i.ToString(), i, i));
+		for (int i = 1001; i < MAX_COMMON_CHARACTER_KINDS + 1001; i++) {
+			CharacterPrivateSpec.AddCharacterCommonSpec(new CharacterCommonSpec(i, i+"name", i+"className", i % 1000));
+		}
+		for (int i = 0; i < MAX_PRIVATE_CHARACTER_COUNT; i++) {
+			AddCharacterSpec (new CharacterPrivateSpec (i, UnityEngine.Random.Range(1001, 1001+MAX_COMMON_CHARACTER_KINDS)));
 		}
 
 		/* dummy formation data */
-		SetFormation (0);
+		SetCurrentFormation (1);
 	}
 
-	/* formation data */
-	// -1: empty and can't enter.
+}
+
+/* character data */
+public class CharacterPrivateSpec {
+	private static Dictionary<int, CharacterCommonSpec> characterCommonSpecDic = new Dictionary<int, CharacterCommonSpec> ();
+	public static void AddCharacterCommonSpec(CharacterCommonSpec spec) {
+		if (!characterCommonSpecDic.ContainsKey (spec.commonCharacterID)) {
+			characterCommonSpecDic.Add (spec.commonCharacterID, spec);
+		}
+	}
+	public CharacterCommonSpec CommonSpec {
+		get {
+			return characterCommonSpecDic [commonCharacterID];
+		}
+	}
+
+	public int commonCharacterID; //케릭터의 공통스펙을 찾을 수 있는 아이디.
+
+	public int privateCharacterID; //유저마다 가지고 있는 케릭터의 고유 아이디. 유저가 영웅을 획득한 순서대로 int값 넣어주면 될 것 같다. 나중에 획득순 정렬이 있으면 쓸 수 있을듯.
+	public int starRank;
+	public int upgradeRank;
+	public int upgradeRankEXP; // upgrade 총 경험치.
+	public int level;
+	public int levelEXP; // level 총 경험치.
+
+	public CharacterPrivateSpec(int privateID, int commonID) {
+		privateCharacterID = privateID;
+		commonCharacterID = commonID;
+	}
+
+	public string GetStarRankImageName() {
+		return "spr_" + starRank;
+	}
+	
+	public string GetUpgradeRankImageName() {
+		return "spr_" + upgradeRank;
+	}
+}
+public class CharacterCommonSpec {
+	public int commonCharacterID;
+
+	public string name;
+	public string className;
+	public int cost;
+
+	public CharacterCommonSpec(int commonID, string name, string className, int cost) {
+		commonCharacterID = commonID;
+		this.name = name;
+		this.className = className;
+		this.cost = cost;
+	}
+
+	public string GetThumbnailImageName() {
+		return "spr_" + name;
+	}
+}
+partial class GameData {
+
+	private const int MAX_COMMON_CHARACTER_KINDS = 10; // 게임의 영웅 종류가 10종이다. 라는 뜻이다.
+	private const int MAX_PRIVATE_CHARACTER_COUNT = 50; // 유저가 가진 영웅의 수가 종류에 상관없이 50명이다. 라는 뜻이다. // TODO: = 3; (little items)
+
+	private Dictionary<int, CharacterPrivateSpec> characterPrivateSpecDic = new Dictionary<int, CharacterPrivateSpec> ();
+
+	public void AddCharacterSpec(CharacterPrivateSpec spec) {
+		if (!characterPrivateSpecDic.ContainsKey (spec.privateCharacterID)) {
+			characterPrivateSpecDic.Add (spec.privateCharacterID, spec);
+		} else {
+			Debug.LogError ("duplicate character. it is not add to dictionary.");
+		}
+	}
+
+	public CharacterPrivateSpec GetCharacterSpec(int privateCharacterID) {
+		if (characterPrivateSpecDic.ContainsKey (privateCharacterID)) {
+			return characterPrivateSpecDic [privateCharacterID];
+		} else {
+			Debug.LogError ("this character not exist. ID: " + privateCharacterID);
+			return null;
+		}
+	}
+
+	public int GetCharacterCount() {
+		return characterPrivateSpecDic.Count;
+	}
+
+	public List<int> GetCharacterIDList() {
+		return new List<int>(characterPrivateSpecDic.Keys);
+	}
+
+}
+
+/* formation data */
+partial class GameData {
+
 	// -2: empty and can enter.
+	// -1: empty and can't enter.
 	// 0~: character id.
 	private int[,] formation0 = new int[6,4] {
 		{ -1,	0,	1,	-1 },
@@ -103,7 +199,6 @@ public class GameData {
 		{ -1,	-2,	-2,	-1 }
 	};
 
-	//private int[,] currentFormation;
 	private int curFormationNumber;
 	public int[,] GetFormation () {
 		switch (curFormationNumber) {
@@ -128,7 +223,7 @@ public class GameData {
 		}
 	}
 
-	public void SetFormation (int formationNumber) {
+	public void SetCurrentFormation (int formationNumber) {
 		curFormationNumber = formationNumber;
 	}
 
@@ -191,52 +286,4 @@ public class GameData {
 		return formationMemberDic;
 	}
 
-	/* character data */
-	private Dictionary<string, CharInfo> characterInfoDic = new Dictionary<string, CharInfo> ();
-
-	public void SetCharInfo(CharInfo info) {
-		if (!characterInfoDic.ContainsKey (info.name)) {
-			characterInfoDic.Add (info.name, info);
-		} else {
-			Debug.LogError ("duplicate character. it is not add to dictionary.");
-		}
-	}
-
-	public CharInfo GetCharInfo(string name) {
-		if (characterInfoDic.ContainsKey (name)) {
-			return characterInfoDic [name];
-		} else {
-			Debug.LogError ("this character not exist. " + name);
-			return null;
-		}
-	}
-
-	public int GetCharacterCount() {
-		return characterInfoDic.Count;
-	}
-
-	public List<string> GetCharacterKeyList() {
-		return new List<string>(characterInfoDic.Keys);
-	}
-
-
-
-
-
-
-}
-	
-/* character data */
-public class CharInfo {
-	public int id;
-	public string name;
-	public int cost;
-	public int hp;
-	//public int[] formationPos;
-
-	public CharInfo(string name, int cost, int hp) {
-		this.name = name;
-		this.cost = cost;
-		this.hp = hp;
-	}
 }

@@ -6,7 +6,7 @@ using System.Text;
 public class PartyEditPanel : MonoBehaviour {
 
 	private int realItemMaxIndex;
-	private List<string> realItemList;
+	private List<int> realItemList;
 	private Dictionary<int, int> formationMemberDic = new Dictionary<int, int> (); //charID, formationPos
 
 	private const int MAX_UI_ITEM_COUNT = 20; //5 rows and 4 cols.
@@ -32,9 +32,9 @@ public class PartyEditPanel : MonoBehaviour {
 		int index = 0;
 		foreach (UILabel uiLabel in wrapContent.GetComponentsInChildren<UILabel> ()) {
 			if (formationMemberDic.ContainsKey (index)) {
-				uiLabel.text = realItemList [index] + " Ready";
+				uiLabel.text = GameData.Inst.GetCharInfo (realItemList[index]).name + " Ready";
 			} else {
-				uiLabel.text = realItemList [index];
+				uiLabel.text = GameData.Inst.GetCharInfo (realItemList[index]).name;
 			}
 			uiItemList [index] = uiLabel;
 			index++;
@@ -42,35 +42,46 @@ public class PartyEditPanel : MonoBehaviour {
 
 		/* when inventory was dragged, this event function will be call. */
 		/* fucntion: inject character information to each item slot. */
-		wrapContent.GetComponent<UIWrapContent> ().onInitializeItem = delegate(GameObject go, int wrapIndex, int realIndex) {
-			realIndex = Mathf.Abs(realIndex);
-			int realItemIndex = realIndex * 4;
-			int uiItemIndex = wrapIndex * 4;
-
-			for (int i = 0; i < 4; i++) {
-				if (realItemIndex <= realItemMaxIndex) {
-					//Debug.Log(uiItemList[uiItemIndex].text);
-					//Debug.Log(realItemList[realItemIndex]);
-					//Debug.Log("");
-					if (formationMemberDic.ContainsKey (realItemIndex)) {
-						uiItemList[uiItemIndex++].text = realItemList [realItemIndex++] + " Ready";
-					} else {
-						uiItemList[uiItemIndex++].text = realItemList[realItemIndex++];
-					}
-				}
-			}
-		};
+		wrapContent.GetComponent<UIWrapContent> ().onInitializeItem += UpdateWrapContentItem;
+		//= delegate(GameObject go, int wrapIndex, int realIndex) {
+		//	UpdateWrapContentItem(go, wrapIndex, realIndex);
+		//};
 
 		index = 0;
 		foreach (UISprite uiSprite in formationRoot.GetComponentsInChildren<UISprite> ()) {
 			uiFromationItemList [index] = uiSprite;
 			uiFormationItemLabelList[index] = uiFromationItemList [index].GetComponentInChildren<UILabel> ();
-			formationTweenPosList [index] = NGUIMath.WorldToLocalPoint (uiSprite.transform.position, Camera.main, UICamera.currentCamera, this.transform);
+
+			if (cam != null)
+				formationTweenPosList [index] = NGUIMath.WorldToLocalPoint (uiSprite.transform.position, Camera.main, cam/*UICamera.currentCamera*/, this.transform);
+			else
+				formationTweenPosList [index] = NGUIMath.WorldToLocalPoint (uiSprite.transform.position, Camera.main, UICamera.currentCamera, this.transform);
+
 			index++;
 		}
 
 		CheckFormation ();
 	}
+
+	private void UpdateWrapContentItem(GameObject go, int wrapIndex, int realIndex) {
+		realIndex = Mathf.Abs(realIndex);
+		int realItemIndex = realIndex * 4;
+		int uiItemIndex = wrapIndex * 4;
+
+		for (int i = 0; i < 4; i++) {
+			if (realItemIndex <= realItemMaxIndex) {
+				//Debug.Log(uiItemList[uiItemIndex].text);
+				//Debug.Log(realItemList[realItemIndex]);
+				//Debug.Log("");
+				if (formationMemberDic.ContainsKey (realItemIndex)) {
+					uiItemList[uiItemIndex++].text = GameData.Inst.GetCharInfo (realItemList[realItemIndex++]).name + " Ready";
+				} else {
+					uiItemList[uiItemIndex++].text = GameData.Inst.GetCharInfo (realItemList[realItemIndex++]).name;
+				}
+			}
+		}
+	}
+
 
 	public void CheckFormation() {
 		int[,] formation = GameData.Inst.GetFormation ();
@@ -85,6 +96,7 @@ public class PartyEditPanel : MonoBehaviour {
 			if (formationMemberDic.ContainsKey (id)) {
 				uiItemList [i].text = realItemList [id] + " Ready";
 			} else {
+				uiItemList [i].text = GameData.Inst.GetCharInfo (realItemList[index]).name;
 				uiItemList [i].text = realItemList [id];
 			}
 		}
