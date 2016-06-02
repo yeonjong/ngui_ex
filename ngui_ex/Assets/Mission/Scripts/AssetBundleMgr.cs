@@ -119,12 +119,12 @@ public class AssetBundleMgr : MonoBehaviour
 		candidatePatchDateTime = Convert.ToDateTime (response.recent_patch_date);
 
 		if (devicesPatchDateTime.CompareTo (candidatePatchDateTime) < 0) {
-			GuiMgr.GetInst ().ShowPatchUI ();
+			GameStateMgr.GetInst ().OnCompletePatchCheck (false);
 			TryPatch ();
 			return;
 		} else {
 			Debug.Log ("Already patched");
-			GameStateMgr.GetInst ().ForwardState (GAME_STATE.LobbyState);
+			GameStateMgr.GetInst ().OnCompletePatchCheck (true);
 		}
 	}
 

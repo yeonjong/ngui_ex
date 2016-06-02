@@ -11,6 +11,16 @@ public class GameObjectPoolMgr : MonoBehaviour {
     public GameObject m_gui_pool;
     public Transform m_gui_root;
 
+	/* imsi. please make some assetbundles. */
+	public GameObject common_top_bar_prefab;
+	public GameObject lobby_prefab;
+	public GameObject chapter_map_prefab;
+	public GameObject stage_entrance_prefab;
+	public GameObject party_edit_prefab;
+	public GameObject formation_edit_prefab;
+	public GameObject battle_prefab;
+
+
     private GameObjectPoolMgr() { }
 
     public static GameObjectPoolMgr GetInst() {
@@ -61,14 +71,38 @@ public class GameObjectPoolMgr : MonoBehaviour {
             if (!prefabDictionary.ContainsKey(prf_name)) {
 
                 switch (prf_name) {
+				/*
                     case "pnl_lobby":
                     case "pnl_battle":
                         temp = AssetBundleMgr.GetInst().LoadAsset(prf_name);
                         break;
+				*/
 
-                    default:
-                        temp = Resources.Load(prf_name) as GameObject;
-                        break;
+				case "pnl_common_top_bar":
+					temp = common_top_bar_prefab;
+					break;
+				case "pnl_lobby":
+					temp = lobby_prefab;
+					break;
+				case "pnl_chapter_map":
+					temp = chapter_map_prefab;
+					break;
+				case "pnl_stage_entrance":
+					temp = stage_entrance_prefab;
+					break;
+				case "pnl_party_edit":
+					temp = party_edit_prefab;
+					break;
+				case "pnl_formation_edit":
+					temp = formation_edit_prefab;
+					break;
+				case "pnl_battle":
+					temp = battle_prefab;
+					break;
+
+                default:
+                    temp = Resources.Load(prf_name) as GameObject;
+                    break;
                 }
 
                 

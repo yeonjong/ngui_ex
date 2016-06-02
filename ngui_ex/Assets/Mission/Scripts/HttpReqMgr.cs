@@ -15,8 +15,8 @@ public class HttpReqMgr : MonoBehaviour {
 
     private static string localRepository;
 
-	private const string ROOT_URI_DOWNLOADSERVER = "http://192.168.0.148:9192/";
-	private const string ROOT_URI_WEBSERVER = "http://192.168.0.148:9292/";
+	private const string ROOT_URI_DOWNLOADSERVER = "http://192.168.0.147:9192/";
+	private const string ROOT_URI_WEBSERVER = "http://192.168.0.147:9292/";
 /*
 #if UNITY_EDITOR
     private const string ROOT_URI_DOWNLOADSERVER = "http://192.168.0.xxx:9192/";
