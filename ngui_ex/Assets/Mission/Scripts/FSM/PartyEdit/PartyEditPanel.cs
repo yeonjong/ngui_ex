@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DG.Tweening;
 
 public class PartyEditPanel : MonoBehaviour {
 
@@ -65,7 +66,15 @@ public class PartyEditPanel : MonoBehaviour {
 		foreach (UISprite uiSprite in formationRoot.GetComponentsInChildren<UISprite> ()) {
 			uiFromationItemList [index] = uiSprite;
 			uiFormationItemLabelList[index] = uiFromationItemList [index].GetComponentInChildren<UILabel> ();
+
+			formationTweenPosList [index] = uiSprite.transform.position;
+			/*
+			#if UNITY_EDITOR
+			formationTweenPosList [index] = NGUIMath.WorldToLocalPoint (uiSprite.transform.position, Camera.main, cam, this.transform);
+			#elif
 			formationTweenPosList [index] = NGUIMath.WorldToLocalPoint (uiSprite.transform.position, Camera.main, UICamera.currentCamera, this.transform);
+			#endif
+			*/
 			index++;
 		}
 
@@ -73,6 +82,8 @@ public class PartyEditPanel : MonoBehaviour {
 	}
 
 	public void CheckFormation() {
+		Debug.Log ("CheckFormation");
+
 		int[,] formation = GameData.Inst.GetFormation ();
 
 		formationMemberDic = GameData.Inst.GetFormationMemberDic (); //edit
@@ -166,6 +177,7 @@ public class PartyEditPanel : MonoBehaviour {
 		
 		string charId = btn.GetComponentInChildren<UILabel> ().text;
 
+		Debug.Log (charId);
 		if (!charId.Contains (" Ready")) { // insert.
 			int id = Int32.Parse (charId);
 		
@@ -173,13 +185,19 @@ public class PartyEditPanel : MonoBehaviour {
 			if (targetPos != -1) {
 				GameData.Inst.SetFormationItem (targetPos / 4, targetPos % 4, id);
 
-				//testTween.transform.position = btn.transform.position;
-				Vector2 itemPos = NGUIMath.WorldToLocalPoint (btn.transform.position, Camera.main, UICamera.currentCamera, this.transform);
-				//testTween.PlayAnimation (/*btn.transform.position*/itemPos, formationTweenPosList[targetPos], gameObject);
-
 				GameObject tweenObj = tweenRoot.AddChild (tweenPrefab);//Instantiate (tweenPrefab);
 				tweenQueue.Enqueue (tweenObj);
-				/*TweenScale tweenScale = */TweenScale.Begin (tweenObj, 0.3f, new Vector3(112f/240f, 112f/240f, 0f));
+				tweenObj.transform.position = btn.transform.position;
+				tweenObj.transform.DOScale (new Vector3(112f/240f, 112f/240f, 0f), 0.3f);
+				DOTween.ToAlpha (() => tweenObj.GetComponentInChildren<UISprite> ().color,
+					x => tweenObj.GetComponentInChildren<UISprite> ().color = x,
+					0f,
+					0.3f).SetEase (Ease.InQuad).OnComplete (CheckFormation);
+				//tweenObj.transform.DOLocalMove (formationTweenPosList [targetPos], 0.3f);
+				tweenObj.transform.DOMove (formationTweenPosList[targetPos], 0.3f).OnComplete(Destroy);
+
+				//Vector2 itemPos = NGUIMath.WorldToLocalPoint (btn.transform.position, Camera.main, UICamera.currentCamera, this.transform);
+				/*TweenScale tweenScale = *//*TweenScale.Begin (tweenObj, 0.3f, new Vector3(112f/240f, 112f/240f, 0f));
 				//tweenScale.value = Vector3.one;
 				TweenAlpha tweenAlpha = TweenAlpha.Begin (tweenObj, 0.3f, 0f);
 				//tweenAlpha.value = 1f;
@@ -191,10 +209,7 @@ public class PartyEditPanel : MonoBehaviour {
 				TweenPosition tweenPostion = TweenPosition.Begin (tweenObj, 0.3f, formationTweenPosList[targetPos]);
 				tweenPostion.from = itemPos;
 				tweenPostion.eventReceiver = gameObject;
-				tweenPostion.callWhenFinished = "CheckFormation";
-
-
-				//CheckFormation ();
+				tweenPostion.callWhenFinished = "CheckFormation";*/
 			} else {
 				Debug.Log ("please make full popup msg.");
 			}

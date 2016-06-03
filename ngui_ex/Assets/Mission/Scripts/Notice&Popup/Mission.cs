@@ -6,6 +6,7 @@ public class Mission : MonoBehaviour {
 	private int m_n_cnt = 0;
     private int m_n_cnt_notice = 0;
     
+	/*
     void OnGUI()
     {
 		GUILayout.BeginVertical ();
@@ -32,6 +33,7 @@ public class Mission : MonoBehaviour {
 
         GUILayout.EndVertical ();
     }
+	*/
 
     //imsi
     public void ShowYesNoPopup() {
