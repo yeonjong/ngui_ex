@@ -2,8 +2,10 @@
 
 class EntryPoint : MonoBehaviour {
 
+	public GAME_STATE m_startState = GAME_STATE.IntroState;
+
     void Start() {
-        GameStateMgr.GetInst().ForwardState(GAME_STATE.IntroState);
+		GameStateMgr.GetInst ().ForwardState (m_startState);//GAME_STATE.IntroState);
     }
 
 }

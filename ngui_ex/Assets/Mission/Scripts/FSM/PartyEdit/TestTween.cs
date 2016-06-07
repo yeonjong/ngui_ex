@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 
 public class TestTween : MonoBehaviour {
@@ -40,19 +41,7 @@ public class TestTween : MonoBehaviour {
 		tweenPostion.from = from;
 		tweenPostion.eventReceiver = eventReceiver;
 		tweenPostion.callWhenFinished = "CheckFormation";
-	
-		/*
-		TweenPosition pos = new TweenPosition ();
-		pos.from = from;
-		pos.to = to;
-		pos.style = UITweener.Style.Once;
-		pos.steeperCurves = true;
-		pos.method = UITweener.Method.EaseIn;
-		//pos.duration = 5f;
-		//pos.Play (true);
-		//pos.PlayForward();
-		//pos.ResetToBeginning();
-		*/
+
 	}
 
 	private void Reset() {
@@ -62,3 +51,4 @@ public class TestTween : MonoBehaviour {
 	}
 
 }
+*/

@@ -21,7 +21,7 @@ public class PartyEditPanel : MonoBehaviour {
 
 	//public Transform t;
 	public Camera cam;
-	public TestTween testTween; // TODO: please delete this parameter.
+	//public TestTween testTween; // TODO: please delete this parameter.
 	public GameObject tweenPrefab;
 	public Vector2[] formationTweenPosList = new Vector2[MAX_UI_FORMATION_ITEM_COUNT];
 
