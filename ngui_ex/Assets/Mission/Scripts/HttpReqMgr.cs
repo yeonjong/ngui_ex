@@ -117,7 +117,7 @@ public class HttpReqMgr : MonoBehaviour {
 #elif UNITY_EDITOR_OSX || UNITY_IPHONE
 		string downloadRepositoryPath = String.Format("{0}/{1}", localRepository, method);
 #endif
-
+		Debug.Log ("download path: " + downloadRepositoryPath);
         /* Application.persistentDataPath로 경로를 지정하므로 필요없다.
         if (!System.IO.Directory.Exists(localRepository)) return;
             System.IO.Directory.CreateDirectory(localRepository);

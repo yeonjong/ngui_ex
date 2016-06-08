@@ -49,7 +49,10 @@ public class GuiMgr : MonoBehaviour {
 
     private static GuiMgr inst;
 	// TODO: please merge this array to m_pnlInstances.
-	private static string[] panelNames = new string[] {"pnl_common_top_bar", "pnl_intro", "pnl_patch", "pnl_lobby", "pnl_chapter_map", "pnl_stage_entrance", "pnl_party_edit", "pnl_formation_edit", "pnl_battle", "pnl_", "pnl_", "pnl_", "pnl_", "pnl_", "pnl_"};
+	private static string[] panelNames = new string[] {"pnl_common_top_bar", "pnl_intro", "pnl_patch", "pnl_lobby", "pnl_chapter_map", "pnl_stage_entrance", "pnl_party_edit", "pnl_formation_edit", "pnl_battle",
+		"pnl_areana_entrance", "pnl_strongest_areana_entrance", "pnl_other_user_party_info", "pnl_character_info", "pnl_formation_info", "pnl_strongest_other_user_party_info", "pnl_defense_party_edit",
+		"pnl_change_party", "pnl_attack_party_edit", "pnl_areana_intro_choreography", "pnl_strongest_areana_intro_choreography", "pnl_areana_battle", "pnl_areana_ending_choreography", "pnl_areana_ranking",
+		"pnl_areana_record", "pnl_areana_record_review_check", "pnl_strongest_areana_record_review_check", "pnl_areana_reward", "pnl_item_info", "pnl_areana_help", "pnl_areana_cumulative", "pnl_sham_battle", "pnl_map_choice"};
 
 
 	private GameObject pnl_common_top_bar;

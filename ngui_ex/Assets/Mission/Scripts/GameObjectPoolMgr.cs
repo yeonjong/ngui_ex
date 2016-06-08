@@ -71,13 +71,12 @@ public class GameObjectPoolMgr : MonoBehaviour {
             if (!prefabDictionary.ContainsKey(prf_name)) {
 
                 switch (prf_name) {
+                case "pnl_intro":
+                case "pnl_patch":
+					temp = Resources.Load(prf_name) as GameObject;
+                    break;
+				
 				/*
-                    case "pnl_lobby":
-                    case "pnl_battle":
-                        temp = AssetBundleMgr.GetInst().LoadAsset(prf_name);
-                        break;
-				*/
-
 				case "pnl_common_top_bar":
 					temp = common_top_bar_prefab;
 					break;
@@ -99,9 +98,9 @@ public class GameObjectPoolMgr : MonoBehaviour {
 				case "pnl_battle":
 					temp = battle_prefab;
 					break;
-
+				*/
                 default:
-                    temp = Resources.Load(prf_name) as GameObject;
+					temp = AssetBundleMgr.GetInst().LoadAsset(prf_name);
                     break;
                 }
 

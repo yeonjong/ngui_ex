@@ -204,7 +204,7 @@ public class AssetBundleMgr : MonoBehaviour
 				if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android) {
 					sb.Append ("Android");
 				} else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS) {
-					sb.Append ("iOS");
+					sb.Append ("iOS.manifest");
 				} else {
 					Debug.LogError ("please change build target (Android or iOS)");
 					return null;
