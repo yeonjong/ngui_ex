@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 451881215
+CRC: 3432413297
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 206391c212871381d12fe71defee01ad
+    Hash: 92a30fb413be65e3cc5619a3ad57b2f8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2514402780380a55a8eee5c2bf278f43
@@ -40,4 +40,4 @@ Assets:
 Dependencies:
 - Assets/@AssetBundle/iOS/tap.unity3d
 - Assets/@AssetBundle/iOS/arimo20.unity3d
-- Assets/@AssetBundle/iOS/wooden atlas.unity3d
+- Assets/@AssetBundle/iOS/test_ui_set.unity3d

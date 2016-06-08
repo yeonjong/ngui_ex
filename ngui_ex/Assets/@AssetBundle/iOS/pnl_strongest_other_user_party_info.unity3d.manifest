@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 1560129297
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: cb367973a53d20ce69148439dd543e28
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b0852f4c769b74d34fa870b973d2b2de
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2c2ad9412632a42a2a6cfa5966c7dede, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/pnl_strongest_other_user_party_info.prefab
+Dependencies: []

@@ -4,165 +4,166 @@
 using UnityEngine;
 
 public enum GAME_STATE {
-	nullState,
-    IntroState,
-    PatchState,
-    LobbyState,
+	NullState,
+
+	IntroState,
+	PatchState,
+	LobbyState,
+
 	ChapterMapState,
-	StageEntranceState, // if don't need this, delete state.
 	PartyEditState,
-	FormationEditState, // if don't need this, delete state.
-    BattleState,
+	BattleState,
+
+	AreanaEntranceState,
+	DefensePartyEditState,
+	AttackPartyEditState,
+	AreanaBattleState,
+
+	StrongestAreanaEntranceState,
+	StrongestAreanaBattleState,
+
+	ShamBattleState,
 }
 
 public class GameStateMgr {
 
-    private static GameStateMgr inst;
-    private static GameStateBase[] gameStates;
-    private static GAME_STATE currentGameState;
+	private static GameStateMgr inst;
+	private static GameStateBase[] gameStates;
+	private static GAME_STATE currentGameState;
 
-    static GameStateMgr() {
-        inst = new GameStateMgr();
+	static GameStateMgr() {
+		inst = new GameStateMgr();
 
-        gameStates = new GameStateBase[Enum.GetValues(typeof(GAME_STATE)).Length];
-        gameStates[(int)GAME_STATE.IntroState] = new IntroState();
-        gameStates[(int)GAME_STATE.PatchState] = new PatchState();
-        gameStates[(int)GAME_STATE.LobbyState] = new LobbyState();
+		gameStates = new GameStateBase[Enum.GetValues(typeof(GAME_STATE)).Length];
+		gameStates[(int)GAME_STATE.IntroState] = new IntroState();
+		gameStates[(int)GAME_STATE.PatchState] = new PatchState();
+		gameStates[(int)GAME_STATE.LobbyState] = new LobbyState();
+
 		gameStates[(int)GAME_STATE.ChapterMapState] = new ChapterMapState();
-		gameStates[(int)GAME_STATE.StageEntranceState] = new StageEntranceState();
 		gameStates[(int)GAME_STATE.PartyEditState] = new PartyEditState();
-		gameStates[(int)GAME_STATE.FormationEditState] = new FormationEditState();
-        gameStates[(int)GAME_STATE.BattleState] = new BattleState();
+		gameStates[(int)GAME_STATE.BattleState] = new BattleState();
 
-        currentGameState = GAME_STATE.nullState;
-    }
+		gameStates[(int)GAME_STATE.AreanaEntranceState] = new AreanaEntranceState();
+		gameStates[(int)GAME_STATE.DefensePartyEditState] = new DefensePartyEditState();
+		gameStates[(int)GAME_STATE.AttackPartyEditState] = new AttackPartyEditState();
+		gameStates[(int)GAME_STATE.AreanaBattleState] = new AreanaBattleState();
 
-    private GameStateMgr() { }
+		gameStates[(int)GAME_STATE.StrongestAreanaEntranceState] = new StrongestAreanaEntranceState();
+		gameStates[(int)GAME_STATE.StrongestAreanaBattleState] = new StrongestAreanaBattleState();
 
-    public static GameStateMgr GetInst() {
-        return inst;
-    }
+		gameStates[(int)GAME_STATE.ShamBattleState] = new ShamBattleState();
+
+		currentGameState = GAME_STATE.NullState;
+	}
+
+	private GameStateMgr() { }
+
+	public static GameStateMgr GetInst() {
+		return inst;
+	}
 
 	public bool BackwardState() {
-		if (currentGameState.Equals (GAME_STATE.IntroState)) {
-			Debug.Log ("TODO: Active Exit Popup panel");
-			// TODO: Active Exit Popup panel.
-			// 두번 연속 눌렸을때 확인해야됨.
-			return true;
-		}
-			
+		GAME_STATE backwardState;
+
 		switch (currentGameState) {
+		case GAME_STATE.IntroState:
 		case GAME_STATE.PatchState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.IntroState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
 		case GAME_STATE.LobbyState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.IntroState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
+			backwardState = GAME_STATE.IntroState;
 			break;
 		case GAME_STATE.ChapterMapState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.LobbyState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
-		case GAME_STATE.StageEntranceState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.ChapterMapState;
+			backwardState = GAME_STATE.LobbyState;
 			break;
 		case GAME_STATE.PartyEditState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.ChapterMapState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
-		case GAME_STATE.FormationEditState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.PartyEditState;
-			break;
 		case GAME_STATE.BattleState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.ChapterMapState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
+			backwardState = GAME_STATE.ChapterMapState;
+			break;
+		case GAME_STATE.AreanaEntranceState:
+			backwardState = GAME_STATE.LobbyState;
+			break;
+		case GAME_STATE.DefensePartyEditState:
+		case GAME_STATE.AttackPartyEditState:
+		case GAME_STATE.AreanaBattleState:
+			backwardState = GAME_STATE.AreanaEntranceState;
+			break;
+		case GAME_STATE.StrongestAreanaEntranceState:
+			backwardState = GAME_STATE.LobbyState;
+			break;
+		case GAME_STATE.StrongestAreanaBattleState:
+			backwardState = GAME_STATE.StrongestAreanaEntranceState;
+			break;
+		case GAME_STATE.ShamBattleState:
+			backwardState = GAME_STATE.LobbyState;
+			break;
+		default:
+			backwardState = GAME_STATE.IntroState;
 			break;
 		}
+
+		gameStates [(int)currentGameState].OnLeave (backwardState);
+		currentGameState = backwardState;
 
 		return true;
 	}
 
-    public void ForwardState(GAME_STATE nextGameState) { //nextGameState don't need...
+	public void ForwardState(GAME_STATE nextGameState) { //nextGameState don't need...
+
+		if (nextGameState.Equals (GAME_STATE.NullState)) {
+			Debug.Log ("test mode: don't forward state");
+			return;
+		}
 
 		switch (currentGameState) {
-		case GAME_STATE.nullState:
-			currentGameState = GAME_STATE.IntroState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
+		case GAME_STATE.NullState:
+			gameStates [(int)nextGameState].OnEnter (currentGameState);
+			currentGameState = nextGameState;
 			break;
 		case GAME_STATE.IntroState:
 			AssetBundleMgr.GetInst().CheckIsPatched(); // after patch check, continue to OnCompletePatchCheck() function.
 			break;
 		case GAME_STATE.PatchState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.LobbyState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
 		case GAME_STATE.LobbyState:
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.ChapterMapState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
 		case GAME_STATE.ChapterMapState:
-			currentGameState = GAME_STATE.StageEntranceState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
-		case GAME_STATE.StageEntranceState:
-			gameStates [(int)GAME_STATE.ChapterMapState].OnLeave (GAME_STATE.ChapterMapState);
-			gameStates [(int)currentGameState].OnLeave (currentGameState);
-			currentGameState = GAME_STATE.PartyEditState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
 		case GAME_STATE.PartyEditState:
-			if (nextGameState.Equals (GAME_STATE.FormationEditState)) {
-			} else if (nextGameState.Equals (GAME_STATE.BattleState)) {
-				gameStates [(int)currentGameState].OnLeave (currentGameState);
-			}
+			gameStates [(int)nextGameState].OnEnter (currentGameState);
 			currentGameState = nextGameState;
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
-			break;
-		case GAME_STATE.FormationEditState:
 			break;
 		case GAME_STATE.BattleState:
 			if (nextGameState.Equals (GAME_STATE.LobbyState)) {
-				gameStates [(int)currentGameState].OnLeave (currentGameState);
+				gameStates [(int)currentGameState].OnLeave (nextGameState);
 				currentGameState = nextGameState;
 			} else if (nextGameState.Equals (GAME_STATE.ChapterMapState)) {
-				gameStates [(int)currentGameState].OnLeave (currentGameState);
+				gameStates [(int)currentGameState].OnLeave (nextGameState);
 				currentGameState = nextGameState;
-			} else if (nextGameState.Equals (GAME_STATE.StageEntranceState)) {
-				gameStates [(int)currentGameState].OnLeave (currentGameState);
-				currentGameState = nextGameState;
-				gameStates [(int)GAME_STATE.ChapterMapState].OnEnter (GAME_STATE.ChapterMapState);
+			} else {
+				Debug.LogError ("...");
 			}
-			gameStates [(int)currentGameState].OnEnter (currentGameState);
 			break;
+		case GAME_STATE.AreanaEntranceState:
+		case GAME_STATE.DefensePartyEditState:
+		case GAME_STATE.AttackPartyEditState:
+		case GAME_STATE.AreanaBattleState:
+		case GAME_STATE.StrongestAreanaEntranceState:
+		case GAME_STATE.StrongestAreanaBattleState:
+		case GAME_STATE.ShamBattleState:
+		default:
+			gameStates [(int)nextGameState].OnEnter (currentGameState);
+			currentGameState = nextGameState;
+			break;
+
 		}
-
-
-		/*
-        if (!gameState.Equals(currentGameState))
-            gameStates[(int)currentGameState].OnLeave(gameState);
-        currentGameState = gameState;
-        gameStates[(int)gameState].OnEnter(gameState);
-		*/
 	}
 
 	public void OnCompletePatchCheck(bool alreadyPatched) {
-		gameStates [(int)currentGameState].OnLeave (currentGameState);
+		//gameStates [(int)currentGameState].OnLeave (currentGameState);
+		GAME_STATE nextGameState;
 		if (alreadyPatched) {
-			currentGameState = GAME_STATE.LobbyState;
+			nextGameState = GAME_STATE.LobbyState;
 		} else {
-			currentGameState = GAME_STATE.PatchState;
+			nextGameState = GAME_STATE.PatchState;
 		}
-		gameStates [(int)currentGameState].OnEnter (currentGameState);
+		gameStates [(int)nextGameState].OnEnter (currentGameState);
+		currentGameState = nextGameState;
 	}
 
 }

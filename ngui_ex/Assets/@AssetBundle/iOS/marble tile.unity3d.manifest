@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 1761248955
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a51f9101d00147a0f11fc2904a1504a8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6759894fca659e2049f05064db45ce61
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/Models/Stanford Bunny/Marble Tile.psd
+Dependencies: []

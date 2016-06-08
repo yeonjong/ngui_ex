@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 3725466345
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d5fb236ad2a8144c3f86654f23d521d6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b0852f4c769b74d34fa870b973d2b2de
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: de14a554dbfd544b8bc3fcb3b8dc6d49, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/pnl_strongest_areana_record_review_check.prefab
+Dependencies: []

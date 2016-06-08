@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 1136135875
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0e38745afbc691e5312e91db3d1782aa
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9dea23ffc7e96552740e12d1ee5309d8
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Texture2Ds/Start Screen.psd
+Dependencies: []

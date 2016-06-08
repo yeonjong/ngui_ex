@@ -1,0 +1,54 @@
+ManifestFileVersion: 0
+CRC: 3813700672
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b989742b2191e3c5127815ebbe322c43
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 6588fbd94e4279d9152117c7768d1d4d
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9d0b5f3bbe925a408bd595c79d0bf63, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a5241bf3c2a1a4d9a9affd5d04183221, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1fdca5042b1d12a4890ec1bd4f04290d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b4eb3a400afab046abb8471a9d746d6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/pnl_stage_entrance.prefab
+Dependencies:
+- Assets/@AssetBundle/iOS/arimo20.unity3d
+- Assets/@AssetBundle/iOS/test_ui_set.unity3d
+- Assets/@AssetBundle/iOS/marble.unity3d
+- Assets/@AssetBundle/iOS/bunny eye.unity3d

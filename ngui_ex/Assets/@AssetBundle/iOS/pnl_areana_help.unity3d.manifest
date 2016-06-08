@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 2956995995
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fa32b927ea2cf27d6ec6c190e980571e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2840709050012740af120291364f2977
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: ae942c9068183dc40a9d01f648273726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b3dc54f924693f41b5cbecb267e647a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 98a1ddf8d00364b56bfd4385d851622c, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/pnl_areana_help.prefab
+Dependencies:
+- Assets/@AssetBundle/iOS/test_ui_set.unity3d
