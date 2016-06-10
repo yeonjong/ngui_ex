@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using DG.Tweening;
 
-public class PartyEditPanel : MonoBehaviour {
+public class PartyEditPanel : PanelBase {
 
 	private int realItemMaxIndex;
 	private List<string> realItemList;
@@ -144,17 +144,19 @@ public class PartyEditPanel : MonoBehaviour {
 		}
 
 	}
-
-	public void ClickForwardToChapterMapBtn() {
-		GameStateMgr.GetInst ().BackwardState ();
-	}
-
-	public void ClickForwardToFormationEditBtn() {
-		GuiMgr.GetInst ().PushPanel (PANEL_TYPE.FormationEdit);
-	}
-
-	public void ClickForwardToBattleBtn() {
-		GameStateMgr.GetInst().ForwardState(GAME_STATE.BattleState);
+		
+	public override void OnClickXXXBtn(string btnName) {
+		switch (btnName) {
+		case "btn_back":
+			GuiMgr.GetInst ().PopPnl (PANEL_TYPE.ChapterMap);
+			break;
+		case "btn_edit_formation":
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.FormationEdit, false);
+			break;
+		case "btn_forward_to_battle":
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.Battle);
+			break;
+		}
 	}
 
 	public void ClickFormationItemBtn(UnityEngine.Object formationItemObject) {

@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CharacterInfoPanel : MonoBehaviour {
+public class CharacterInfoPanel : PanelBase {
 
-	// Use this for initialization
-	void Start () {
-	
+	public override void OnClickXXXBtn(string btnName) {
+		
+		switch (btnName) {
+		case "btn_back":
+		case "spr_modal":
+		case "btn_x":
+			GuiMgr.GetInst ().PopPnl ();
+			break;
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

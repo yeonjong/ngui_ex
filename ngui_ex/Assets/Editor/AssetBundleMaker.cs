@@ -3,6 +3,7 @@ using UnityEditor;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 
 public class AssetBundleMaker {
@@ -38,53 +39,21 @@ public class AssetBundleMaker {
 
 /* (unity5) AssetBundle 만들기. */
 
-	[MenuItem("Tools/Make AssetBundle for iOS")]
-	static void CreateNewAssetBundleFromScript__() {
-		if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.iOS) {
-			Debug.LogError ("<b>Build for iOS</b> requires <b>iOS Platform</b> to be selected.");
-			return;
-		}
+	[MenuItem("Tools/Asset Bundle/Register selected asset to assetDatabase")]
+	static void RegistAsset() {
+		ClearLog ();
 
-		if (!Directory.Exists(OUTPUT_PATH_IOS)) {
-			Debug.Log("Directory not exist: " + OUTPUT_PATH_IOS);
-		}
-
-		CheckDependences ();
-
-		CreateNewAssetBundleFromAssetDatabase (BuildTarget.iOS, OUTPUT_PATH_IOS);
-	}
-
-	[MenuItem("Tools/Make AssetBundle for Android")]
-	static void CreateNewAssetBundleFromAssetBundleBuild2()
-	{
-		if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.Android) {
-			Debug.LogError ("<b>Build for Android</b> requires <b>Android Platform</b> to be selected.");
-			return;
-		}
-
-		if (!Directory.Exists(OUTPUT_PATH_ANDROID)) {
-			Debug.Log("Directory not exist: " + OUTPUT_PATH_ANDROID);
-			return;
-		}
-
-		CheckDependences ();
-
-		CreateNewAssetBundleFromAssetDatabase (BuildTarget.Android, OUTPUT_PATH_ANDROID);
-	}
-
-	static void CheckDependences() {
 		Dictionary<string, string> assetImporterDic = new Dictionary<string, string> ();
-		
-		string selectedPrefabPath = AssetDatabase.GetAssetPath (Selection.activeObject);
-		int lastSlashIndex = selectedPrefabPath.LastIndexOf('/');
-		string assetBundleName = selectedPrefabPath.Substring(lastSlashIndex + 1, selectedPrefabPath.Length - lastSlashIndex - 1);
-		assetBundleName = assetBundleName.Replace(".prefab", ".unity3d");
-		assetBundleName = assetBundleName.ToLower();
-		
+		string[] assetBundleNames = AssetDatabase.GetAllAssetBundleNames();
+		for (int i = 0; i < assetBundleNames.Length; i++) {
+			assetImporterDic.Add (assetBundleNames[i], "");
+		}
+
+		var selectedPrefab = Selection.activeObject;
+		string selectedPrefabPath = AssetDatabase.GetAssetPath (selectedPrefab);
 		RegistToAssetImporter (ref assetImporterDic, selectedPrefabPath);
-		
-		var prefab = Selection.activeObject;
-		foreach (var dependency in EditorUtility.CollectDependencies(new[]{ prefab })) {
+
+		foreach (var dependency in EditorUtility.CollectDependencies(new[]{ selectedPrefab })) {
 			var dependencyPath = AssetDatabase.GetAssetPath(dependency);
 			if (string.IsNullOrEmpty(dependencyPath)) continue;
 
@@ -100,28 +69,35 @@ public class AssetBundleMaker {
 				break;
 			case ".shader":
 			case ".mat":
+			case ".FBX":
 			case ".psd":	// texture extention add.
 			case ".png":
 			case ".wav":	// autioClip extention add.
 				//Debug.Log("?? " + dependencyPath);
 				RegistToAssetImporter (ref assetImporterDic, dependencyPath);
 				break;
-			default:		// .cs
+			case ".cs":		// skip script
+				break;
+			default:
+				StringBuilder sb = new StringBuilder ("There are non registered extention. Please check and add this extention.\n");
+				sb.AppendFormat ("New Extention: {0}\n", extension);
+				sb.AppendFormat ("Asset Path: {0}\n", dependencyPath);
+				Debug.LogError(sb.ToString());
 				break;
 			}
 		}
 	}
 
 	static void RegistToAssetImporter(ref Dictionary<string, string> dic, string targetPath) {
-		string extension = Path.GetExtension (targetPath);
+		//string extension = Path.GetExtension (targetPath);
 
 		int lastSlashIndex = targetPath.LastIndexOf('/');
 		string assetBundleName = targetPath.Substring(lastSlashIndex + 1, targetPath.Length - lastSlashIndex - 1);
-		assetBundleName = assetBundleName.Replace(extension, ".unity3d");
 		assetBundleName = assetBundleName.ToLower();
-		string name = assetBundleName.Replace (".unity3d", "");
+		assetBundleName += ".unity3d";
 
-		if (dic.ContainsKey (name)) {
+		if (dic.ContainsKey (assetBundleName)) {
+			/*
 			//Debug.Log (dic [name] + "/" + extension);
 			if (dic [name].Equals (extension)) {
 				//Debug.Log ("Same extension. skip");
@@ -129,38 +105,68 @@ public class AssetBundleMaker {
 			} else {
 				Debug.LogError ("two objects have same name but have different extention");
 				Debug.LogError ("it was not made to asset bundle. please check these objects");
-				Debug.LogError ("[crash info] name: " + name + ", extention 1 :" + dic[name]  + ", extention 2 " + extension);
+				Debug.LogError ("[crash info] name: " + name + ", extention 1 :" + dic [name] + ", extention 2 " + extension);
 				Debug.LogError (targetPath);
 				return;
 			}
+			*/
+		} else {
+			AssetImporter importer = AssetImporter.GetAtPath (targetPath);
+			importer.assetBundleName = assetBundleName;
+			dic.Add (assetBundleName, "");
+			Debug.Log(targetPath +  " => " + assetBundleName);
 		}
-
-		Debug.Log(targetPath +  " => " + assetBundleName);
-		AssetImporter importer = AssetImporter.GetAtPath (targetPath);
-		importer.assetBundleName = assetBundleName;
-		dic.Add (name, extension);
-		//Debug.Log ("regist");
 	}
 
-	static void CreateNewAssetBundleFromAssetDatabase(BuildTarget buildTarget, string outputPath)
-	{
-		CheckAssetDatabase();
 
+	[MenuItem("Tools/Asset Bundle/Make AssetBundles for iOS")]
+	static void MakeAssetBundle_iOS() {
+		ClearLog ();
+
+		if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.iOS) {
+			Debug.LogError ("<b>Build for iOS</b> requires <b>iOS Platform</b> to be selected.");
+			return;
+		}
+
+		if (!Directory.Exists(OUTPUT_PATH_IOS)) {
+			Debug.Log("Directory not exist: " + OUTPUT_PATH_IOS);
+		}
+
+		CreateNewAssetBundleFromAssetDatabase (BuildTarget.iOS, OUTPUT_PATH_IOS);
+	}
+	[MenuItem("Tools/Asset Bundle/Make AssetBundles for Android")]
+	static void MakeAssetBundle_Android() {
+		ClearLog ();
+
+		if (EditorUserBuildSettings.selectedBuildTargetGroup != BuildTargetGroup.iOS) {
+			Debug.LogError ("<b>Build for iOS</b> requires <b>iOS Platform</b> to be selected.");
+			return;
+		}
+
+		if (!Directory.Exists(OUTPUT_PATH_IOS)) {
+			Debug.LogError("Directory not exist: " + OUTPUT_PATH_IOS);
+		}
+
+		CreateNewAssetBundleFromAssetDatabase (BuildTarget.Android, OUTPUT_PATH_ANDROID);
+	}
+	static void CreateNewAssetBundleFromAssetDatabase(BuildTarget buildTarget, string outputPath) {
 		try {
 			BuildPipeline.BuildAssetBundles (outputPath, BuildAssetBundleOptions.None, buildTarget);
+			Debug.Log("Success making assetbundles");
 		} catch (Exception e) {
 			Debug.Log ("Fail making assetbundles");
 			Debug.LogError (e.Message);
 			return;
+		} finally {
+			AssetDatabase.Refresh();
 		}
-
-		Debug.Log("Made some AssetBundles");
-		AssetDatabase.Refresh();
 	}
 
-	[MenuItem("Tools/Check AssetBundleNames")]
+	[MenuItem("Tools/Asset Bundle/Check AssetBundleNames")]
     static void CheckAssetDatabase()
     {
+		ClearLog ();
+
         StringBuilder sb = new StringBuilder("[Check AssetBundleNames]");
 
         string[] assetBundleNames = AssetDatabase.GetAllAssetBundleNames();
@@ -194,9 +200,11 @@ public class AssetBundleMaker {
         sb.Length = 0; sb.Capacity = 0;
     }
 
-	[MenuItem("Tools/Remove UnusedAssetBundleNames on AssetDatabase")]
+	[MenuItem("Tools/Asset Bundle/Remove UnusedAssetBundleNames on AssetDatabase")]
     static void RemoveAllUnusedAssetBundleNames()
     {
+		ClearLog ();
+
         StringBuilder sb = new StringBuilder("[Show unused AssetBundles]");
         string[] unusedAssetBundleNames = AssetDatabase.GetUnusedAssetBundleNames();
         sb.Append("\n# of unused AssetBundles: ");
@@ -225,6 +233,13 @@ public class AssetBundleMaker {
 
         AssetDatabase.Refresh();
     }
+
+	public static void ClearLog() {
+		var assembly = Assembly.GetAssembly(typeof(UnityEditor.ActiveEditorTracker));
+		var type = assembly.GetType("UnityEditorInternal.LogEntries");
+		var method = type.GetMethod("Clear");
+		method.Invoke(new object(), null);
+	}
 
 	/*
 	//[MenuItem("Tools/Make AssetBundle for iOS")]// - with script, many target prefabs (v5)")]

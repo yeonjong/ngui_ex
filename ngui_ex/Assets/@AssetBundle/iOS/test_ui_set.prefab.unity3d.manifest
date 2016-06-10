@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 3662224732
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ec1e101a4a9571e16bc1288aa35d47f8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7a8becec1d197c8ad30ef65e4815a480
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/Atlases/test_ui_set.prefab
+Dependencies:
+- Assets/@AssetBundle/iOS/mat_test_ui_set.mat.unity3d

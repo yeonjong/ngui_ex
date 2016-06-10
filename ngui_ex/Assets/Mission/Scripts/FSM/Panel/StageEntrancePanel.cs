@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 
-public class StageEntrancePanel : MonoBehaviour {
+public class StageEntrancePanel : PanelBase {
 
-	public void ClickForwardToChapterMapBtn() {
-		GuiMgr.GetInst ().PopPanel ();
-		//GameStateMgr.GetInst ().BackwardState ();
-	}
-
-	public void ClickForwardToPartyEditBtn() {
-		GameStateMgr.GetInst ().ForwardState (GAME_STATE.PartyEditState);
+	public override void OnClickXXXBtn(string btnName) {
+		switch (btnName) {
+		case "btn_back":
+		case "spr_modal":
+			GuiMgr.GetInst ().PopPnl ();
+			break;
+		case "btn_entrance":
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.PartyEdit);
+			break;
+		}
 	}
 
 }

@@ -3,13 +3,14 @@ using System.Collections;
 
 public class ItemInfoPanel : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	public void OnClickXXXBtn(string btnName) {
+		Debug.Log (btnName);
+
+		switch (btnName) {
+		case "spr_modal":
+			//GuiMgr.GetInst ().PopPanel ();
+			break;
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

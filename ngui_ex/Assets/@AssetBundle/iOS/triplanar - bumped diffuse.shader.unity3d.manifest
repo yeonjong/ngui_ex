@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 3644710337
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4a0553fb023840178be2e61ff7181273
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1094ce4a8b63a0cc7870d736bb694a93
+HashAppended: 0
+ClassTypes:
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/Models/Stanford Bunny/Triplanar - Bumped Diffuse.shader
+Dependencies: []

@@ -2,24 +2,24 @@
 
 public class LobbyPanel : MonoBehaviour {
 
-    public void ClickBackwardToIntroBtn() {
-		GameStateMgr.GetInst ().BackwardState ();
-    }
-
     public void ClickForwardToChapterMapBtn() {
-		GameStateMgr.GetInst().ForwardState(GAME_STATE.ChapterMapState);
+		GameStateMgr.GetInst ().ForwardState (GAME_STATE.OtherState);
+		GuiMgr.GetInst ().PushPnl (PANEL_TYPE.ChapterMap);
     }
 
 	public void OnClickAreanaBtn() {
-		GameStateMgr.GetInst ().ForwardState (GAME_STATE.AreanaEntranceState);
+		GameStateMgr.GetInst ().ForwardState (GAME_STATE.OtherState);
+		GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AreanaEntrance);
 	}
 
 	public void OnClickStrongestAreanaBtn() {
-		GameStateMgr.GetInst ().ForwardState (GAME_STATE.StrongestAreanaEntranceState);
+		GameStateMgr.GetInst ().ForwardState (GAME_STATE.OtherState);
+		GuiMgr.GetInst ().PushPnl (PANEL_TYPE.StrongestAreanaEntrance);
 	}
 
 	public void OnClickShamBattleBtn() {
-		GameStateMgr.GetInst ().ForwardState (GAME_STATE.ShamBattleState);
+		GameStateMgr.GetInst ().ForwardState (GAME_STATE.OtherState);
+		GuiMgr.GetInst ().PushPnl (PANEL_TYPE.ShamBattleEntrance);
 	}
 
 }

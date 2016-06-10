@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AreanaRecordReviewCheckPanel : MonoBehaviour {
+public class AreanaRecordReviewCheckPanel : PanelBase {
 
-	// Use this for initialization
-	void Start () {
-	
+	public override void OnClickXXXBtn(string btnName) {
+		Debug.Log (btnName);
+
+		switch (btnName) {
+		case "btn_back":
+		case "spr_modal":
+			GuiMgr.GetInst ().PopPnl ();
+			break;
+		case "btn_review":
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AreanaBattle);
+			break;
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }

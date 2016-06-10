@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 1038524274
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 9234435e5e59a206752906fbb96ef42b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 20d2a047ae4e99a3eaf853982df4d9aa
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/Models/Stanford Bunny/Marble.mat
+Dependencies:
+- Assets/@AssetBundle/iOS/marble tile.psd.unity3d
+- Assets/@AssetBundle/iOS/triplanar - bumped diffuse.shader.unity3d
+- Assets/@AssetBundle/iOS/marble tile nm.psd.unity3d

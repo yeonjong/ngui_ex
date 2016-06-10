@@ -8,13 +8,21 @@ public class CommonTopBarPanel : MonoBehaviour {
 	public void ClickBackwardBtn() {
 		if (current == null) {
 			current = this;
-			StartCoroutine (Execute());
+
+			if ((GameStateMgr.GetInst ().Curr).Equals (GAME_STATE.OtherState)) {
+				GuiMgr.GetInst ().Backward ();
+			} else {
+				GameStateMgr.GetInst ().Backward ();
+			}
+
 			current = null;
 		}
 	}
 
+	/*
+	//StartCoroutine (Execute());
 	IEnumerator Execute() {
 		yield return new WaitUntil (() => GameStateMgr.GetInst ().BackwardState ());
 	}
-
+	*/
 }

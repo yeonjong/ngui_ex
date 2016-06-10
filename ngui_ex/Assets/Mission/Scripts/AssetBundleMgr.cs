@@ -204,7 +204,7 @@ public class AssetBundleMgr : MonoBehaviour
 				if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android) {
 					sb.Append ("Android");
 				} else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS) {
-					sb.Append ("iOS.manifest");
+					sb.Append ("iOS");
 				} else {
 					Debug.LogError ("please change build target (Android or iOS)");
 					return null;
@@ -241,13 +241,11 @@ public class AssetBundleMgr : MonoBehaviour
 
 			}
 
-
 			sb = new StringBuilder (assetBundleFolder);
 			sb.Append (bundleName);
 			Debug.Log ("target: " + sb.ToString ());
 			//Debug.Log("load Path: " + sb.ToString());
 			AssetBundle myLoadedAssetBundle = AssetBundle.LoadFromFile(sb.ToString());
-			prefab = myLoadedAssetBundle.LoadAsset(name + ".prefab") as GameObject;
 			prefab = myLoadedAssetBundle.LoadAsset(myLoadedAssetBundle.GetAllAssetNames()[0]) as GameObject;
 
 			//for (int i = 0; i < dependentAssetBundles.Length; i++) {
@@ -255,7 +253,7 @@ public class AssetBundleMgr : MonoBehaviour
 				//	assetBundles[i].Unload(false);
 			//}
 			myLoadedAssetBundle.Unload (false);
-
+			
 		} catch (Exception e) {
 			Debug.Log ("failed to load AssetBundle!");
 			Debug.LogError (e.Message);

@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 2851817876
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 340fd47af0e6762a2b90ac8c0cd1fd84
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 20d2a047ae4e99a3eaf853982df4d9aa
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Media/gui/@outcome/Atlases/mat_Wooden Atlas.mat
+Dependencies:
+- Assets/@AssetBundle/iOS/unlit - transparent colored.shader.unity3d
+- Assets/@AssetBundle/iOS/tex_wooden atlas.png.unity3d

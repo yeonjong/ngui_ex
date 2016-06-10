@@ -1,10 +1,22 @@
 ﻿using UnityEngine;
 
-public class ChapterMapPanel : MonoBehaviour {
-	
+public class ChapterMapPanel : PanelBase {
+
+	/*
 	public void ClickForwardToStageEntranceBtn() {
-		GuiMgr.GetInst ().PushPanel (PANEL_TYPE.StageEntrance);
-		//GameStateMgr.GetInst ().ForwardState (GAME_STATE.StageEntranceState);
+		GuiMgr.GetInst ().PushPnl (PANEL_TYPE.StageEntrance, false);
+	}
+	*/	
+	public override void OnClickXXXBtn(string btnName) {
+		switch (btnName) {
+		case "btn_back":
+			GameStateMgr.GetInst ().Backward ();
+			GuiMgr.GetInst ().PopPnl ();
+			break;
+		case "btn_dungeon":
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.StageEntrance, false);
+			break;
+		}
 	}
 
 }

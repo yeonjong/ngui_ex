@@ -41,7 +41,7 @@ public enum PANEL_TYPE {
 	ItemInfo,							//
 	AreanaHelp,							//아레나 도움.
 	AreanaCumulative,					//아레나 누적 (최강전장).
-	ShamBattle,							//모의전.
+	ShamBattleEntrance,					//모의전 준비.
 	MapChoice,							//(모의전 )맵 선택.
 }
 
@@ -52,7 +52,7 @@ public class GuiMgr : MonoBehaviour {
 	private static string[] panelNames = new string[] {"pnl_common_top_bar", "pnl_intro", "pnl_patch", "pnl_lobby", "pnl_chapter_map", "pnl_stage_entrance", "pnl_party_edit", "pnl_formation_edit", "pnl_battle",
 		"pnl_areana_entrance", "pnl_strongest_areana_entrance", "pnl_other_user_party_info", "pnl_character_info", "pnl_formation_info", "pnl_strongest_other_user_party_info", "pnl_defense_party_edit",
 		"pnl_change_party", "pnl_attack_party_edit", "pnl_areana_intro_choreography", "pnl_strongest_areana_intro_choreography", "pnl_areana_battle", "pnl_areana_ending_choreography", "pnl_areana_ranking",
-		"pnl_areana_record", "pnl_areana_record_review_check", "pnl_strongest_areana_record_review_check", "pnl_areana_reward", "pnl_item_info", "pnl_areana_help", "pnl_areana_cumulative", "pnl_sham_battle", "pnl_map_choice"};
+		"pnl_areana_record", "pnl_areana_record_review_check", "pnl_strongest_areana_record_review_check", "pnl_areana_reward", "pnl_item_info", "pnl_areana_help", "pnl_areana_cumulative", "pnl_sham_battle_entrance", "pnl_map_choice"};
 
 
 	private GameObject pnl_common_top_bar;
@@ -74,16 +74,26 @@ public class GuiMgr : MonoBehaviour {
         return inst;
     }
 
+	public void Backward() {
+		m_pnlInstances [(int)m_panelStack.Peek ()].GetComponent<PanelBase> ().OnClickXXXBtn("btn_back");
+	}
+
+	public bool CheckContainsTargetPanel(PANEL_TYPE target) {
+		return m_panelStack.Contains (target);
+	}
+
 	private void ShowStack() {
 		StringBuilder sb = new StringBuilder ("Stack: ");
 		foreach (PANEL_TYPE t in m_panelStack.ToArray()) {
 			sb.Append (t);
 			sb.Append (" ");
 		}
+		sb.Append (showDepth);
 		sb.Append ("\n");
 		Debug.Log (sb.ToString());
 	}
 
+	/*
 	public void JumpBackPanel(PANEL_TYPE panelType) {
 		Debug.Log ("JumpBack " + panelType);
 
@@ -101,7 +111,91 @@ public class GuiMgr : MonoBehaviour {
 
 		ShowStack ();
 	}
+	*/
 
+	int showDepth = 0;
+	public void PushPnl(PANEL_TYPE target, bool hideCurrPnl = true) {
+		Debug.Log ("Push " + target);
+
+		if (hideCurrPnl) {
+			if (m_panelStack.Count != 0) {
+				if (showDepth < 0) {
+					Stack<PANEL_TYPE> temp = new Stack<PANEL_TYPE> ();
+					for (int i = showDepth; i <= 0; i++) {
+						HidePanel (m_panelStack.Peek ());
+						temp.Push (m_panelStack.Pop ());
+					}
+					while (temp.Count != 0) {
+						Debug.Log ("hide " + temp.Peek());
+						m_panelStack.Push (temp.Pop ());
+					}
+					showDepth = 0;
+				} else {
+					HidePanel (m_panelStack.Peek ());
+				}
+			}
+
+		} else {
+			showDepth -= 1;
+		}
+
+		m_panelStack.Push (target);
+		ShowPanel (target);
+
+		ShowStack ();
+	}
+
+	public void PopPnl() {
+		if (showDepth < 0)
+			showDepth++;
+
+		HidePanel (m_panelStack.Pop ());
+		ShowPanel (m_panelStack.Peek ());
+
+		ShowStack ();
+	}
+
+	public void PopPnl(PANEL_TYPE target, params PANEL_TYPE[] args) {
+		if (m_panelStack.Contains (target)) {
+			while (!target.Equals (m_panelStack.Peek ())) {
+				HidePanel (m_panelStack.Pop ());
+			}
+		} else {
+			Debug.LogError ("don't exist target panel in stack");
+			m_panelStack.Clear ();
+			m_panelStack.Push (target);
+		}
+		ShowPanel (m_panelStack.Peek());
+
+		if (args == null) {
+			showDepth = 0;
+		} else {
+			for (int i = 0; i < args.Length; i++) {
+				m_panelStack.Push (args [i]);
+				ShowPanel (args [i]);
+			}
+			showDepth = args.Length * -1;
+		}
+
+		ShowStack ();
+	}
+
+	/*
+	public void PushPanel(PANEL_TYPE panelType) {
+		Debug.Log ("Push " + panelType);
+
+		if (m_panelStack.Count != 0) {
+			HidePanel (m_panelStack.Peek ());
+		}
+
+		m_panelStack.Push (panelType);
+		ShowPanel (panelType);
+
+		ShowStack ();
+	}
+	*/
+
+	/*
 	public void PushPanel(PANEL_TYPE panelType) {
 		Debug.Log ("Push " + panelType);
 
@@ -136,7 +230,9 @@ public class GuiMgr : MonoBehaviour {
 
 		ShowStack ();
 	}
+	*/
 
+	/*
 	public void PopPanel() {
 		Debug.Log ("Pop");
 
@@ -145,6 +241,7 @@ public class GuiMgr : MonoBehaviour {
 
 		ShowStack ();
 	}
+	*/
 
 	public void ShowPanel(PANEL_TYPE panelType) {
 		int panelIndex = (int)panelType;
@@ -177,6 +274,9 @@ public class GuiMgr : MonoBehaviour {
 		case PANEL_TYPE.Lobby:
 		case PANEL_TYPE.ChapterMap:
 		case PANEL_TYPE.StageEntrance:
+		case PANEL_TYPE.AreanaEntrance:
+		case PANEL_TYPE.ShamBattleEntrance:
+		case PANEL_TYPE.AreanaRecord:
 			ShowPanel (PANEL_TYPE.CommonTopBar);
 			break;
 
@@ -185,13 +285,15 @@ public class GuiMgr : MonoBehaviour {
 			break;
 
 		case PANEL_TYPE.Battle:
+		case PANEL_TYPE.AreanaIntroChoreography:
+		case PANEL_TYPE.StrongestAreanaIntroChoreography:
+		case PANEL_TYPE.AreanaBattle:
 			HidePanel (PANEL_TYPE.CommonTopBar);
 			break;
 
 		/* don't check */
-		case PANEL_TYPE.AreanaEntrance:
-			ShowPanel (PANEL_TYPE.CommonTopBar);
-			break;
+		//case PANEL_TYPE.AreanaEntrance:
+		//	break;
 		case PANEL_TYPE.StrongestAreanaEntrance:
 			break;
 		case PANEL_TYPE.OtherUserPartyInfo:
@@ -208,18 +310,18 @@ public class GuiMgr : MonoBehaviour {
 			break;
 		case PANEL_TYPE.AttackPartyEdit:
 			break;
-		case PANEL_TYPE.AreanaIntroChoreography:
-		case PANEL_TYPE.StrongestAreanaIntroChoreography:
-			HidePanel (PANEL_TYPE.CommonTopBar);
-			break;
-		case PANEL_TYPE.AreanaBattle:
-			break;
+		//case PANEL_TYPE.AreanaIntroChoreography:
+		//	break;
+		//case PANEL_TYPE.StrongestAreanaIntroChoreography:
+		//	break;
+		//case PANEL_TYPE.AreanaBattle:
+		//	break;
 		case PANEL_TYPE.AreanaEndingChoreography:
 			break;
 		case PANEL_TYPE.AreanaRanking:
 			break;
-		case PANEL_TYPE.AreanaRecord:
-			break;
+		//case PANEL_TYPE.AreanaRecord:
+		//	break;
 		case PANEL_TYPE.AreanaRecordReviewCheck:
 			break;
 		case PANEL_TYPE.StrongestAreanaRecordReviewCheck:
@@ -232,8 +334,8 @@ public class GuiMgr : MonoBehaviour {
 			break;
 		case PANEL_TYPE.AreanaCumulative:
 			break;
-		case PANEL_TYPE.ShamBattle:
-			break;
+		//case PANEL_TYPE.ShamBattle:
+		//	break;
 		case PANEL_TYPE.MapChoice:
 			break;
 		}

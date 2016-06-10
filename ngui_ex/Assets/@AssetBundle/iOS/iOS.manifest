@@ -2,222 +2,79 @@ ManifestFileVersion: 0
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: pnl_battle.unity3d
-      Dependencies:
-        Dependency_0: tap.unity3d
-        Dependency_1: arimo20.unity3d
-        Dependency_2: test_ui_set.unity3d
+      Name: unlit - transparent colored.shader.unity3d
+      Dependencies: {}
     Info_1:
-      Name: tap.unity3d
+      Name: atl_test_ui_set.png.unity3d
       Dependencies: {}
     Info_2:
-      Name: unlit - transparent colored.unity3d
+      Name: tex_wooden atlas.png.unity3d
       Dependencies: {}
     Info_3:
-      Name: arimo20.unity3d
-      Dependencies:
-        Dependency_0: wooden atlas.unity3d
-        Dependency_1: mat_wooden atlas.unity3d
+      Name: tap.wav.unity3d
+      Dependencies: {}
     Info_4:
-      Name: wooden atlas.unity3d
+      Name: test_ui_set.prefab.unity3d
       Dependencies:
-        Dependency_0: mat_wooden atlas.unity3d
+        Dependency_0: mat_test_ui_set.mat.unity3d
     Info_5:
-      Name: mat_wooden atlas.unity3d
+      Name: arimo20.prefab.unity3d
       Dependencies:
-        Dependency_0: unlit - transparent colored.unity3d
-        Dependency_1: tex_wooden atlas.unity3d
+        Dependency_0: mat_wooden atlas.mat.unity3d
+        Dependency_1: wooden atlas.prefab.unity3d
     Info_6:
-      Name: tex_wooden atlas.unity3d
-      Dependencies: {}
+      Name: mat_test_ui_set.mat.unity3d
+      Dependencies:
+        Dependency_0: unlit - transparent colored.shader.unity3d
+        Dependency_1: atl_test_ui_set.png.unity3d
     Info_7:
-      Name: pnl_lobby.unity3d
+      Name: mat_wooden atlas.mat.unity3d
       Dependencies:
-        Dependency_0: tap.unity3d
-        Dependency_1: arimo20.unity3d
-        Dependency_2: test_ui_set.unity3d
+        Dependency_0: unlit - transparent colored.shader.unity3d
+        Dependency_1: tex_wooden atlas.png.unity3d
     Info_8:
-      Name: panel.unity3d
+      Name: wooden atlas.prefab.unity3d
       Dependencies:
-        Dependency_0: test_ui_set.unity3d
+        Dependency_0: mat_wooden atlas.mat.unity3d
     Info_9:
-      Name: atl_test_ui_set.unity3d
-      Dependencies: {}
+      Name: marble.mat.unity3d
+      Dependencies:
+        Dependency_0: marble tile.psd.unity3d
+        Dependency_1: triplanar - bumped diffuse.shader.unity3d
+        Dependency_2: marble tile nm.psd.unity3d
     Info_10:
-      Name: test_ui_set.unity3d
-      Dependencies:
-        Dependency_0: mat_test_ui_set.unity3d
+      Name: tex_bunny_eye.png.unity3d
+      Dependencies: {}
     Info_11:
-      Name: mat_test_ui_set.unity3d
-      Dependencies:
-        Dependency_0: unlit - transparent colored.unity3d
-        Dependency_1: atl_test_ui_set.unity3d
+      Name: marble tile.psd.unity3d
+      Dependencies: {}
     Info_12:
-      Name: pnl_areana_battle.unity3d
-      Dependencies:
-        Dependency_0: test_ui_set.unity3d
+      Name: triplanar - bumped diffuse.shader.unity3d
+      Dependencies: {}
     Info_13:
-      Name: pnl_areana_cumulative.unity3d
-      Dependencies: {}
+      Name: bunny eye.mat.unity3d
+      Dependencies:
+        Dependency_0: tex_bunny_eye.png.unity3d
+        Dependency_1: triplanar - bumped diffuse.shader.unity3d
     Info_14:
-      Name: pnl_areana_ending_choreography.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
+      Name: marble tile nm.psd.unity3d
+      Dependencies: {}
     Info_15:
-      Name: pnl_areana_entrance.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
+      Name: stanford bunny.fbx.unity3d
+      Dependencies: {}
     Info_16:
-      Name: pnl_areana_help.unity3d
+      Name: coalition.prefab.unity3d
       Dependencies:
-        Dependency_0: test_ui_set.unity3d
+        Dependency_0: mat_wooden atlas.mat.unity3d
+        Dependency_1: wooden atlas.prefab.unity3d
     Info_17:
-      Name: pnl_areana_intro_choreography.unity3d
+      Name: pnl_lobby.prefab.unity3d
       Dependencies:
-        Dependency_0: test_ui_set.unity3d
+        Dependency_0: tap.wav.unity3d
+        Dependency_1: test_ui_set.prefab.unity3d
+        Dependency_2: arimo20.prefab.unity3d
     Info_18:
-      Name: pnl_areana_ranking.unity3d
+      Name: pnl_common_top_bar.prefab.unity3d
       Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_19:
-      Name: pnl_areana_record.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_20:
-      Name: pnl_areana_record_review_check.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_21:
-      Name: pnl_areana_reward.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_22:
-      Name: pnl_attack_party_edit.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_23:
-      Name: pnl_change_party.unity3d
-      Dependencies: {}
-    Info_24:
-      Name: pnl_chapter_map.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-        Dependency_2: start screen.unity3d
-    Info_25:
-      Name: start screen.unity3d
-      Dependencies: {}
-    Info_26:
-      Name: pnl_character_info.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_27:
-      Name: pnl_common_top_bar.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_28:
-      Name: pnl_defense_party_edit.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_29:
-      Name: pnl_formation_edit.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-        Dependency_2: coalition.unity3d
-    Info_30:
-      Name: coalition.unity3d
-      Dependencies:
-        Dependency_0: wooden atlas.unity3d
-        Dependency_1: mat_wooden atlas.unity3d
-    Info_31:
-      Name: pnl_formation_info.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_32:
-      Name: pnl_item_info.unity3d
-      Dependencies:
-        Dependency_0: test_ui_set.unity3d
-    Info_33:
-      Name: pnl_map_choice.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_34:
-      Name: pnl_normal_popup.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-        Dependency_2: tap2.unity3d
-    Info_35:
-      Name: tap2.unity3d
-      Dependencies: {}
-    Info_36:
-      Name: pnl_other_user_party_info.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_37:
-      Name: pnl_party_edit.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: panel.unity3d
-        Dependency_2: test_ui_set.unity3d
-        Dependency_3: coalition.unity3d
-    Info_38:
-      Name: pnl_sham_battle.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-    Info_39:
-      Name: pnl_stage_entrance.unity3d
-      Dependencies:
-        Dependency_0: arimo20.unity3d
-        Dependency_1: test_ui_set.unity3d
-        Dependency_2: marble.unity3d
-        Dependency_3: bunny eye.unity3d
-    Info_40:
-      Name: triplanar - bumped diffuse.unity3d
-      Dependencies: {}
-    Info_41:
-      Name: marble tile.unity3d
-      Dependencies: {}
-    Info_42:
-      Name: marble.unity3d
-      Dependencies:
-        Dependency_0: triplanar - bumped diffuse.unity3d
-        Dependency_1: marble tile.unity3d
-        Dependency_2: marble tile nm.unity3d
-    Info_43:
-      Name: bunny eye.unity3d
-      Dependencies:
-        Dependency_0: tex_bunny_eye.unity3d
-    Info_44:
-      Name: marble tile nm.unity3d
-      Dependencies: {}
-    Info_45:
-      Name: tex_bunny_eye.unity3d
-      Dependencies: {}
-    Info_46:
-      Name: pnl_strongest_areana_entrance.unity3d
-      Dependencies: {}
-    Info_47:
-      Name: pnl_strongest_areana_intro_choreography.unity3d
-      Dependencies: {}
-    Info_48:
-      Name: pnl_strongest_areana_record_review_check.unity3d
-      Dependencies: {}
-    Info_49:
-      Name: pnl_strongest_other_user_party_info.unity3d
-      Dependencies: {}
+        Dependency_0: test_ui_set.prefab.unity3d
+        Dependency_1: arimo20.prefab.unity3d

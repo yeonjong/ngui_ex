@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 public class GameObjectPoolMgr : MonoBehaviour {
@@ -19,6 +20,12 @@ public class GameObjectPoolMgr : MonoBehaviour {
 	public GameObject party_edit_prefab;
 	public GameObject formation_edit_prefab;
 	public GameObject battle_prefab;
+
+	public GameObject[] prefabs;
+	private static string[] panelNames = new string[] {"pnl_common_top_bar", "pnl_intro", "pnl_patch", "pnl_lobby", "pnl_chapter_map", "pnl_stage_entrance", "pnl_party_edit", "pnl_formation_edit", "pnl_battle",
+		"pnl_areana_entrance", "pnl_strongest_areana_entrance", "pnl_other_user_party_info", "pnl_character_info", "pnl_formation_info", "pnl_strongest_other_user_party_info", "pnl_defense_party_edit",
+		"pnl_change_party", "pnl_attack_party_edit", "pnl_areana_intro_choreography", "pnl_strongest_areana_intro_choreography", "pnl_areana_battle", "pnl_areana_ending_choreography", "pnl_areana_ranking",
+		"pnl_areana_record", "pnl_areana_record_review_check", "pnl_strongest_areana_record_review_check", "pnl_areana_reward", "pnl_item_info", "pnl_areana_help", "pnl_areana_cumulative", "pnl_sham_battle_entrance", "pnl_map_choice"};
 
 
     private GameObjectPoolMgr() { }
@@ -43,8 +50,8 @@ public class GameObjectPoolMgr : MonoBehaviour {
     {
         switch (prf_name)
         {
-            case "pnl_lobby":
-            case "pnl_battle":
+            case "pnl_lobby.prefab":
+            case "pnl_battle.prefab":
                 if (gameObjectDictionary.ContainsKey(prf_name)) {
                     return true;
                 } else if (prefabDictionary.ContainsKey(prf_name)) {
@@ -100,7 +107,9 @@ public class GameObjectPoolMgr : MonoBehaviour {
 					break;
 				*/
                 default:
-					temp = AssetBundleMgr.GetInst().LoadAsset(prf_name);
+					
+					temp = prefabs[Array.IndexOf(panelNames, prf_name)];
+					//temp = AssetBundleMgr.GetInst().LoadAsset(prf_name + ".prefab");
                     break;
                 }
 

@@ -17,8 +17,8 @@ public class PatchPanel : MonoBehaviour {
     */
 
     public void ClickBackwardToIntroBtn() {
-		GameStateMgr.GetInst ().BackwardState ();
-    }
+		GameStateMgr.GetInst ().Backward ();
+	}
 
     public void ClickForwardToLobbyBtn() {
         GameStateMgr.GetInst().ForwardState(GAME_STATE.LobbyState);

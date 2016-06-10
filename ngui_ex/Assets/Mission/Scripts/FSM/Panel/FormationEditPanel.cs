@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FormationEditPanel : MonoBehaviour {
+public class FormationEditPanel : PanelBase {
 	
 
 	public void ClickSelectFormationBtn(Object formationObject) {
@@ -37,11 +37,16 @@ public class FormationEditPanel : MonoBehaviour {
 		GameData.Inst.SetFormation(formationNumber);
 		GuiMgr.GetInst ().OnSelectFormation ();
 
-		ClickForwardToPartyEditBtn ();
+		GuiMgr.GetInst ().PopPnl ();
 	}
 
-	public void ClickForwardToPartyEditBtn() {
-		GuiMgr.GetInst ().PopPanel ();
+	public override void OnClickXXXBtn(string btnName) {
+		switch (btnName) {
+		case "btn_back":
+		case "spr_modal":
+			GuiMgr.GetInst ().PopPnl ();
+			break;
+		}
 	}
 
 }
