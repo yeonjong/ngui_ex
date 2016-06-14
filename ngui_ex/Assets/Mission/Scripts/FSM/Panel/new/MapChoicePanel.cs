@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class MapChoicePanel : PanelBase {
@@ -15,6 +16,18 @@ public class MapChoicePanel : PanelBase {
 			GuiMgr.GetInst ().PopPnl ();
 			break;
 		case "btn_cancel":
+			GuiMgr.GetInst ().PopPnl ();
+			break;
+
+		case "btn_map_0":
+		case "btn_map_1":
+		case "btn_map_2":
+			int wrapIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			Debug.Log (wrapIndex);
+
+			//TODO: calculate real index and save selected map;
+			Debug.Log("todo");
+
 			GuiMgr.GetInst ().PopPnl ();
 			break;
 		}

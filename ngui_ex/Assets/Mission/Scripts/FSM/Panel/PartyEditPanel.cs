@@ -26,10 +26,11 @@ public class PartyEditPanel : PanelBase {
 	public Vector2[] formationTweenPosList = new Vector2[MAX_UI_FORMATION_ITEM_COUNT];
 
 	public void Start() {
-		realItemList = GameData.Inst.GetCharacterKeyList ();
-		realItemMaxIndex = realItemList.Count;
+		//realItemList = GlobalApp.Inst.userData.m_user.GetCharacterKeyList ();// GameData.Inst.GetCharacterKeyList ();
+		//realItemMaxIndex = realItemList.Count;
+		//formationMemberDic = GameData.Inst.GetFormationMemberDic ();
+		/*
 
-		formationMemberDic = GameData.Inst.GetFormationMemberDic ();
 		int index = 0;
 		foreach (UILabel uiLabel in wrapContent.GetComponentsInChildren<UILabel> ()) {
 			if (formationMemberDic.ContainsKey (index)) {
@@ -40,9 +41,11 @@ public class PartyEditPanel : PanelBase {
 			uiItemList [index] = uiLabel;
 			index++;
 		}
+		*/
 
 		/* when inventory was dragged, this event function will be call. */
 		/* fucntion: inject character information to each item slot. */
+		/*
 		wrapContent.GetComponent<UIWrapContent> ().onInitializeItem = delegate(GameObject go, int wrapIndex, int realIndex) {
 			realIndex = Mathf.Abs(realIndex);
 			int realItemIndex = realIndex * 4;
@@ -68,17 +71,11 @@ public class PartyEditPanel : PanelBase {
 			uiFormationItemLabelList[index] = uiFromationItemList [index].GetComponentInChildren<UILabel> ();
 
 			formationTweenPosList [index] = uiSprite.transform.position;
-			/*
-			#if UNITY_EDITOR
-			formationTweenPosList [index] = NGUIMath.WorldToLocalPoint (uiSprite.transform.position, Camera.main, cam, this.transform);
-			#elif
-			formationTweenPosList [index] = NGUIMath.WorldToLocalPoint (uiSprite.transform.position, Camera.main, UICamera.currentCamera, this.transform);
-			#endif
-			*/
 			index++;
 		}
 
 		CheckFormation ();
+		*/
 	}
 
 	public void CheckFormation() {

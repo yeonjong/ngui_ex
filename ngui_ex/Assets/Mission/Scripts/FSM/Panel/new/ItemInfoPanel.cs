@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ItemInfoPanel : MonoBehaviour {
+public class ItemInfoPanel : PanelBase {
 
-	public void OnClickXXXBtn(string btnName) {
+	public override void OnClickXXXBtn(string btnName) {
 		Debug.Log (btnName);
 
 		switch (btnName) {
+		case "btn_back":
 		case "spr_modal":
-			//GuiMgr.GetInst ().PopPanel ();
+			GuiMgr.GetInst ().PopPnl ();
 			break;
 		}
 	}

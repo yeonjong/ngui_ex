@@ -27,6 +27,7 @@ public class GameStateMgr {
 		gameStates[(int)GAME_STATE.IntroState] = new IntroState();
 		gameStates[(int)GAME_STATE.PatchState] = new PatchState();
 		gameStates[(int)GAME_STATE.LobbyState] = new LobbyState();
+		gameStates [(int)GAME_STATE.OtherState] = new OtherState ();
 
 		currGameState = GAME_STATE.NullState;
 		//prevGameState = GAME_STATE.NullState;
@@ -75,9 +76,14 @@ public class GameStateMgr {
 			gameStates [(int)currGameState].OnLeave (GAME_STATE.IntroState);
 			currGameState = GAME_STATE.IntroState;
 			break;
-		default:
+		case GAME_STATE.OtherState:
+			//gameStates [(int)currGameState].OnLeave (GAME_STATE.IntroState);
 			currGameState = GAME_STATE.LobbyState;
-			//Debug.LogError ("");
+			break;
+		default:
+			//gameStates [(int)currGameState].OnLeave (GAME_STATE.IntroState);
+			//currGameState = GAME_STATE.LobbyState;
+			Debug.LogError ("");
 			break;
 		}
 	}

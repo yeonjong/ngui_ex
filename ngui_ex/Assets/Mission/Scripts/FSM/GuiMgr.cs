@@ -75,7 +75,11 @@ public class GuiMgr : MonoBehaviour {
     }
 
 	public void Backward() {
-		m_pnlInstances [(int)m_panelStack.Peek ()].GetComponent<PanelBase> ().OnClickXXXBtn("btn_back");
+		if (m_panelStack.Count == 0) {
+			GameStateMgr.GetInst ().Backward ();
+		} else {
+			m_pnlInstances [(int)m_panelStack.Peek ()].GetComponent<PanelBase> ().OnClickXXXBtn("btn_back");
+		}
 	}
 
 	public bool CheckContainsTargetPanel(PANEL_TYPE target) {
@@ -92,26 +96,6 @@ public class GuiMgr : MonoBehaviour {
 		sb.Append ("\n");
 		Debug.Log (sb.ToString());
 	}
-
-	/*
-	public void JumpBackPanel(PANEL_TYPE panelType) {
-		Debug.Log ("JumpBack " + panelType);
-
-		HidePanel (m_panelStack.Pop ());
-
-		if (m_panelStack.Contains (panelType)) {
-			while (!m_panelStack.Peek().Equals(panelType)) {
-				HidePanel(m_panelStack.Pop ());
-			}
-			ShowPanel (m_panelStack.Peek());
-		} else {
-			m_panelStack.Clear ();
-			PushPanel (panelType);
-		}
-
-		ShowStack ();
-	}
-	*/
 
 	int showDepth = 0;
 	public void PushPnl(PANEL_TYPE target, bool hideCurrPnl = true) {
@@ -148,11 +132,14 @@ public class GuiMgr : MonoBehaviour {
 	public void PopPnl() {
 		if (showDepth < 0)
 			showDepth++;
-
+		#if UNITY_EDITOR
+		if (m_panelStack.Count != 0) HidePanel (m_panelStack.Pop ());
+		if (m_panelStack.Count != 0) ShowPanel (m_panelStack.Peek ());
+		ShowStack ();
+		#elif
 		HidePanel (m_panelStack.Pop ());
 		ShowPanel (m_panelStack.Peek ());
-
-		ShowStack ();
+		#endif
 	}
 
 	public void PopPnl(PANEL_TYPE target, params PANEL_TYPE[] args) {
@@ -179,69 +166,6 @@ public class GuiMgr : MonoBehaviour {
 
 		ShowStack ();
 	}
-
-	/*
-	public void PushPanel(PANEL_TYPE panelType) {
-		Debug.Log ("Push " + panelType);
-
-		if (m_panelStack.Count != 0) {
-			HidePanel (m_panelStack.Peek ());
-		}
-
-		m_panelStack.Push (panelType);
-		ShowPanel (panelType);
-
-		ShowStack ();
-	}
-	*/
-
-	/*
-	public void PushPanel(PANEL_TYPE panelType) {
-		Debug.Log ("Push " + panelType);
-
-		if (m_panelStack.Count != 0) {
-			if (panelType.Equals (PANEL_TYPE.PartyEdit) && m_panelStack.Peek ().Equals (PANEL_TYPE.StageEntrance)) {
-				if (m_panelStack.Contains (PANEL_TYPE.ChapterMap)) {
-					Stack<PANEL_TYPE> tempStack = new Stack<PANEL_TYPE> ();
-					PANEL_TYPE tempType;
-					while (!m_panelStack.Peek ().Equals (PANEL_TYPE.ChapterMap)) {
-						tempType = m_panelStack.Pop ();
-						tempStack.Push (tempType);
-						HidePanel (tempType);
-					}
-					HidePanel (m_panelStack.Peek ());
-					while (tempStack.Count != 0) {
-						m_panelStack.Push (tempStack.Pop());
-					}
-				} else {
-					m_panelStack.Clear ();
-				}
-			} else if (panelType.Equals (PANEL_TYPE.StageEntrance) && m_panelStack.Peek ().Equals (PANEL_TYPE.ChapterMap)) {
-				
-			} else if (panelType.Equals (PANEL_TYPE.FormationEdit) && m_panelStack.Peek().Equals(PANEL_TYPE.PartyEdit)) {
-				
-			} else {
-				HidePanel (m_panelStack.Peek ());
-			}
-		}
-
-		m_panelStack.Push (panelType);
-		ShowPanel (panelType);
-
-		ShowStack ();
-	}
-	*/
-
-	/*
-	public void PopPanel() {
-		Debug.Log ("Pop");
-
-		HidePanel (m_panelStack.Pop ());
-		ShowPanel (m_panelStack.Peek ());
-
-		ShowStack ();
-	}
-	*/
 
 	public void ShowPanel(PANEL_TYPE panelType) {
 		int panelIndex = (int)panelType;
@@ -288,6 +212,8 @@ public class GuiMgr : MonoBehaviour {
 		case PANEL_TYPE.AreanaIntroChoreography:
 		case PANEL_TYPE.StrongestAreanaIntroChoreography:
 		case PANEL_TYPE.AreanaBattle:
+		case PANEL_TYPE.DefensePartyEdit:
+		case PANEL_TYPE.AttackPartyEdit:
 			HidePanel (PANEL_TYPE.CommonTopBar);
 			break;
 
@@ -304,12 +230,12 @@ public class GuiMgr : MonoBehaviour {
 			break;
 		case PANEL_TYPE.StrongestOtherUserPartyInfo:
 			break;
-		case PANEL_TYPE.DefensePartyEdit:
-			break;
+		//case PANEL_TYPE.DefensePartyEdit:
+		//	break;
 		case PANEL_TYPE.ChangeParty:
 			break;
-		case PANEL_TYPE.AttackPartyEdit:
-			break;
+		//case PANEL_TYPE.AttackPartyEdit:
+		//	break;
 		//case PANEL_TYPE.AreanaIntroChoreography:
 		//	break;
 		//case PANEL_TYPE.StrongestAreanaIntroChoreography:

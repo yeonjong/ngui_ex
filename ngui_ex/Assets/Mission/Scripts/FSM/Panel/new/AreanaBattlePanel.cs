@@ -9,8 +9,9 @@ public class AreanaBattlePanel : PanelBase {
 		switch (btnName) {
 		case "btn_back":
 		case "btn_imsi_back":
-			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaRecordReviewCheck))
-				GuiMgr.GetInst ().PopPnl ();
+			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaRecordReviewCheck)) {
+				GuiMgr.GetInst ().PopPnl (PANEL_TYPE.AreanaRecord, PANEL_TYPE.AreanaRecordReviewCheck);
+			}
 			else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaEntrance))
 				GuiMgr.GetInst ().PopPnl (PANEL_TYPE.AreanaEntrance);
 			else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.ShamBattleEntrance))

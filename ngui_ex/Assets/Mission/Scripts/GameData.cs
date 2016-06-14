@@ -20,7 +20,10 @@ public class GameData {
 	private void Initialize() {
 		/* dummy character data */
 		for (int i = 0; i < 52; i++) {
-			SetCharInfo (new CharInfo (i.ToString(), i, i));
+			int random = Random.Range (1, 9);
+			random = random * 10 + random;
+			Debug.Log ("GameData/CharInfo/random: " + random);
+			SetCharInfo (new CharInfo (random, i.ToString(), i, i));
 		}
 
 		/* dummy formation data */
@@ -215,28 +218,16 @@ public class GameData {
 		return characterInfoDic.Count;
 	}
 
+
+
+
+
+
+
+
+	/*
 	public List<string> GetCharacterKeyList() {
 		return new List<string>(characterInfoDic.Keys);
 	}
-
-
-
-
-
-
-}
-	
-/* character data */
-public class CharInfo {
-	public int id;
-	public string name;
-	public int cost;
-	public int hp;
-	//public int[] formationPos;
-
-	public CharInfo(string name, int cost, int hp) {
-		this.name = name;
-		this.cost = cost;
-		this.hp = hp;
-	}
+	*/
 }

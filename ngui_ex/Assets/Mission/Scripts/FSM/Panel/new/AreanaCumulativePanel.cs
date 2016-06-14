@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AreanaCumulativePanel : MonoBehaviour {
+public class AreanaCumulativePanel : PanelBase {
 
-	// Use this for initialization
-	void Start () {
-	
+	public override void OnClickXXXBtn(string btnName) {
+		Debug.Log (btnName);
+
+		switch (btnName) {
+		case "btn_back":
+		case "spr_modal":
+			//GuiMgr.GetInst ().PopPnl ();
+			break;
+		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }
