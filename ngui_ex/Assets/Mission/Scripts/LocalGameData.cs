@@ -12,6 +12,7 @@ public partial class LocalGameData {
 	private void Init() {
 		InitOtherUser ();
 		InitHighRankUser ();
+		InitStrHighRankUser ();
 		InitRecord ();
 		InitReward ();
 	}
@@ -38,78 +39,203 @@ public partial class LocalGameData {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 		for (int i = 0; i < OTHER_USER_NUM; i++) {
-			m_otherUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), UnityEngine.Random.Range(1000,3001), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			m_otherUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
 
-			CharInfo[] otherUserParty = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
-			for (int j = 0; j < otherUserParty.Length; j++) {
-				CharInfo character = new CharInfo(j * 10 + j, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
-				otherUserParty [j] = character;
+			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
+			Party areanaDefParty = new Party ();
+			for (int j = 0; j < 1; j++) {
+				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				areanaDefParty.m_charSetList.Add (charSet);
 			}
-			m_otherUsers [i].AddParty (otherUserParty, FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)));
+
+			Party strAreanaDefParty = new Party ();
+			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
+				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				strAreanaDefParty.m_charSetList.Add (charSet);
+			}
+
+			partyDic.Add (PARTY_TYPE.AreanaDef, areanaDefParty);
+			partyDic.Add (PARTY_TYPE.StrAreanaDef, strAreanaDefParty);
+
+			m_otherUsers [i].SetPartyDic (partyDic);
 		}
 	}
 
 	/* high rank */
-	private User[]  m_highRankUsers;
+	private User[] m_highRankUsers;
+	private User[] m_strHighRankUsers;
 	public User[] GetHighRankUsers(bool reset = false) {
 		if (reset)
 			ResetHighRankUser ();
 		return m_highRankUsers;
+	}
+	public User[] GetStrHighRankUsers(bool reset = false) {
+		if (reset)
+			ResetStrHighRankUser ();
+		return m_strHighRankUsers;
 	}
 
 	private void InitHighRankUser() {
 		m_highRankUsers = new User[3 + 20]; // + 10
 		ResetHighRankUser ();
 	}
+	private void InitStrHighRankUser() {
+		m_strHighRankUsers = new User[3 + 20];
+		ResetStrHighRankUser ();
+	}
 
 	private void ResetHighRankUser() {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 		for (int i = 0; i < m_highRankUsers.Length; i++) {
-			m_highRankUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), UnityEngine.Random.Range(1000,3001), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			m_highRankUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
 
-			CharInfo[] party = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
-			for (int j = 0; j < party.Length; j++) {
-				CharInfo character = new CharInfo(j * 10 + j, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
-				party [j] = character;
+			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
+			Party areanaDefParty = new Party ();
+			for (int j = 0; j < 1; j++) {
+				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				areanaDefParty.m_charSetList.Add (charSet);
 			}
-			m_highRankUsers [i].AddParty (party, FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)));
+			partyDic.Add (PARTY_TYPE.AreanaDef, areanaDefParty);
+
+			m_highRankUsers [i].SetPartyDic (partyDic);
+		}
+	}
+	private void ResetStrHighRankUser() {
+		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
+
+		for (int i = 0; i < m_strHighRankUsers.Length; i++) {
+			m_strHighRankUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+
+			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
+			Party strAreanaDefParty = new Party ();
+			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
+				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				strAreanaDefParty.m_charSetList.Add (charSet);
+			}
+			partyDic.Add (PARTY_TYPE.StrAreanaDef, strAreanaDefParty);
+
+			m_strHighRankUsers [i].SetPartyDic (partyDic);
 		}
 	}
 
 
 	/* record */
 	public List<RecordInfo> recordList;
+	public List<RecordInfo> strRecordList;
 
 	private void InitRecord() {
 		recordList = new List<RecordInfo> ();
+		strRecordList = new List<RecordInfo> ();
 
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 
 		for (int i = 0; i < 6; i++) {
-			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), UnityEngine.Random.Range(1000,3001), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
-			CharInfo[] userParty = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
-			for (int j = 0; j < userParty.Length; j++) {
-				CharInfo character = new CharInfo(j * 10 + j, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
-				userParty [j] = character;
-			}
-			user.AddParty (userParty, FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)));
+			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
+			Party areanaAtkParty = new Party ();
+			for (int j = 0; j < 1; j++) {
+				areanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-			User otheruser = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), UnityEngine.Random.Range(1000,3001), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
-			CharInfo[] otherUserParty = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
-			for (int j = 0; j < otherUserParty.Length; j++) {
-				CharInfo character = new CharInfo(j * 10 + j, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
-				otherUserParty [j] = character;
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				areanaAtkParty.m_charSetList.Add (charSet);
 			}
-			otheruser.AddParty (otherUserParty, FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)));
+			partyDic.Add (PARTY_TYPE.AreanaAtk, areanaAtkParty);
+			user.SetPartyDic (partyDic);
+
+
+			User otheruser = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			Dictionary<PARTY_TYPE, Party> otherUserPartyDic = new Dictionary<PARTY_TYPE, Party> ();
+			Party areanaDefParty = new Party ();
+			for (int j = 0; j < 1; j++) {
+				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				areanaDefParty.m_charSetList.Add (charSet);
+			}
+			otherUserPartyDic.Add (PARTY_TYPE.AreanaDef, areanaDefParty);
+			otheruser.SetPartyDic (otherUserPartyDic);
+
 			AddRecord (UnityEngine.Random.Range (0, 2) == 1 ? true : false, otheruser, user);
+		}
+
+		for (int i = 0; i < 6; i++) {
+			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
+			Party strAreanaAtkParty = new Party ();
+			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
+				strAreanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				strAreanaAtkParty.m_charSetList.Add (charSet);
+			}
+			partyDic.Add (PARTY_TYPE.StrAreanaAtk, strAreanaAtkParty);
+			user.SetPartyDic (partyDic);
+
+			User otheruser = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			Dictionary<PARTY_TYPE, Party> otherUserPartyDic = new Dictionary<PARTY_TYPE, Party> ();
+			Party strAreanaDefParty = new Party ();
+			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
+				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
+					charSet [k] = character;
+				}
+				strAreanaDefParty.m_charSetList.Add (charSet);
+			}
+			otherUserPartyDic.Add (PARTY_TYPE.StrAreanaDef, strAreanaDefParty);
+			otheruser.SetPartyDic (otherUserPartyDic);
+
+			AddStrRecord (UnityEngine.Random.Range (0, 2) == 1 ? true : false, otheruser, user);
 		}
 	}
 
 	public void AddRecord(bool isWin, User otherUserInfo, User userInfo) {
 		int deviation = UnityEngine.Random.Range (-10, 0);
 		recordList.Add (new RecordInfo (isWin, true, DateTime.Now.AddHours (deviation), otherUserInfo, userInfo));
+	}
+	public void AddStrRecord(bool isWin, User otherUserInfo, User userInfo) {
+		int deviation = UnityEngine.Random.Range (-10, 0);
+		strRecordList.Add (new RecordInfo (isWin, true, DateTime.Now.AddHours (deviation), otherUserInfo, userInfo));
 	}
 }
 	

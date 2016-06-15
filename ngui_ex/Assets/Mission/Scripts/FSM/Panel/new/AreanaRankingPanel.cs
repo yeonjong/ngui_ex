@@ -16,7 +16,7 @@ public class AreanaRankingPanel : PanelBase {
 		case "btn_other_user_party_info_1":
 		case "btn_other_user_party_info_2":
 		case "btn_other_user_party_info_3":
-			GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)) - 1, PANEL_TYPE.AreanaRanking);
+			GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)) - 1, PANEL_TYPE.AreanaRanking, PARTY_TYPE.AreanaDef);
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.OtherUserPartyInfo, false);
 			break;
 		}
@@ -71,7 +71,7 @@ public class AreanaRankingPanel : PanelBase {
 		StringBuilder sb = new StringBuilder ();
 
 		User userInfo = GlobalApp.Inst.userData.m_user;
-		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.m_nTeamFightingPower);
+		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.GetPartyFightingPower(PARTY_TYPE.AreanaAtk));
 		m_userInfo.text = sb.ToString ();
 		m_userMainCharacter.spriteName = userInfo.m_mainCharacterName;
 
@@ -81,7 +81,7 @@ public class AreanaRankingPanel : PanelBase {
 			sb.AppendFormat ("Level {0} {1}", users [i/2].m_nLevel, users [i/2].m_nickName);
 			m_labels [i].text = sb.ToString ();
 			sb.Length = 0;
-			sb.AppendFormat ("Power {0}", users[i/2].m_nTeamFightingPower);
+			sb.AppendFormat ("Power {0}", users[i/2].GetPartyFightingPower(PARTY_TYPE.AreanaDef));
 			m_labels [i + 1].text = sb.ToString ();
 			m_sprites [i / 2].spriteName = users[i/2].m_mainCharacterName;
 		}
@@ -91,7 +91,7 @@ public class AreanaRankingPanel : PanelBase {
 			sb.AppendFormat ("Rank {0}", users[i/2].m_nAreanaRank);
 			m_labels [i].text = sb.ToString ();
 			sb.Length = 0;
-			sb.AppendFormat ("Power {0}\nGuild {1}", users[i/2].m_nTeamFightingPower, users[i/2].m_guildName);
+			sb.AppendFormat ("Power {0}\nGuild {1}", users[i/2].GetPartyFightingPower(PARTY_TYPE.AreanaDef), users[i/2].m_guildName);
 			m_labels [i + 1].text = sb.ToString ();
 			m_sprites [i / 2].spriteName = users [i / 2].m_mainCharacterName;
 		}

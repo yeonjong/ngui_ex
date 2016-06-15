@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
 public class AttackPartyEditPanel : PanelBase {
@@ -14,13 +15,39 @@ public class AttackPartyEditPanel : PanelBase {
 		case "btn_start":
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AreanaIntroChoreography);
 			break;
-		case "btn_formation_edit":
+		case "btn_edit_formation":
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.FormationEdit, false);
 			break;
+
+
 		case "btn_formation_info":
+			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaEntrance)) {
+				GlobalApp.Inst.SetOtherUser (-1, PANEL_TYPE.AreanaEntrance, PARTY_TYPE.AreanaDef);
+			} else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.ShamBattleEntrance)) {
+				GlobalApp.Inst.SetOtherUser (-1, PANEL_TYPE.AttackPartyEdit, PARTY_TYPE.ShamDef);
+			} else {
+				Debug.LogError ("..");
+			}
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.FormationInfo, false);
 			break;
 		case "btn_character_info":
+			Debug.LogError ("..");
+			break;
+		case "btn_character_info_0":
+		case "btn_character_info_1":
+		case "btn_character_info_2":
+		case "btn_character_info_3":
+		case "btn_character_info_4":
+		case "btn_character_info_5":
+		case "btn_character_info_6":
+		case "btn_character_info_7":
+			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaEntrance)) {
+				GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)), PANEL_TYPE.AttackPartyEdit, PARTY_TYPE.AreanaDef);
+			} else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.ShamBattleEntrance)) {
+				GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)), PANEL_TYPE.AttackPartyEdit, PARTY_TYPE.ShamDef);
+			} else {
+				Debug.LogError ("..");
+			}
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
 			break;
 		}

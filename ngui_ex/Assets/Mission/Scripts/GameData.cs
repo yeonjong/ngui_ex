@@ -179,21 +179,6 @@ public class GameData {
 		}
 	}
 
-	public Dictionary<int, int> GetFormationMemberDic() {
-		Dictionary<int, int> formationMemberDic = new Dictionary<int, int> (); //charID, formationPos
-
-		int formationItem;
-		int[,] formation = GetFormation ();
-		for (int i = 0; i < 24; i++) {
-			formationItem = formation [i / 4, i % 4];
-			if (formationItem >= 0) { // is there a character's id?
-				formationMemberDic.Add(formationItem, i);			
-			}
-		}
-
-		return formationMemberDic;
-	}
-
 	/* character data */
 	private Dictionary<string, CharInfo> characterInfoDic = new Dictionary<string, CharInfo> ();
 
@@ -228,6 +213,21 @@ public class GameData {
 	/*
 	public List<string> GetCharacterKeyList() {
 		return new List<string>(characterInfoDic.Keys);
+	}
+
+	public Dictionary<int, int> GetFormationMemberDic() {
+		Dictionary<int, int> formationMemberDic = new Dictionary<int, int> (); //charID, formationPos
+
+		int formationItem;
+		int[,] formation = GetFormation ();
+		for (int i = 0; i < 24; i++) {
+			formationItem = formation [i / 4, i % 4];
+			if (formationItem >= 0) { // is there a character's id?
+				formationMemberDic.Add(formationItem, i);			
+			}
+		}
+
+		return formationMemberDic;
 	}
 	*/
 }

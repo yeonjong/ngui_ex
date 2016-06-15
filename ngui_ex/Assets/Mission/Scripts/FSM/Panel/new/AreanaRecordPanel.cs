@@ -47,7 +47,7 @@ public class AreanaRecordPanel : PanelBase {
 	void OnEnable() {
 		StringBuilder sb = new StringBuilder ();
 		User user = GlobalApp.Inst.userData.m_user;
-		sb.AppendFormat ("Rank {0}\nPower {1}",user.m_nAreanaRank, user.m_nTeamFightingPower);
+		sb.AppendFormat ("Rank {0}\nPower {1}",user.m_nAreanaRank, user.GetPartyFightingPower(PARTY_TYPE.AreanaAtk));
 		userInfoLabel.text = sb.ToString ();
 
 		List<RecordInfo> recordList = GlobalApp.Inst.commData.recordList;

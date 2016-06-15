@@ -51,7 +51,7 @@ public class AreanaRewardPanel : PanelBase {
 
 		User userInfo = GlobalApp.Inst.userData.m_user;
 
-		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.m_nTeamFightingPower);
+		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.GetPartyFightingPower(PARTY_TYPE.AreanaAtk));
 		m_userInfoLabels [0].text = sb.ToString ();
 
 		sb.Length = 0;
@@ -59,7 +59,7 @@ public class AreanaRewardPanel : PanelBase {
 		m_userInfoLabels [1].text = sb.ToString ();
 
 		sb.Length = 0;
-		sb.AppendFormat ("Power {0}\nGuild {1}", userInfo.m_nTeamFightingPower, userInfo.m_guildName);
+		sb.AppendFormat ("Power {0}\nGuild {1}", userInfo.GetPartyFightingPower(PARTY_TYPE.AreanaAtk), userInfo.m_guildName);
 		m_userInfoLabels [2].text = sb.ToString ();
 
 		sb.Length = 0;

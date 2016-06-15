@@ -15,7 +15,7 @@ public class AreanaEntrancePanel : PanelBase {
 		case "btn_other_user_party_info1":
 		case "btn_other_user_party_info2":
 		case "btn_other_user_party_info3":
-			GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)), PANEL_TYPE.AreanaEntrance);
+			GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)), PANEL_TYPE.AreanaEntrance, PARTY_TYPE.AreanaDef);
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.OtherUserPartyInfo, false);
 			break;
 		case "btn_attack_party_edit":
@@ -88,7 +88,7 @@ public class AreanaEntrancePanel : PanelBase {
 		//sb.Length = 0;
 
 		User userInfo = GlobalApp.Inst.userData.m_user;
-		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.m_nTeamFightingPower);
+		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.GetPartyFightingPower(PARTY_TYPE.AreanaAtk));
 		m_userInfo.text = sb.ToString ();
 		m_userMainCharacter.spriteName = userInfo.m_mainCharacterName;
 
@@ -107,7 +107,7 @@ public class AreanaEntrancePanel : PanelBase {
 				otherUserInfos [i/2].m_nickName);
 			m_otherUserInfos [i].text = sb.ToString ();
 			sb.Length = 0;
-			sb.AppendFormat ("Power {0}", otherUserInfos[i/2].m_nTeamFightingPower);
+			sb.AppendFormat ("Power {0}", otherUserInfos[i/2].GetPartyFightingPower(PARTY_TYPE.AreanaDef));
 			m_otherUserInfos [i + 1].text = sb.ToString ();
 			m_otherUserMainCharacters [i / 2].spriteName = otherUserInfos[i/2].m_mainCharacterName;
 		}

@@ -57,12 +57,13 @@ public class OtherUserPartyInfoPanel : PanelBase {
 		StringBuilder sb = new StringBuilder ();
 
 		User otherUser = GlobalApp.Inst.GetOtherUser ();
-		sb.AppendFormat ("Power {0}", otherUser.m_nTeamFightingPower);
+		sb.AppendFormat ("Power {0}", otherUser.GetPartyFightingPower(PARTY_TYPE.AreanaDef));
 		m_otherTeamFightingPower.text = sb.ToString ();
 
+		CharInfo[] charSet = otherUser.GetCharSet (PARTY_TYPE.AreanaDef);
 		for (int i = 0; i < m_otherTeamFormation.Length; i++) {
-			if (otherUser.m_partyList[0][i] != null)
-				m_otherTeamFormation [i].spriteName = otherUser.m_partyList[0][i].spriteName;
+			if (charSet[i] != null)
+				m_otherTeamFormation [i].spriteName = charSet[i].spriteName;
 		}
 	}
 

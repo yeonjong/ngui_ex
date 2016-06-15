@@ -6,33 +6,197 @@ using DG.Tweening;
 
 public class PartyEditPanel : PanelBase {
 
-	private int realItemMaxIndex;
-	private List<string> realItemList;
-	private Dictionary<int, int> formationMemberDic = new Dictionary<int, int> (); //charID, formationPos
+	public override void OnClickXXXBtn (string btnName) {
+		Debug.Log (btnName);
 
-	private const int MAX_UI_ITEM_COUNT = 20; //5 rows and 4 cols.
-	private UILabel[] uiItemList = new UILabel[MAX_UI_ITEM_COUNT];
-	public GameObject wrapContent; // TODO: please delete this parameter.
+		switch (btnName) {
+		case "btn_back":
+			GuiMgr.GetInst ().PopPnl ();
+			break;
+		case "btn_edit_formation":
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.FormationEdit, false);
+			break;
+		case "btn_start_battle":
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.Battle);
+			break;
+		}
+	}
 
-	private const int MAX_UI_FORMATION_ITEM_COUNT = 24; //6 rows and 4 cols.
-	private UISprite[] uiFromationItemList = new UISprite[MAX_UI_FORMATION_ITEM_COUNT];
-	private UILabel[] uiFormationItemLabelList = new UILabel[MAX_UI_FORMATION_ITEM_COUNT];
-	public GameObject formationRoot; // TODO: please delete this parameter.
+	public override void OnClickXXXCell(CELL_TYPE cellType, int cellIndex) {
+		Debug.LogFormat ("{0}: {1}", cellType, cellIndex);
+
+		switch (cellType) {
+		case CELL_TYPE.character:
+			break;
+		case CELL_TYPE.formation:
+			break;
+		}
+	}
+
+
+
+	//private int realItemMaxIndex; // note: = realItemList.Count;
+	//private List<string> realItemList;
+	//private Dictionary<int, int> formationMemberDic = new Dictionary<int, int> (); //charID, formationPos
+
+	//private const int MAX_UI_ITEM_COUNT = 20; //5 rows and 4 cols.
+	//private UILabel[] uiItemList = new UILabel[MAX_UI_ITEM_COUNT];
+	//public GameObject wrapContent; // TODO: please delete this parameter.
+
+	//private const int MAX_UI_FORMATION_ITEM_COUNT = 24; //6 rows and 4 cols.
+	//private UISprite[] uiFromationItemList = new UISprite[MAX_UI_FORMATION_ITEM_COUNT];
+	//private UILabel[] uiFormationItemLabelList = new UILabel[MAX_UI_FORMATION_ITEM_COUNT];
+	//public GameObject formationRoot; // TODO: please delete this parameter.
 
 	//public Transform t;
-	public Camera cam;
+	//public Camera cam;
 	//public TestTween testTween; // TODO: please delete this parameter.
-	public GameObject tweenPrefab;
-	public Vector2[] formationTweenPosList = new Vector2[MAX_UI_FORMATION_ITEM_COUNT];
+	//public GameObject tweenPrefab;
+	//public Vector2[] formationTweenPosList = new Vector2[MAX_UI_FORMATION_ITEM_COUNT];
 
-	public void Start() {
-		//realItemList = GlobalApp.Inst.userData.m_user.GetCharacterKeyList ();// GameData.Inst.GetCharacterKeyList ();
-		//realItemMaxIndex = realItemList.Count;
+	private List<CharInfo> realCharList;
+	private List<CharacterCell> wrapCharList;
+
+	private UIScrollView m_scrollView;
+	private UIWrapContent m_wrapContent;
+	private GameObject[] wrapRows;
+
+	private List<FormationCell> formCellList;
+	CharInfo[] charSet;
+
+	private int selectedParty = 0;
+
+	void Awake() {
+		// set wrap character list.
+		Transform wrapContent = transform.FindChild ("party/scv_party_scroll_view/wrap_content");
+		wrapCharList = new List<CharacterCell>();
+		foreach (CharacterCell charCell in wrapContent.GetComponentsInChildren<CharacterCell> ()) {
+			charCell.SetBtnsTarget (this);
+			wrapCharList.Add (charCell);
+		}
+
+		// set endless scroll view's rows.
+		m_scrollView = transform.FindChild("party/scv_party_scroll_view").GetComponent<UIScrollView>();
+		m_wrapContent = wrapContent.GetComponent<UIWrapContent> ();
+		wrapRows = new GameObject[FixedConstantValue.PARTY_SCV_ROW_NUM];
+		wrapRows [0] = wrapContent.FindChild ("row_0").gameObject;
+		wrapRows [1] = wrapContent.FindChild ("row_1").gameObject;
+		wrapRows [2] = wrapContent.FindChild ("row_2").gameObject;
+		wrapRows [3] = wrapContent.FindChild ("row_3").gameObject;
+
+		// set formation cell list.
+		formCellList = new List<FormationCell> ();
+		Transform formRoot = transform.FindChild ("formation/btn_formation_items");
+		foreach (FormationCell formCell in formRoot.GetComponentsInChildren<FormationCell>()) {
+			formCell.SetBtnsTarget (this);
+			formCellList.Add (formCell);
+		}
+	}
+
+	private void OnWrapContentChanged(int wrapIndex, int realIndex) {
+		Debug.Log ("OnWrapContentChanged()");
+		
+		realIndex = Mathf.Abs(realIndex) * 4;
+		wrapIndex = wrapIndex * 4;
+		Debug.LogFormat ("RealIdx {0}, WrapIdx {1}", realIndex, wrapIndex);
+
+		for (int i = 0; i < 4; i++) {
+			if (realIndex < realCharList.Count) {
+
+
+				Debug.Log (realCharList [realIndex].cost);
+				wrapCharList [wrapIndex].Set (realCharList [realIndex], realIndex);
+
+				// if formation! check!
+			} else {
+				wrapCharList [wrapIndex].Set (null, realIndex);
+			}
+			wrapIndex++;
+			realIndex++;
+
+
+			/*
+				//Debug.Log(uiItemList[uiItemIndex].text);
+				//Debug.Log(realItemList[realItemIndex]);
+				//Debug.Log("");
+				if (formationMemberDic.ContainsKey (realItemIndex)) {
+					uiItemList[uiItemIndex++].text = realItemList [realItemIndex++] + " Ready";
+				} else {
+					uiItemList[uiItemIndex++].text = realItemList[realItemIndex++];
+				}
+			}
+			*/
+		}
+	}
+
+	void OnEnable() {
+		Debug.Log ("Enable");
+
+		// set real character list.
+		Dictionary<int, CharInfo> charDic = GlobalApp.Inst.userData.m_user.m_characterDic;
+		realCharList = new List<CharInfo> (charDic.Values);
+		
+		// set endless scroll view's rows.
+		int minIndex = ((realCharList.Count - 1) / 4) * -1;
+		if (minIndex == 0) {
+			wrapRows [3].SetActive (false);
+			wrapRows [2].SetActive (false);
+			wrapRows [1].SetActive (true);
+			wrapRows [0].SetActive (true);
+		}
+		else {
+			for (int i = 0; i < FixedConstantValue.PARTY_SCV_ROW_NUM; i++) {
+				if (i > minIndex * -1)
+					wrapRows [i].SetActive (false);
+				else
+					wrapRows [i].SetActive (true);
+			}
+		}
+		m_wrapContent.minIndex = minIndex;
+
+		if (m_wrapContent.onInitializeItem == null) {
+			// add event function for updating endless scroll view's each row & set contents.
+			m_wrapContent.onInitializeItem = delegate(GameObject go, int wrapIndex, int realIndex) {
+				OnWrapContentChanged(wrapIndex, realIndex);
+			};
+		} else {
+			// reset contents & reset scv position.
+			m_wrapContent.SortBasedOnScrollMovement();
+			
+			Vector3 pos = Vector3.zero;
+			for (int i = 0; i < wrapRows.Length; i++) {
+				pos.y = i * -240;
+				wrapRows [i].transform.localPosition = pos;
+			}
+
+			m_scrollView.ResetPosition ();
+		}
+
+		// set formation cell list.
+		Party dungeonParty = GlobalApp.Inst.userData.m_user.GetParty(PARTY_TYPE.Dungeon);
+	CharInfo[] charSet = dungeonParty.m_charSetList [selectedParty];
+	FormInfo form = dungeonParty.m_formList [selectedParty];
+
+		for (int i = 0; i < form.m_Form.Length; i++) {
+			int charIndex = form.m_Form [i];
+			if (charIndex == -1) {
+				formCellList [i].Set (i, "UISliderBG");
+			} else {
+				if (charSet[charIndex] == null)
+					formCellList [i].Set (i, "btn_9slice_pressed");
+				else 	
+					formCellList [i].Set (i, charSet [charIndex].spriteName);
+			}
+		}
+
+	}
+	//int[] form = GlobalApp.Inst.userData.m_user.m_formList[(int)PARTY_TYPE.Dungeon].m_Form;
+
+	public void dddStart() {
+		//realItemList = GlobalApp.Inst.userData.m_user.GetCharacterKeyList (); // GameData.Inst.GetCharacterKeyList (); realItemMaxIndex = realItemList.Count;
 		//formationMemberDic = GameData.Inst.GetFormationMemberDic ();
 		/*
-
-		int index = 0;
-		foreach (UILabel uiLabel in wrapContent.GetComponentsInChildren<UILabel> ()) {
+		foreach (CharacterCell charCell in wrapContent.GetComponentsInChildren<CharacterCell> ()) {
 			if (formationMemberDic.ContainsKey (index)) {
 				uiLabel.text = realItemList [index] + " Ready";
 			} else {
@@ -42,7 +206,6 @@ public class PartyEditPanel : PanelBase {
 			index++;
 		}
 		*/
-
 		/* when inventory was dragged, this event function will be call. */
 		/* fucntion: inject character information to each item slot. */
 		/*
@@ -64,7 +227,8 @@ public class PartyEditPanel : PanelBase {
 				}
 			}
 		};
-
+	*/
+	/*
 		index = 0;
 		foreach (UISprite uiSprite in formationRoot.GetComponentsInChildren<UISprite> ()) {
 			uiFromationItemList [index] = uiSprite;
@@ -78,6 +242,10 @@ public class PartyEditPanel : PanelBase {
 		*/
 	}
 
+	public void CheckFormation() {
+	
+	}
+	/*
 	public void CheckFormation() {
 		Debug.Log ("CheckFormation");
 
@@ -141,7 +309,8 @@ public class PartyEditPanel : PanelBase {
 		}
 
 	}
-		
+	*/
+	/*
 	public override void OnClickXXXBtn(string btnName) {
 		switch (btnName) {
 		case "btn_back":
@@ -209,6 +378,7 @@ public class PartyEditPanel : PanelBase {
 				tweenPostion.from = itemPos;
 				tweenPostion.eventReceiver = gameObject;
 				tweenPostion.callWhenFinished = "CheckFormation";*/
+	/*
 			} else {
 				Debug.Log ("please make full popup msg.");
 			}
@@ -230,6 +400,7 @@ public class PartyEditPanel : PanelBase {
 
 	public GameObject tweenRoot;
 	public Queue<GameObject> tweenQueue = new Queue<GameObject>();
+	*/
 }
 
 

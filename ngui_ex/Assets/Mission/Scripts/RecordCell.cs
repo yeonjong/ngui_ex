@@ -31,7 +31,7 @@ public class RecordCell : MonoBehaviour {
 			recordInfo.m_otherUserInfo.m_nLevel,
 			recordInfo.m_otherUserInfo.m_nickName,
 			recordInfo.m_otherUserInfo.m_guildName,
-			recordInfo.m_otherUserInfo.m_nTeamFightingPower);
+			recordInfo.m_otherUserInfo.GetPartyFightingPower(PARTY_TYPE.AreanaDef));
 		m_labels [0].text = sb.ToString ();
 
 		m_labels[1].text = recordInfo.m_isNew ? "NEW" : "";

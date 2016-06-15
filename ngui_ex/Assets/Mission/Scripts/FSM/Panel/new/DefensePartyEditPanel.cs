@@ -12,7 +12,7 @@ public class DefensePartyEditPanel : PanelBase {
 		case "btn_x":
 			GuiMgr.GetInst ().PopPnl ();
 			break;
-		case "btn_formation_edit":
+		case "btn_edit_formation":
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.FormationEdit, false);
 			break;
 		case "btn_auto_form":
@@ -38,13 +38,14 @@ public class DefensePartyEditPanel : PanelBase {
 		
 		partyScvWrapContent = transform.FindChild ("party/scv_party_scroll_view/wrap_content").GetComponent<UIWrapContent>();
 
+		/*
 		rows = new GameObject[FixedConstantValue.PARTY_SCV_ROW_NUM];
 		rows [0] = partyScvWrapContent.transform.FindChild ("row_0").gameObject;
 		rows [1] = partyScvWrapContent.transform.FindChild ("row_1").gameObject;
 		rows [2] = partyScvWrapContent.transform.FindChild ("row_2").gameObject;
 		rows [3] = partyScvWrapContent.transform.FindChild ("row_3").gameObject;
 		rows [4] = partyScvWrapContent.transform.FindChild ("row_4").gameObject;
-
+		*/
 
 
 
@@ -53,6 +54,7 @@ public class DefensePartyEditPanel : PanelBase {
 	void OnEnable() {
 		charDic = GlobalApp.Inst.userData.m_user.m_characterDic;
 
+		/*
 		// set endless scroll range.
 		int temp = ((charDic.Count - 1) / 4) * -1;
 		partyScvWrapContent.minIndex = temp;
@@ -73,7 +75,7 @@ public class DefensePartyEditPanel : PanelBase {
 					rows [i * -1].SetActive (false);
 			}
 		}
-
+		*/
 
 		/*
 		partyScvWrapContent.onInitializeItem = delegate(GameObject go, int wrapIndex, int realIndex) {

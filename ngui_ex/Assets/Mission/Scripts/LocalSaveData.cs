@@ -22,8 +22,9 @@ public partial class LocalSaveData {
 
 	private void InitUser() {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
-		m_user = new User ("jipsa", 56, 10, 1200, randomCharacterNames[1]);
+		m_user = new User ("jipsa", 56, 10, randomCharacterNames[1]);
 
+		/* character dictionary */
 		Dictionary<int, CharInfo> characterDic = new Dictionary<int, CharInfo> ();
 		for (int i = 0; i < FixedConstantValue.TEMP_USER_CHAR_NUM; i++) { // this user have 48 characters;
 			CharInfo character = new CharInfo(i * 10 + i, randomCharacterNames[Random.Range(0, 4)], Random.Range(1, 8), 1);
@@ -31,20 +32,32 @@ public partial class LocalSaveData {
 		}
 		m_user.SetCharacterDic (characterDic);
 
-		for (int j = 0; j < 3; j++) {
-			CharInfo[] party = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
-			for (int i = 0; i < party.Length; i++) {
-				int randomCharID = Random.Range (0, FixedConstantValue.TEMP_USER_CHAR_NUM);
-				if (randomCharID == FixedConstantValue.TEMP_USER_CHAR_NUM) {
-					party [i] = null;
-				} else {
-					randomCharID = randomCharID * 10 + randomCharID;
-					party [i] = characterDic [randomCharID];
-				}
-			}
-			m_user.AddParty (party, FormInfo.GetFormInfo(Random.Range (1, 9)) ); // add dungeonParty, areanaAtkParty, areanaDefParty.
-		}
 
+		/* party dictionary */
+		Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
+		for (int i = 0; i < 7; i++) {
+			Party party = new Party ();
+			for (int j = 0; j < FixedConstantValue.DUNGEION_PARTY_NUM; j++) {
+				party.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				for (int k = 0; k < charSet.Length; k++) {
+					int randomCharID = Random.Range (0, FixedConstantValue.TEMP_USER_CHAR_NUM + 1);
+					if (randomCharID == FixedConstantValue.TEMP_USER_CHAR_NUM) {
+						charSet [k] = null;
+					} else {
+						randomCharID = randomCharID * 10 + randomCharID;
+						charSet [k] = characterDic [randomCharID];
+					}
+				}
+				party.m_charSetList.Add (charSet);
+			}
+
+			partyDic.Add ((PARTY_TYPE)i, party);
+		}
+		m_user.SetPartyDic (partyDic);
+
+		/* key */
 		m_key = new Key (5, 4);
 	}
 }
@@ -53,19 +66,70 @@ public enum PARTY_TYPE {
 	Dungeon,
 	AreanaAtk,
 	AreanaDef,
+	StrAreanaAtk,
+	StrAreanaDef,
+	ShamAtk,
+	ShamDef,
+}
+
+public class Party {
+	public List<FormInfo> m_formList = new List<FormInfo> ();
+	public List<CharInfo[]> m_charSetList = new List<CharInfo[]> ();
 }
 
 public class User {
+	private Dictionary<PARTY_TYPE, Party> m_partyDic;
+	public void SetPartyDic (Dictionary<PARTY_TYPE, Party> partyDic) {
+		m_partyDic = partyDic;
+	}
+	public Party GetParty (PARTY_TYPE partyType) {
+		return m_partyDic [partyType];
+	}
+	public int GetPartyFightingPower(PARTY_TYPE partyType, int listIndex = 0) {
+		int fightingPower = 0;
+		CharInfo[] charSet = GetCharSet (partyType, listIndex);
+		for (int i = 0; i < charSet.Length; i++) {
+			if (charSet[i] != null)
+				fightingPower += charSet [i].fightingPower;
+		}
+		return fightingPower;
+	}
+	public int GetPartyCost(PARTY_TYPE partyType, int listIndex = 0) {
+		int cost = 0;
+		CharInfo[] charSet = GetCharSet (partyType, listIndex);
+		for (int i = 0; i < charSet.Length; i++) {
+			if (charSet[i] != null)
+				cost += charSet [i].cost;
+		}
+		return cost;
+	}
+	public CharInfo[] GetCharSet(PARTY_TYPE partyType, int listIndex = 0) {
+		return m_partyDic [partyType].m_charSetList [listIndex];
+	}
+	public FormInfo GetFormation(PARTY_TYPE partyType, int listIndex = 0) {
+		return m_partyDic [partyType].m_formList [listIndex];
+	}
+
+
 	/* party edit */
 	public List<int> GetCharacterKeyList() {
 		return new List<int>(m_characterDic.Keys);
 	}
 
+	/*
+	public void AddParty(CharInfo[] newParty, FormInfo newForm) {
+		m_partyList.Add (newParty);
+		m_formList.Add (newForm);
 
-
-
-
-
+		int fightingPower = 0;
+		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
+			if (newParty [i] != null) {
+				fightingPower += newParty [i].fightingPower;
+			}
+		}
+		m_partyFightingPowerLlist.Add (fightingPower);
+	}
+	*/
 
 	/* party edit - end */
 
@@ -83,21 +147,23 @@ public class User {
 	//public string m_formationEffectDisc; // maybe made formation class.. but...
 	//public List<CharInfo> m_mainTeam;
 
-	public Dictionary<int, CharInfo> m_characterDic; // key: CharInfo.id, val: CharInfo
 
 	/* dungeonParty/Form, areanaAtkParty/Form, areanaDefParty/Form, ... */
 
-	public int m_nTeamFightingPower; // 방어 팀 전투력. // TODO: delete this param...
-	public List<CharInfo[]> m_partyList = new List<CharInfo[]> ();
-	public List<FormInfo> m_formList = new List<FormInfo> ();
-	public List<int> m_partyFightingPowerLlist = new List<int> ();
+	public Dictionary<int, CharInfo> m_characterDic; // key: CharInfo.id, val: CharInfo
 	public int m_maxPartyCost = 1000;
 
-	public User(string nickName, int level, int areanaRank, int teamFightingPower, string mainCharacterName) {
+	/*
+	public List<FormInfo> m_formList = new List<FormInfo> ();
+	public List<CharInfo[]> m_partyList = new List<CharInfo[]> ();
+	public List<int> m_partyFightingPowerLlist = new List<int> ();
+	public int m_nTeamFightingPower; // 방어 팀 전투력. // TODO: delete this param...
+	*/
+
+	public User(string nickName, int level, int areanaRank, string mainCharacterName) {
 		m_nickName = nickName;
 		m_nLevel = level;
 		m_nAreanaRank = areanaRank;
-		m_nTeamFightingPower = teamFightingPower;
 		m_mainCharacterName = mainCharacterName;
 	}
 
@@ -113,18 +179,6 @@ public class User {
 
 	public void SetCharacterDic(Dictionary<int, CharInfo>  characterDic) {
 		m_characterDic = characterDic;
-	}
-	public void AddParty(CharInfo[] newParty, FormInfo newForm) {
-		m_partyList.Add (newParty);
-		m_formList.Add (newForm);
-
-		int fightingPower = 0;
-		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
-			if (newParty [i] != null) {
-				fightingPower += newParty [i].fightingPower;
-			}
-		}
-		m_partyFightingPowerLlist.Add (fightingPower);
 	}
 
 }

@@ -58,10 +58,12 @@ public class AreanaRecordReviewCheckPanel : PanelBase {
 		User user = record.m_userInfo;
 		sb.AppendFormat ("Level {0} {1}", user.m_nLevel, user.m_nickName);
 		userInfoLabel.text = sb.ToString ();
-		CharInfo[] party = user.m_partyList [0];
+
+
+		CharInfo[] charSet = user.GetCharSet (PARTY_TYPE.AreanaAtk);
 		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
-			if (party [i] != null)
-				userPartySprites [i].spriteName = party [i].spriteName;
+			if (charSet [i] != null)
+				userPartySprites [i].spriteName = charSet [i].spriteName;
 			else {
 				userPartySprites [i].spriteName = "UISliderBG"; // TODO: please empty sprite name enter;
 			}
@@ -71,10 +73,10 @@ public class AreanaRecordReviewCheckPanel : PanelBase {
 		sb.Length = 0;
 		sb.AppendFormat ("Level {0} {1}", user.m_nLevel, user.m_nickName);
 		otherUserInfoLabel.text = sb.ToString ();
-		party = user.m_partyList [0];
+		charSet = user.GetCharSet (PARTY_TYPE.AreanaDef);
 		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
-			if (party [i] != null)
-				otherUserPartySprites [i].spriteName = party [i].spriteName;
+			if (charSet [i] != null)
+				otherUserPartySprites [i].spriteName = charSet [i].spriteName;
 			else {
 				otherUserPartySprites [i].spriteName = "UISliderBG"; // TODO: please empty sprite name enter;
 			}

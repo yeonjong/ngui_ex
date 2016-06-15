@@ -105,16 +105,16 @@ public class ShamBattleEntrancePanel : PanelBase {
 		User user = GlobalApp.Inst.userData.m_user;
 
 		/* atk party */
-		sb.AppendFormat ("Power {0}", user.m_partyFightingPowerLlist[(int)PARTY_TYPE.AreanaAtk]);
+		sb.AppendFormat ("Power {0}", user.GetPartyFightingPower(PARTY_TYPE.ShamAtk));
 		m_atkPartyLabels [0].text = sb.ToString ();
 
 		sb.Length = 0;
-		CharInfo[] party = user.m_partyList [(int)PARTY_TYPE.AreanaAtk];
+		CharInfo[] charSet = user.GetCharSet (PARTY_TYPE.ShamAtk);
 		int cost = 0;
 		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
-			if (party [i] != null) {
-				cost += party [i].cost;
-				m_atkPartySprites [i].spriteName = party[i].spriteName;
+			if (charSet [i] != null) {
+				cost += charSet [i].cost;
+				m_atkPartySprites [i].spriteName = charSet[i].spriteName;
 			}
 		}
 		sb.AppendFormat ("Cost {0}/{1}", cost, user.m_maxPartyCost);
@@ -122,16 +122,17 @@ public class ShamBattleEntrancePanel : PanelBase {
 
 		/* def party */
 		sb.Length = 0;
-		sb.AppendFormat ("Power {0}", user.m_partyFightingPowerLlist[(int)PARTY_TYPE.AreanaDef]);
+		sb.AppendFormat ("Power {0}", user.GetPartyFightingPower(PARTY_TYPE.ShamDef));
 		m_defPartyLabels [0].text = sb.ToString ();
 
 		sb.Length = 0;
-		party = user.m_partyList [(int)PARTY_TYPE.AreanaDef];
-		cost = 0;
+		charSet = user.GetCharSet (PARTY_TYPE.ShamDef);
+		cost = user.GetPartyCost (PARTY_TYPE.ShamDef);
+
 		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
-			if (party [i] != null) {
-				cost += party [i].cost;
-				m_defPartySprites [i].spriteName = party[i].spriteName;
+			if (charSet [i] != null) {
+				cost += charSet [i].cost;
+				m_defPartySprites [i].spriteName = charSet[i].spriteName;
 			}
 		}
 		sb.AppendFormat ("Cost {0}/{1}", cost, user.m_maxPartyCost);
