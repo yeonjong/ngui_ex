@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
+using System;
 
 public class FormationEditPanel : PanelBase {
-	
 
-	public void ClickSelectFormationBtn(Object formationObject) {
+	public void ClickSelectFormationBtn(UnityEngine.Object formationObject) {
 		int formationNumber;
 		switch (formationObject.name) {
 		case "btn_formation_0":
@@ -34,9 +34,11 @@ public class FormationEditPanel : PanelBase {
 			Debug.LogError ("inject formationObject to button on click.");
 			return;
 		}
-		GameData.Inst.SetFormation(formationNumber);
-		GuiMgr.GetInst ().OnSelectFormation ();
+		//GameData.Inst.SetFormation(formationNumber);
+		Debug.Log("??");
+		Debug.Log (formationNumber);
 
+		GuiMgr.GetInst ().OnSelectFormation (formationNumber);
 		GuiMgr.GetInst ().PopPnl ();
 	}
 

@@ -307,8 +307,14 @@ public class GuiMgr : MonoBehaviour {
     }
 
 	/* party edit */
-	public void OnSelectFormation() {
-		m_pnlInstances[(int)PANEL_TYPE.PartyEdit].GetComponent<PartyEditPanel> ().CheckFormation ();
+	public void OnSelectFormation(int formNum) {
+		if (m_panelStack.Contains (PANEL_TYPE.PartyEdit)) {
+			m_pnlInstances [(int)PANEL_TYPE.PartyEdit].GetComponent<PanelBase> ().OnClickXXXBtn (formNum.ToString ());
+		} else if (m_panelStack.Contains (PANEL_TYPE.AttackPartyEdit)) {
+			m_pnlInstances [(int)PANEL_TYPE.AttackPartyEdit].GetComponent<PanelBase> ().OnClickXXXBtn (formNum.ToString ());
+		} else if (m_panelStack.Contains (PANEL_TYPE.DefensePartyEdit)) {
+			m_pnlInstances [(int)PANEL_TYPE.DefensePartyEdit].GetComponent<PanelBase> ().OnClickXXXBtn (formNum.ToString ());
+		}
 	}
 
 

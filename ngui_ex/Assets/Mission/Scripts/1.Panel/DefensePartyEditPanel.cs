@@ -52,7 +52,7 @@ public class DefensePartyEditPanel : PanelBase {
 	}
 
 	void OnEnable() {
-		charDic = GlobalApp.Inst.userData.m_user.m_characterDic;
+		charDic = GlobalApp.Inst.userData.m_user.m_charDicByID;
 
 		/*
 		// set endless scroll range.

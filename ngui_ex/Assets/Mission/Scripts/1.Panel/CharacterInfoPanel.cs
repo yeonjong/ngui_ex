@@ -31,18 +31,21 @@ public class CharacterInfoPanel : PanelBase {
 	}
 
 	void OnEnable() {
-		CharInfo otherUserCharacter = GlobalApp.Inst.GetOtherUserCharacter ();
+		Party party = GlobalApp.Inst.GetCachedParties()[0];
+		int charIndex = GlobalApp.Inst.GetBtnIndex ();
 
-		m_labels [0].text = otherUserCharacter.name;
-		m_labels [1].text = otherUserCharacter.feature;
-		m_labels [2].text = otherUserCharacter.cost.ToString();
-		m_labels [3].text = otherUserCharacter.classKind;
-		m_labels [4].text = otherUserCharacter.level.ToString();
+		CharInfo character = party.m_charSetList [0] [charIndex];
 
-		m_sprites [0].spriteName = otherUserCharacter.spriteName;
+		m_labels [0].text = character.name;
+		m_labels [1].text = character.feature;
+		m_labels [2].text = character.cost.ToString();
+		m_labels [3].text = character.classKind;
+		m_labels [4].text = character.level.ToString();
+
+		m_sprites [0].spriteName = character.spriteName;
 		Color[] colors = new Color[2] { Color.yellow, Color.black };
-		m_sprites [1].color = otherUserCharacter.upgradeRank == 0 ? colors[0] : colors[1];
-		m_sprites [2].color = otherUserCharacter.starRank == 0 ? colors[0] : colors[1];
+		m_sprites [1].color = character.upgradeRank == 0 ? colors[0] : colors[1];
+		m_sprites [2].color = character.starRank == 0 ? colors[0] : colors[1];
 	}
 
 }

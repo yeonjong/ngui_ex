@@ -21,13 +21,6 @@ public class AttackPartyEditPanel : PanelBase {
 
 
 		case "btn_formation_info":
-			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaEntrance)) {
-				GlobalApp.Inst.SetOtherUser (-1, PANEL_TYPE.AreanaEntrance, PARTY_TYPE.AreanaDef);
-			} else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.ShamBattleEntrance)) {
-				GlobalApp.Inst.SetOtherUser (-1, PANEL_TYPE.AttackPartyEdit, PARTY_TYPE.ShamDef);
-			} else {
-				Debug.LogError ("..");
-			}
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.FormationInfo, false);
 			break;
 		case "btn_character_info":
@@ -41,13 +34,7 @@ public class AttackPartyEditPanel : PanelBase {
 		case "btn_character_info_5":
 		case "btn_character_info_6":
 		case "btn_character_info_7":
-			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaEntrance)) {
-				GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)), PANEL_TYPE.AttackPartyEdit, PARTY_TYPE.AreanaDef);
-			} else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.ShamBattleEntrance)) {
-				GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)), PANEL_TYPE.AttackPartyEdit, PARTY_TYPE.ShamDef);
-			} else {
-				Debug.LogError ("..");
-			}
+			GlobalApp.Inst.charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
 			break;
 		}

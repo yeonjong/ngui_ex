@@ -31,9 +31,9 @@ public class FormationInfoPanel : PanelBase {
 	}
 
 	void OnEnable() {
-		FormInfo form = GlobalApp.Inst.GetUserForm ();
-		//User otherUser = GlobalApp.Inst.GetOtherUser ();
-		//FormInfo form = otherUser.m_formList [0];
+		Party party = GlobalApp.Inst.GetCachedParties ()[0];
+		FormInfo form = party.m_formList [0];
+		CharInfo[] charSet = party.m_charSetList [0];
 
 		m_formationEffect.text = form.m_EffectDisc;
 
@@ -42,10 +42,10 @@ public class FormationInfoPanel : PanelBase {
 			if (charIndex == -1) {
 				m_formationItems [i].spriteName = "UISliderBG";
 			} else {
-				if (GlobalApp.Inst.GetUserParty()[charIndex] == null)
+				if (charSet[charIndex] == null)
 					m_formationItems [i].spriteName = "btn_9slice_pressed";
 				else
-					m_formationItems [i].spriteName = GlobalApp.Inst.GetUserParty()[charIndex].spriteName;
+					m_formationItems [i].spriteName = charSet[charIndex].spriteName;
 			}
 		}
 	}

@@ -5,48 +5,54 @@ using System.Collections.Generic;
 
 /* common data */
 public partial class LocalGameData {
+	public User[] m_areanaUsers;
+	public User[] m_highRankUsers;		//TODO: convert to list?
+	public User[] m_strHighRankUsers;	//TODO: convert to list?
+
+	public List<RecordInfo> recordList;
+	public List<RecordInfo> strRecordList;
+
+	public Dictionary<int, RewardInfo> rewardDicByScore = new Dictionary<int, RewardInfo>();
+
 	public LocalGameData() {
 		Init ();
 	}
 
 	private void Init() {
-		InitOtherUser ();
-		InitHighRankUser ();
-		InitStrHighRankUser ();
+		InitAreanaUsers ();
+		InitHighRankUsers ();
+		InitStrHighRankUsers ();
 		InitRecord ();
 		InitReward ();
 	}
 }
 
-/* other_user_info */
+/* areana user */
 public partial class LocalGameData {
-	private const int OTHER_USER_NUM = 4;
-
-	private User[] m_otherUsers;
-	public User[] GetOtherUsers(bool reset = false) {
+	public User[] GetAreanaUsers(bool reset) {// = false) {
 		if (reset)
-			ResetOtherUsers ();
-		return m_otherUsers;
+			ResetAreanaUsers ();
+		return m_areanaUsers;
 	}
 
-	private void InitOtherUser() {
-		m_otherUsers = new User[OTHER_USER_NUM];
-		ResetOtherUsers ();
+	private void InitAreanaUsers() {
+		m_areanaUsers = new User[FixedConstantValue.AREANA_USER_NUM];
+		ResetAreanaUsers ();
 	}
 
 	// TODO: request data.
-	private void ResetOtherUsers() {
+	private void ResetAreanaUsers() {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
-
-		for (int i = 0; i < OTHER_USER_NUM; i++) {
-			m_otherUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+		 
+		for (int i = 0; i < FixedConstantValue.AREANA_USER_NUM; i++) {
+			m_areanaUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
 
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaDefParty = new Party ();
 			for (int j = 0; j < 1; j++) {
 				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 				
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -58,7 +64,7 @@ public partial class LocalGameData {
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
 				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -69,34 +75,19 @@ public partial class LocalGameData {
 			partyDic.Add (PARTY_TYPE.AreanaDef, areanaDefParty);
 			partyDic.Add (PARTY_TYPE.StrAreanaDef, strAreanaDefParty);
 
-			m_otherUsers [i].SetPartyDic (partyDic);
+			m_areanaUsers [i].SetPartyDic (partyDic);
 		}
 	}
+}
 
-	/* high rank */
-	private User[] m_highRankUsers;
-	private User[] m_strHighRankUsers;
-	public User[] GetHighRankUsers(bool reset = false) {
-		if (reset)
-			ResetHighRankUser ();
-		return m_highRankUsers;
-	}
-	public User[] GetStrHighRankUsers(bool reset = false) {
-		if (reset)
-			ResetStrHighRankUser ();
-		return m_strHighRankUsers;
-	}
-
-	private void InitHighRankUser() {
+/* high rank user */
+public partial class LocalGameData {
+	private void InitHighRankUsers() {
 		m_highRankUsers = new User[3 + 20]; // + 10
-		ResetHighRankUser ();
-	}
-	private void InitStrHighRankUser() {
-		m_strHighRankUsers = new User[3 + 20];
-		ResetStrHighRankUser ();
+		ResetHighRankUsers ();
 	}
 
-	private void ResetHighRankUser() {
+	private void ResetHighRankUsers() {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 		for (int i = 0; i < m_highRankUsers.Length; i++) {
@@ -107,7 +98,7 @@ public partial class LocalGameData {
 			for (int j = 0; j < 1; j++) {
 				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -119,7 +110,16 @@ public partial class LocalGameData {
 			m_highRankUsers [i].SetPartyDic (partyDic);
 		}
 	}
-	private void ResetStrHighRankUser() {
+}
+
+/* strongest high rank user */
+public partial class LocalGameData {
+	private void InitStrHighRankUsers() {
+		m_strHighRankUsers = new User[3 + 20];
+		ResetStrHighRankUsers ();
+	}
+
+	private void ResetStrHighRankUsers() {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 		for (int i = 0; i < m_strHighRankUsers.Length; i++) {
@@ -130,7 +130,7 @@ public partial class LocalGameData {
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
 				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -142,18 +142,31 @@ public partial class LocalGameData {
 			m_strHighRankUsers [i].SetPartyDic (partyDic);
 		}
 	}
+}
 
+/* record */
+public class RecordInfo {
+	public bool m_isWin;
+	public bool m_isNew;
+	public DateTime m_time;
 
-	/* record */
-	public List<RecordInfo> recordList;
-	public List<RecordInfo> strRecordList;
+	public User m_userInfo;
+	public User m_otherUserInfo;
 
+	public RecordInfo(bool isWin, bool isNew, DateTime time, User otherUserInfo, User userInfo) {
+		m_isWin = isWin;
+		m_isNew = isNew;
+		m_time = time;
+		m_otherUserInfo = otherUserInfo;
+		m_userInfo = userInfo;
+	}
+}
+public partial class LocalGameData {
 	private void InitRecord() {
 		recordList = new List<RecordInfo> ();
 		strRecordList = new List<RecordInfo> ();
 
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
-
 
 		for (int i = 0; i < 6; i++) {
 			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
@@ -162,7 +175,7 @@ public partial class LocalGameData {
 			for (int j = 0; j < 1; j++) {
 				areanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -179,7 +192,7 @@ public partial class LocalGameData {
 			for (int j = 0; j < 1; j++) {
 				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -199,7 +212,7 @@ public partial class LocalGameData {
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
 				strAreanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -215,7 +228,7 @@ public partial class LocalGameData {
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
 				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
 					CharInfo character = new CharInfo(k * 10 + k, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 					charSet [k] = character;
@@ -238,57 +251,27 @@ public partial class LocalGameData {
 		strRecordList.Add (new RecordInfo (isWin, true, DateTime.Now.AddHours (deviation), otherUserInfo, userInfo));
 	}
 }
-	
-public class RecordInfo {
 
-	public bool m_isWin;
-	public bool m_isNew;
-	public DateTime m_time;
+/* reward */
+public class RewardInfo {
+	public int m_nRewardScore; //TODO: reward score -> reward rank 808!!
+	public ItemInfo[] m_items; // TODO: make item class with inventory
 
-	public User m_userInfo;
-	public User m_otherUserInfo;
-
-	public RecordInfo(bool isWin, bool isNew, DateTime time, User otherUserInfo, User userInfo) {
-		m_isWin = isWin;
-		m_isNew = isNew;
-		m_time = time;
-		m_otherUserInfo = otherUserInfo;
-		m_userInfo = userInfo;
+	public RewardInfo(int rewardScore, ItemInfo[] items) {
+		m_nRewardScore = rewardScore;
+		m_items = items;
 	}
-
 }
-
+public class ItemInfo {
+	public int id = 0;
+	public string name = "Gold";
+	public string spriteName = "gold_1";
+}
 public partial class LocalGameData {
-	public Dictionary<int, Reward> rewardDicByScore = new Dictionary<int, Reward>();
-
 	private void InitReward() {
 		for (int i = 1000; i <= FixedConstantValue.REWARD_MAX_SCORE; i += 1000) {
-			Reward reward = new Reward (i, new int[] {0, 0, 0, 0});
+			RewardInfo reward = new RewardInfo (i, new ItemInfo[] {new ItemInfo(), new ItemInfo(), new ItemInfo(), new ItemInfo()});
 			rewardDicByScore.Add (reward.m_nRewardScore, reward);
-		}
-	}
-
-}
-
-public class Reward {
-	public int m_nRewardScore; //TODO: reward score -> reward rank 808!!
-	public int[] m_nItemIDs; // TODO: make item class with inventory
-
-	public Reward(int rewardScore, int[] itemIDs) {
-		m_nRewardScore = rewardScore;
-		m_nItemIDs = itemIDs;
-	}
-}
-
-public class Item {
-	public int id = 0;
-
-	public static string GetItemSpriteName(int itemID) {
-		if (itemID == 0) {
-			return "gold_1";
-		} else {
-			Debug.LogError ("..");
-			return "";
 		}
 	}
 }

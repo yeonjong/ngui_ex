@@ -39,6 +39,8 @@ public class FormationCell : MonoBehaviour {
 
 	// make override method.
 	public void Set (int cellIndex, string spriteName) { // TODO: param => (int cellIndex, template & args)
+		if (m_sprite == null) Awake();
+
 		m_cellIndex = cellIndex; // must do.
 
 		m_sprite.spriteName = spriteName;

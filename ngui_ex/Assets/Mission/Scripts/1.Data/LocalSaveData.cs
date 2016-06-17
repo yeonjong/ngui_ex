@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 /* user data */
 public partial class LocalSaveData {
+	public User m_user;
+	public Key m_key;
+
 	public LocalSaveData() {
 		Init ();	
 	}
@@ -11,27 +14,21 @@ public partial class LocalSaveData {
 	private void Init() {
 		InitUser ();
 	}
-
-
 }
 
 /* user information */
 public partial class LocalSaveData {
-	public User m_user;
-	public Key m_key;
-
 	private void InitUser() {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 		m_user = new User ("jipsa", 56, 10, randomCharacterNames[1]);
 
 		/* character dictionary */
 		Dictionary<int, CharInfo> characterDic = new Dictionary<int, CharInfo> ();
-		for (int i = 0; i < FixedConstantValue.TEMP_USER_CHAR_NUM; i++) { // this user have 48 characters;
+		for (int i = 0; i < FixedConstantValue.IMSI_USER_CHAR_GEN_NUM; i++) { // this user have 48 characters;
 			CharInfo character = new CharInfo(i * 10 + i, randomCharacterNames[Random.Range(0, 4)], Random.Range(1, 8), 1);
 			characterDic.Add (character.id, character);
 		}
 		m_user.SetCharacterDic (characterDic);
-
 
 		/* party dictionary */
 		Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
@@ -40,10 +37,10 @@ public partial class LocalSaveData {
 			for (int j = 0; j < FixedConstantValue.DUNGEION_PARTY_NUM; j++) {
 				party.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
 
-				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_NUM];
+				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
-					int randomCharID = Random.Range (0, FixedConstantValue.TEMP_USER_CHAR_NUM + 1);
-					if (randomCharID == FixedConstantValue.TEMP_USER_CHAR_NUM) {
+					int randomCharID = Random.Range (0, FixedConstantValue.IMSI_USER_CHAR_GEN_NUM + 1);
+					if (randomCharID == FixedConstantValue.IMSI_USER_CHAR_GEN_NUM) {
 						charSet [k] = null;
 					} else {
 						randomCharID = randomCharID * 10 + randomCharID;
@@ -62,23 +59,43 @@ public partial class LocalSaveData {
 	}
 }
 
-public enum PARTY_TYPE {
-	Dungeon,
-	AreanaAtk,
-	AreanaDef,
-	StrAreanaAtk,
-	StrAreanaDef,
-	ShamAtk,
-	ShamDef,
-}
 
-public class Party {
-	public List<FormInfo> m_formList = new List<FormInfo> ();
-	public List<CharInfo[]> m_charSetList = new List<CharInfo[]> ();
-}
 
-public class User {
+
+
+
+
+
+public partial class User {
+	public string m_nickName;
+	public int m_nLevel;
+	public int m_nAreanaRank;
+	public int m_nAreanaRanking = 17;
+ public string m_mainCharacterName; // TODO: m_mainTeam's first info is main character! so delete this variable.
+	public string m_guildName;
+	public int m_maxPartyCost = 1000;
+
+	public Dictionary<int, CharInfo> m_charDicByID;
 	private Dictionary<PARTY_TYPE, Party> m_partyDic;
+
+	public User(string nickName, int level, int areanaRank, string mainCharacterName) {
+		m_nickName = nickName;
+		m_nLevel = level;
+		m_nAreanaRank = areanaRank;
+		m_mainCharacterName = mainCharacterName;
+	}
+}
+
+public partial class User {
+	/* all character */
+	public void SetCharacterDic(Dictionary<int, CharInfo>  characterDic) {
+		m_charDicByID = characterDic;
+	}
+	public List<int> GetCharacterIDList() {
+		return new List<int>(m_charDicByID.Keys);
+	}
+
+	/* party */
 	public void SetPartyDic (Dictionary<PARTY_TYPE, Party> partyDic) {
 		m_partyDic = partyDic;
 	}
@@ -106,81 +123,62 @@ public class User {
 	public CharInfo[] GetCharSet(PARTY_TYPE partyType, int listIndex = 0) {
 		return m_partyDic [partyType].m_charSetList [listIndex];
 	}
+	public void SetFormation(PARTY_TYPE partyType, int listIndex, int formNum) {
+		m_partyDic [partyType].m_formList [listIndex] = FormInfo.GetFormInfo (formNum);
+	}
 	public FormInfo GetFormation(PARTY_TYPE partyType, int listIndex = 0) {
 		return m_partyDic [partyType].m_formList [listIndex];
 	}
+}
 
+public enum PARTY_TYPE {
+	Dungeon,
+	AreanaAtk,
+	AreanaDef,
+	StrAreanaAtk,
+	StrAreanaDef,
+	ShamAtk,
+	ShamDef,
+}
 
-	/* party edit */
-	public List<int> GetCharacterKeyList() {
-		return new List<int>(m_characterDic.Keys);
-	}
-
-	/*
-	public void AddParty(CharInfo[] newParty, FormInfo newForm) {
-		m_partyList.Add (newParty);
-		m_formList.Add (newForm);
-
-		int fightingPower = 0;
-		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
-			if (newParty [i] != null) {
-				fightingPower += newParty [i].fightingPower;
-			}
-		}
-		m_partyFightingPowerLlist.Add (fightingPower);
-	}
-	*/
-
-	/* party edit - end */
-
-
-
-
-	public string m_nickName;
-	public int m_nLevel;
-	public int m_nAreanaRank;
-	public int m_nAreanaRanking = 17;
-	public string m_mainCharacterName; // m_mainTeam's first info is main character! so delete this variable.
-	public string m_guildName;
-
-	//public int[] m_mainFormation;
-	//public string m_formationEffectDisc; // maybe made formation class.. but...
-	//public List<CharInfo> m_mainTeam;
-
-
-	/* dungeonParty/Form, areanaAtkParty/Form, areanaDefParty/Form, ... */
-
-	public Dictionary<int, CharInfo> m_characterDic; // key: CharInfo.id, val: CharInfo
-	public int m_maxPartyCost = 1000;
-
-	/*
+public class Party {
 	public List<FormInfo> m_formList = new List<FormInfo> ();
-	public List<CharInfo[]> m_partyList = new List<CharInfo[]> ();
-	public List<int> m_partyFightingPowerLlist = new List<int> ();
-	public int m_nTeamFightingPower; // 방어 팀 전투력. // TODO: delete this param...
-	*/
-
-	public User(string nickName, int level, int areanaRank, string mainCharacterName) {
-		m_nickName = nickName;
-		m_nLevel = level;
-		m_nAreanaRank = areanaRank;
-		m_mainCharacterName = mainCharacterName;
-	}
-
+	public List<CharInfo[]> m_charSetList = new List<CharInfo[]> ();
 	/*
-	public void SetFormation(int[] mainFormation, string formationEffectDisc) {
-		m_mainFormation = mainFormation;
-		m_formationEffectDisc = formationEffectDisc;
-	}
-	public void SetMainTeam(List<CharInfo> mainTeam) {
-		m_mainTeam = mainTeam;
+	public int GetPartyFightingPower(int partyNum = 0) {
+		int fightingPower = 0;
+		CharInfo[] charSet = m_charSetList [partyNum];
+		for (int i = 0; i < charSet.Length; i++) {
+			if (charSet[i] != null)
+				fightingPower += charSet [i].fightingPower;
+		}
+		return fightingPower;
 	}
 	*/
+}
 
-	public void SetCharacterDic(Dictionary<int, CharInfo>  characterDic) {
-		m_characterDic = characterDic;
+public class CharInfo {
+	public int id;
+	public string name = "NAME";
+	public string spriteName;
+	public int cost;
+	public int hp;
+	public int starRank = 0;
+	public int upgradeRank = 0;
+	public int level = 60;
+	public string classKind = "atk";
+	public string feature = null;
+	public int fightingPower;
+	//public int[] formationPos;
+
+	public CharInfo(int id, string spriteName, int cost, int hp) {
+		this.id = id;
+		this.spriteName = spriteName;
+		this.cost = cost;
+		this.hp = hp;
+
+		fightingPower = UnityEngine.Random.Range (10, 101);
 	}
-
 }
 
 public class FormInfo {
@@ -192,10 +190,10 @@ public class FormInfo {
 		FormInfo info = new FormInfo ();
 
 		switch (formNum) {
-		case 1:
+		case 0:
 			info.m_Name = "ATK FORM";
 			info.m_EffectDisc = "20% ATK UP";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	 0,	 1,	-1,
 				-1,	-1,	 2,	-1,
 				-1,	-1,	 3,	-1,
@@ -204,10 +202,10 @@ public class FormInfo {
 				-1,	-1,	-1,	-1
 			};
 			break;
-		case 2:
+		case 1:
 			info.m_Name = "DEF FORM";
 			info.m_EffectDisc = "40% DEF UP, 10% DEF DOWN";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	-1,	 0,	-1,
 				-1,	-1,	-1,	 1,
 				-1,	-1,	-1,	 2,
@@ -216,10 +214,10 @@ public class FormInfo {
 				-1,	 5,	 6,	 7
 			};
 			break;
-		case 3:
+		case 2:
 			info.m_Name = "FORM 3";
 			info.m_EffectDisc = "DISCRIPTION ... ... ... 3";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	 0,	 1,	-1,
 				-1,	-1,	-1,	 2,
 				-1,	-1,	 3,	-1,
@@ -228,10 +226,10 @@ public class FormInfo {
 				-1,	 6,	 7,	-1
 			};
 			break;
-		case 4:
+		case 3:
 			info.m_Name = "FORM 4";
 			info.m_EffectDisc = "DISCRIPTION ... ... ... 4";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	-1,	 0,	-1,
 				-1,	 1,	-1,	-1,
 				2,	-1,	-1,	-1,
@@ -240,10 +238,10 @@ public class FormInfo {
 				-1,	-1,	-1,	-1
 			};
 			break;
-		case 5:
+		case 4:
 			info.m_Name = "FORM 5";
 			info.m_EffectDisc = "DISCRIPTION ... ... ... 5";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	 0,	 1,	-1,
 				-1,	 2,	-1,	-1,
 				-1,	 3,	 4,	-1,
@@ -252,10 +250,10 @@ public class FormInfo {
 				-1,	-1,	 7,	-1
 			};
 			break;
-		case 6:
+		case 5:
 			info.m_Name = "FORM 6";
 			info.m_EffectDisc = "DISCRIPTION ... ... ... 6";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	-1,	 0,	-1,
 				-1,	 1,	-1,	-1,
 				-1,	 2,	-1,	-1,
@@ -264,10 +262,10 @@ public class FormInfo {
 				-1,	-1,	 5,	-1
 			};
 			break;
-		case 7:
+		case 6:
 			info.m_Name = "FORM 7";
 			info.m_EffectDisc = "DISCRIPTION ... ... ... 7";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	 0,	 1,	 2,
 				-1,	-1,	-1,	 3,
 				-1,	-1,	-1,	 4,
@@ -276,10 +274,10 @@ public class FormInfo {
 				-1,	-1,	-1,	 7
 			};
 			break;
-		case 8:
+		case 7:
 			info.m_Name = "FORM 8";
 			info.m_EffectDisc = "DISCRIPTION ... ... ... 8";
-			info.m_Form = new int[24] {
+			info.m_Form = new int[FixedConstantValue.FORM_CELL_NUM] {
 				-1,	-1,	 0,	-1,
 				-1,	 1,	 2,	-1,
 				-1,	-1,	 3,	-1,
@@ -296,30 +294,6 @@ public class FormInfo {
 
 }
 
-/* character data */
-public class CharInfo {
-	public int id;
-	public string name = "NAME";
-	public string spriteName;
-	public int cost;
-	public int hp;
-	public int starRank = 0;
-	public int upgradeRank = 0;
-	public int level = 60;
-	public string classKind = "atk";
-	public string feature = null;
-	public int fightingPower;
-	//public int[] formationPos;
-	 
-	public CharInfo(int id, string spriteName, int cost, int hp) {
-		this.id = id;
-		this.spriteName = spriteName;
-		this.cost = cost;
-		this.hp = hp;
-
-		fightingPower = UnityEngine.Random.Range (10, 101);
-	}
-}
 
 public class Key {
 	public int m_nMaxAreanaKey;

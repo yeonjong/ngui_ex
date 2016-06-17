@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AreanaEndingChoreographyPanel : PanelBase {
+public class AreanaBattlePanel : PanelBase {
 
 	public override void OnClickXXXBtn(string btnName) {
 		Debug.Log (btnName);
 
 		switch (btnName) {
 		case "btn_back":
-		case "btn_ok":
-			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaRecord))
+		case "btn_imsi_back":
+			if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaRecordReviewCheck)) {
 				GuiMgr.GetInst ().PopPnl (PANEL_TYPE.AreanaRecord, PANEL_TYPE.AreanaRecordReviewCheck);
+			}
 			else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaEntrance))
 				GuiMgr.GetInst ().PopPnl (PANEL_TYPE.AreanaEntrance);
 			else if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.ShamBattleEntrance))
@@ -18,10 +19,13 @@ public class AreanaEndingChoreographyPanel : PanelBase {
 			else
 				Debug.LogError ("this case not implemented");
 			break;
-		case "btn_review":
-			//TODO: you must give review information.
-			Debug.Log("todo logic");
-			GuiMgr.GetInst ().PopPnl ();
+		case "btn_imsi_win":
+			GlobalApp.Inst.isWin = true;
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AreanaEndingChoreography);
+			break;
+		case "btn_imsi_lose":
+			GlobalApp.Inst.isWin = false;
+			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AreanaEndingChoreography);
 			break;
 		}
 	}

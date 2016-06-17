@@ -15,7 +15,7 @@ public class AreanaEntrancePanel : PanelBase {
 		case "btn_other_user_party_info1":
 		case "btn_other_user_party_info2":
 		case "btn_other_user_party_info3":
-			GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)), PANEL_TYPE.AreanaEntrance, PARTY_TYPE.AreanaDef);
+			GlobalApp.Inst.userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.OtherUserPartyInfo, false);
 			break;
 		case "btn_attack_party_edit":
@@ -49,8 +49,6 @@ public class AreanaEntrancePanel : PanelBase {
 		}
 	}
 
-	private const int OTHER_USER_NUMBER = 4;
-
 	private UILabel m_userInfo;
 	private UISprite m_userMainCharacter;
 
@@ -63,7 +61,7 @@ public class AreanaEntrancePanel : PanelBase {
 		m_userInfo = transform.FindChild ("user_info/lbl_info1").GetComponent<UILabel> ();
 		m_userMainCharacter = transform.FindChild ("user_info").GetComponent<UISprite> ();
 
-		m_otherUserInfos = new UILabel[OTHER_USER_NUMBER * 2];
+		m_otherUserInfos = new UILabel[FixedConstantValue.AREANA_USER_NUM * 2];
 		m_otherUserInfos[0] = transform.FindChild ("other_user_info1/lbl_info1").GetComponent<UILabel> ();
 		m_otherUserInfos[1] = transform.FindChild ("other_user_info1/lbl_info2").GetComponent<UILabel> ();
 		m_otherUserInfos[2] = transform.FindChild ("other_user_info2/lbl_info1").GetComponent<UILabel> ();
@@ -73,7 +71,7 @@ public class AreanaEntrancePanel : PanelBase {
 		m_otherUserInfos[6] = transform.FindChild ("other_user_info4/lbl_info1").GetComponent<UILabel> ();
 		m_otherUserInfos[7] = transform.FindChild ("other_user_info4/lbl_info2").GetComponent<UILabel> ();
 
-		m_otherUserMainCharacters = new UISprite[OTHER_USER_NUMBER];
+		m_otherUserMainCharacters = new UISprite[FixedConstantValue.AREANA_USER_NUM];
 		m_otherUserMainCharacters [0] = transform.FindChild ("other_user_info1/btn_other_user_party_info0").GetComponent<UISprite> ();
 		m_otherUserMainCharacters [1] = transform.FindChild ("other_user_info2/btn_other_user_party_info1").GetComponent<UISprite> ();
 		m_otherUserMainCharacters [2] = transform.FindChild ("other_user_info3/btn_other_user_party_info2").GetComponent<UISprite> ();
@@ -98,18 +96,19 @@ public class AreanaEntrancePanel : PanelBase {
 	void Reset() {
 		StringBuilder sb = new StringBuilder ();
 
-		User[] otherUserInfos = GlobalApp.Inst.commData.GetOtherUsers(true);
-		for (int i = 0; i < OTHER_USER_NUMBER * 2; i+=2) {
+		User[] otherUserInfos = GlobalApp.Inst.commData.GetAreanaUsers(true);
+		for (int i = 0; i < FixedConstantValue.AREANA_USER_NUM; i++) {
 			sb.Length = 0;
 			sb.AppendFormat ("Rank {0}\nLevel {1} {2}",
-				otherUserInfos [i/2].m_nAreanaRank,
-				otherUserInfos [i/2].m_nLevel,
-				otherUserInfos [i/2].m_nickName);
-			m_otherUserInfos [i].text = sb.ToString ();
+				otherUserInfos[i].m_nAreanaRank,
+				otherUserInfos[i].m_nLevel,
+				otherUserInfos[i].m_nickName);
+			m_otherUserInfos [i * 2].text = sb.ToString ();
 			sb.Length = 0;
-			sb.AppendFormat ("Power {0}", otherUserInfos[i/2].GetPartyFightingPower(PARTY_TYPE.AreanaDef));
-			m_otherUserInfos [i + 1].text = sb.ToString ();
-			m_otherUserMainCharacters [i / 2].spriteName = otherUserInfos[i/2].m_mainCharacterName;
+			sb.AppendFormat ("Power {0}",
+				otherUserInfos [i].GetPartyFightingPower (PARTY_TYPE.AreanaDef));
+			m_otherUserInfos [i * 2 + 1].text = sb.ToString ();
+			m_otherUserMainCharacters [i].spriteName = otherUserInfos [i].GetCharSet (PARTY_TYPE.AreanaDef)[0].spriteName;
 		}
 
 		Key key = GlobalApp.Inst.userData.m_key;

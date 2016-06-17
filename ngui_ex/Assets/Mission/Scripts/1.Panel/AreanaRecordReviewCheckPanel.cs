@@ -27,7 +27,7 @@ public class AreanaRecordReviewCheckPanel : PanelBase {
 	void Awake() {
 		userInfoLabel = transform.FindChild ("lbl_user_info").GetComponent<UILabel> ();
 
-		userPartySprites = new UISprite[FixedConstantValue.PARTY_MAX_NUM];
+		userPartySprites = new UISprite[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 		userPartySprites [0] = transform.FindChild ("user_party/spr_user_char_0").GetComponent<UISprite> ();
 		userPartySprites [1] = transform.FindChild ("user_party/spr_user_char_1").GetComponent<UISprite> ();
 		userPartySprites [2] = transform.FindChild ("user_party/spr_user_char_2").GetComponent<UISprite> ();
@@ -39,7 +39,7 @@ public class AreanaRecordReviewCheckPanel : PanelBase {
 
 		otherUserInfoLabel = transform.FindChild ("lbl_other_user_info").GetComponent<UILabel> ();
 
-		otherUserPartySprites = new UISprite[FixedConstantValue.PARTY_MAX_NUM];
+		otherUserPartySprites = new UISprite[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 		otherUserPartySprites [0] = transform.FindChild ("other_user_party/spr_user_char_0").GetComponent<UISprite> ();
 		otherUserPartySprites [1] = transform.FindChild ("other_user_party/spr_user_char_1").GetComponent<UISprite> ();
 		otherUserPartySprites [2] = transform.FindChild ("other_user_party/spr_user_char_2").GetComponent<UISprite> ();
@@ -61,7 +61,7 @@ public class AreanaRecordReviewCheckPanel : PanelBase {
 
 
 		CharInfo[] charSet = user.GetCharSet (PARTY_TYPE.AreanaAtk);
-		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
+		for (int i = 0; i < FixedConstantValue.PARTY_MAX_CHAR_NUM; i++) {
 			if (charSet [i] != null)
 				userPartySprites [i].spriteName = charSet [i].spriteName;
 			else {
@@ -74,7 +74,7 @@ public class AreanaRecordReviewCheckPanel : PanelBase {
 		sb.AppendFormat ("Level {0} {1}", user.m_nLevel, user.m_nickName);
 		otherUserInfoLabel.text = sb.ToString ();
 		charSet = user.GetCharSet (PARTY_TYPE.AreanaDef);
-		for (int i = 0; i < FixedConstantValue.PARTY_MAX_NUM; i++) {
+		for (int i = 0; i < FixedConstantValue.PARTY_MAX_CHAR_NUM; i++) {
 			if (charSet [i] != null)
 				otherUserPartySprites [i].spriteName = charSet [i].spriteName;
 			else {

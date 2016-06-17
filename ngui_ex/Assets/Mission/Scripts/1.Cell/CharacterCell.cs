@@ -44,11 +44,17 @@ public class CharacterCell : MonoBehaviour {
 		m_sprites [2] = transform.FindChild ("spr_character_star_rank").GetComponent<UISprite> ();
 	}
 
-	public void Set(CharInfo charInfo, int cellIndex) {
+	public void Set(CharInfo charInfo, int cellIndex, bool belongFormation = false) {
 		m_cellIndex = cellIndex;
 
 		if (m_labels == null)
 			Awake ();
+
+		if (belongFormation) {
+			m_sprites [0].color = new Color (0.3f, 0.3f, 0.3f);
+		} else {
+			m_sprites [0].color = Color.white;
+		}
 
 		if (charInfo == null) {
 			m_labels [0].text = "";

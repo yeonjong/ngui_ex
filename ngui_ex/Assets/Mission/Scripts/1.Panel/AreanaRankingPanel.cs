@@ -16,7 +16,7 @@ public class AreanaRankingPanel : PanelBase {
 		case "btn_other_user_party_info_1":
 		case "btn_other_user_party_info_2":
 		case "btn_other_user_party_info_3":
-			GlobalApp.Inst.SetOtherUser (Int32.Parse (btnName.Substring (btnName.Length - 1)) - 1, PANEL_TYPE.AreanaRanking, PARTY_TYPE.AreanaDef);
+			GlobalApp.Inst.userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1)) -1;
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.OtherUserPartyInfo, false);
 			break;
 		}
@@ -75,7 +75,7 @@ public class AreanaRankingPanel : PanelBase {
 		m_userInfo.text = sb.ToString ();
 		m_userMainCharacter.spriteName = userInfo.m_mainCharacterName;
 
-		User[] users = GlobalApp.Inst.commData.GetHighRankUsers ();
+		User[] users = GlobalApp.Inst.commData.m_highRankUsers;
 		for (int i = 0; i < 3 * 2; i+=2) {
 			sb.Length = 0;
 			sb.AppendFormat ("Level {0} {1}", users [i/2].m_nLevel, users [i/2].m_nickName);
