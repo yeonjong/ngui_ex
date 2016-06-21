@@ -47,7 +47,7 @@ public class PartyEditPanel : PanelBase {
 	int maxRowIndex = 0;
 
 
-	Dictionary<int, CharInfo> charDicByID; //= GlobalApp.Inst.userData.m_user.m_charDicByID;
+	//Dictionary<int, CharInfo> charDicByID; //= GlobalApp.Inst.userData.m_user.m_charDicByID;
 	//Party dungeonParty; //= GlobalApp.Inst.userData.m_user.GetParty(PARTY_TYPE.Dungeon);
 	CharInfo[] charSet; //= dungeonParty.m_charSetList [selectedParty];
 	FormInfo form; //= dungeonParty.m_formList [selectedParty];
@@ -111,8 +111,8 @@ public class PartyEditPanel : PanelBase {
 
 	void OnEnable() {
 		// set real character list.
-		charDicByID = GlobalApp.Inst.userData.m_user.m_charDicByID;
-		realCharList = GlobalApp.Inst.userData.m_user.GetCharacterList ();
+		//charDicByID = GlobalApp.Inst.userData.m_user.m_charDicByID;
+		realCharList = GlobalApp.Inst.userData.GetUser().GetCharacterList ();
 		
 		// set endless scroll view's rows.
 		int minIndex = ((realCharList.Count - 1) / 4) * -1;
@@ -151,7 +151,7 @@ public class PartyEditPanel : PanelBase {
 		}
 
 		// set formation cell list.
-		Party dungeonParty = GlobalApp.Inst.userData.m_user.GetParty(PARTY_TYPE.Dungeon);
+		Party dungeonParty = GlobalApp.Inst.userData.GetUser().GetParty(PARTY_TYPE.Dungeon);
 		charSet = dungeonParty.m_charSetList [selectedParty];
 		form = dungeonParty.m_formList [selectedParty];
 
@@ -194,9 +194,9 @@ public class PartyEditPanel : PanelBase {
 	}
 
 	public void ChangeFormation(int formNum) {
-		GlobalApp.Inst.userData.m_user.SetFormation (PARTY_TYPE.Dungeon, selectedParty, formNum);
+		GlobalApp.Inst.userData.GetUser().SetFormation (PARTY_TYPE.Dungeon, selectedParty, formNum);
 
-		Party dungeonParty = GlobalApp.Inst.userData.m_user.GetParty (PARTY_TYPE.Dungeon);
+		Party dungeonParty = GlobalApp.Inst.userData.GetUser().GetParty (PARTY_TYPE.Dungeon);
 		charSet = dungeonParty.m_charSetList [selectedParty];
 		form = dungeonParty.m_formList [selectedParty];
 
@@ -242,7 +242,7 @@ public class PartyEditPanel : PanelBase {
 
 			//release character from charSet, ui/formcell, ui/charcell
 			int charSetIndex = form.m_Form[cellIndex];
-			GlobalApp.Inst.userData.m_user.GetParty(PARTY_TYPE.Dungeon).m_charSetList [selectedParty][charSetIndex] = null;
+			GlobalApp.Inst.userData.GetUser().GetParty(PARTY_TYPE.Dungeon).m_charSetList [selectedParty][charSetIndex] = null;
 			charSet[charSetIndex] = null;
 
 			int charID = charIDDicByFormCellListIndex[cellIndex];
@@ -270,7 +270,7 @@ public class PartyEditPanel : PanelBase {
 			int formCellListIndex = formCellListIndexByCharID [charID];
 			int charSetIndex = form.m_Form [formCellListIndex];
 
-			GlobalApp.Inst.userData.m_user.GetParty(PARTY_TYPE.Dungeon).m_charSetList [selectedParty][charSetIndex] = null;
+			GlobalApp.Inst.userData.GetUser().GetParty(PARTY_TYPE.Dungeon).m_charSetList [selectedParty][charSetIndex] = null;
 			charSet[charSetIndex] = null;
 
 			formCellListIndexByCharID.Remove (charID);
@@ -324,7 +324,7 @@ public class PartyEditPanel : PanelBase {
 				Debug.Log (sbbbbbb.ToString());
 
 				CharInfo character = realCharList[cellIndex];
-				GlobalApp.Inst.userData.m_user.GetParty(PARTY_TYPE.Dungeon).m_charSetList [selectedParty][charSetIndex] = character;
+				GlobalApp.Inst.userData.GetUser().GetParty(PARTY_TYPE.Dungeon).m_charSetList [selectedParty][charSetIndex] = character;
 				charSet[charSetIndex] = character;
 
 				//

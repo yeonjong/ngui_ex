@@ -46,11 +46,11 @@ public class AreanaRecordPanel : PanelBase {
 
 	void OnEnable() {
 		StringBuilder sb = new StringBuilder ();
-		User user = GlobalApp.Inst.userData.m_user;
+		User user = GlobalApp.Inst.userData.GetUser();
 		sb.AppendFormat ("Rank {0}\nPower {1}",user.m_nAreanaRank, user.GetPartyFightingPower(PARTY_TYPE.AreanaAtk));
 		userInfoLabel.text = sb.ToString ();
 
-		List<RecordInfo> recordList = GlobalApp.Inst.commData.recordList;
+		List<RecordInfo> recordList = GlobalApp.Inst.commData.GetRecordList();
 		for (int i = 0; i < FixedConstantValue.RECORD_CELL_NUM; i++) {
 			records [i].Set (recordList[i]);
 		}

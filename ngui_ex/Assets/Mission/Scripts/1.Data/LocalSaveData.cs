@@ -5,7 +5,12 @@ using System.Collections.Generic;
 
 /* user data */
 public partial class LocalSaveData {
-	public User m_user;
+	private User m_user;
+	public User GetUser() {
+		Debug.Log ("!!Get user");
+		return m_user;
+	}
+
 	public Key m_key;
 
 	public LocalSaveData() {
@@ -21,7 +26,7 @@ public partial class LocalSaveData {
 public partial class LocalSaveData {
 	private void InitUser() {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
-		m_user = new User ("jipsa", 56, 10, randomCharacterNames[1]);
+		m_user = new User ("jipsa", 56, 10);
 
 		/* character dictionary */
 		Dictionary<int, CharInfo> characterDic = new Dictionary<int, CharInfo> ();
@@ -36,6 +41,7 @@ public partial class LocalSaveData {
 
 		for (int i = 0; i < Enum.GetNames(typeof(PARTY_TYPE)).Length; i++) {
 			Party party = new Party ();
+			party.type = (PARTY_TYPE)i;
 
 			int max;
 			if (i == (int)PARTY_TYPE.Dungeon)
@@ -97,18 +103,17 @@ public partial class User {
 	public int m_nLevel;
 	public int m_nAreanaRank;
 	public int m_nAreanaRanking = 17;
- public string m_mainCharacterName; // TODO: m_mainTeam's first info is main character! so delete this variable.
+ 	//public string m_mainCharacterName; // TODO: m_mainTeam's first info is main character! so delete this variable.
 	public string m_guildName;
 	public int m_maxPartyCost = 1000;
 
 	public Dictionary<int, CharInfo> m_charDicByID;
 	private Dictionary<PARTY_TYPE, Party> m_partyDic;
 
-	public User(string nickName, int level, int areanaRank, string mainCharacterName) {
+	public User(string nickName, int level, int areanaRank) {
 		m_nickName = nickName;
 		m_nLevel = level;
 		m_nAreanaRank = areanaRank;
-		m_mainCharacterName = mainCharacterName;
 	}
 }
 
@@ -243,6 +248,8 @@ public partial class User {
 public class Party {
 	public List<FormInfo> m_formList = new List<FormInfo> ();
 	public List<CharInfo[]> m_charSetList = new List<CharInfo[]> ();
+	public PARTY_TYPE type;
+
 	/*
 	public int GetPartyFightingPower(int partyNum = 0) {
 		int fightingPower = 0;

@@ -51,7 +51,7 @@ public class GlobalApp {
 	public int currDungeonParty = 0;
 
 	public Party GetParty (PARTY_TYPE partyType) {
-		return userData.m_user.GetParty (partyType);
+		return userData.GetUser().GetParty (partyType);
 	}
 
 	// hard coding
@@ -84,42 +84,42 @@ public class GlobalApp {
 
 		switch (specialCase) {
 		case "AreanaEntrancePanel/OtherUserPartyInfoPanel":
-			user = commData.m_areanaUsers [userIndex];
+			user = commData.GetAreanaUsers() [userIndex];
 			break;
 		case "AreanaEntrancePanel/AreanaRankingPanel/OtherUserPartyInfoPanel":
-			user = commData.m_highRankUsers [userIndex];
+			user = commData.GetHighRankUsers() [userIndex];
 			break;
 
 		case "ShamBattleEntrancePanel/AttackPartyEditPanel/CharacterInfoPanel":
-			user = userData.m_user;
+			user = userData.GetUser();
 			break;
 		case "AreanaEntrancePanel/AttackPartyEditPanel/CharacterInfoPanel":
-			user = commData.m_areanaUsers [userIndex];
+			user = commData.GetAreanaUsers() [userIndex];
 			break;
 		case "AreanaEntrancePanel/AreanaRankingPanel/OtherUserPartyInfoPanel/CharacterInfoPanel":
-			user = commData.m_highRankUsers [userIndex];
+			user = commData.GetHighRankUsers() [userIndex];
 			break;
 		case "AreanaEntrancePanel/OtherUserPartyInfoPanel/CharacterInfoPanel":
-			user = commData.m_areanaUsers [userIndex];
+			user = commData.GetAreanaUsers() [userIndex];
 			break;
 
 		case "ShamBattleEntrancePanel/AttackPartyEditPanel/FormationInfoPanel":
-			user = userData.m_user;
+			user = userData.GetUser();
 			break;
 		case "ShamBattleEntrancePanel/DefensePartyEditPanel/ChangePartyPanel/FormationInfoPanel":
-			user = userData.m_user;
+			user = userData.GetUser();
 			break;
 		case "AreanaEntrancePanel/AreanaRankingPanel/OtherUserPartyInfoPanel/FormationInfoPanel":
-			user = commData.m_highRankUsers [userIndex];
+			user = commData.GetHighRankUsers() [userIndex];
 			break;
 		case "AreanaEntrancePanel/OtherUserPartyInfoPanel/FormationInfoPanel":
-			user = commData.m_areanaUsers [userIndex];
+			user = commData.GetAreanaUsers() [userIndex];
 			break;
 		case "AreanaEntrancePanel/DefensePartyEditPanel/ChangePartyPanel/FormationInfoPanel":
-			user = userData.m_user;
+			user = userData.GetUser();
 			break;
 		case "AreanaEntrancePanel/AttackPartyEditPanel/FormationInfoPanel":
-			user = commData.m_areanaUsers [userIndex];
+			user = commData.GetAreanaUsers() [userIndex];
 			break;
 
 		}

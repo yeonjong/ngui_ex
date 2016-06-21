@@ -28,8 +28,14 @@ public class OtherUserPartyInfoPanel : PanelBase {
 		case "btn_character_info5":
 		case "btn_character_info6":
 		case "btn_character_info7":
-			GlobalApp.Inst.charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
-			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
+			int index = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			if (!m_otherTeamFormation [index].spriteName.Equals (FixedConstantValue.EMPTY_SPRITE_NAME)) {
+				GlobalApp.Inst.charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+				
+				GlobalApp.Inst.SetBtnIndex (Int32.Parse (btnName.Substring (btnName.Length - 1)));
+				
+				GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
+			}
 			break;
 		}
 	}
@@ -58,16 +64,28 @@ public class OtherUserPartyInfoPanel : PanelBase {
 
 		StringBuilder sb = new StringBuilder ();
 
-		User otherUser;
+		//User otherUser;
+		/*
 		if (GuiMgr.GetInst ().CheckContainsTargetPanel (PANEL_TYPE.AreanaRanking))
 			otherUser = GlobalApp.Inst.GetUserAtSpecialCase ("AreanaEntrancePanel/AreanaRankingPanel/OtherUserPartyInfoPanel");
 		else
 			otherUser = GlobalApp.Inst.GetUserAtSpecialCase ("AreanaEntrancePanel/OtherUserPartyInfoPanel");
+		*/
+		Party party = GlobalApp.Inst.GetCachedParties ()[0];
+		//CharInfo character = party.m_charSetList [0] [charIndex];
+		//party.get
 
-		sb.AppendFormat ("Power {0}", otherUser.GetPartyFightingPower(PARTY_TYPE.AreanaDef));
+		int fightingPower = 0;
+		CharInfo[] charSet = party.m_charSetList[0];
+		for (int i = 0; i < charSet.Length; i++) {
+			if (charSet[i] != null)
+				fightingPower += charSet [i].fightingPower;
+		}
+
+		sb.AppendFormat ("Power {0}", fightingPower);
 		m_otherTeamFightingPower.text = sb.ToString ();
 
-		CharInfo[] charSet = otherUser.GetCharSet (PARTY_TYPE.AreanaDef);
+		//CharInfo[] charSet = otherUser.GetCharSet (PARTY_TYPE.AreanaDef);
 		for (int i = 0; i < m_otherTeamFormation.Length; i++) {
 			if (charSet [i] != null) {
 				m_otherTeamFormation [i].spriteName = charSet [i].spriteName;

@@ -13,10 +13,16 @@ public class AreanaRankingPanel : PanelBase {
 			GuiMgr.GetInst ().PopPnl ();
 			break;
 
+		case "btn_other_user_party_info_0":
 		case "btn_other_user_party_info_1":
 		case "btn_other_user_party_info_2":
-		case "btn_other_user_party_info_3":
-			GlobalApp.Inst.userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1)) -1;
+			GlobalApp.Inst.userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+
+			int userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			User otherUser = GlobalApp.Inst.commData.GetHighRankUsers()[userIndex];
+			Party otherUserAreanaDefParty = otherUser.GetParty (PARTY_TYPE.AreanaDef);
+			GlobalApp.Inst.SetCachedParties (otherUserAreanaDefParty);
+
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.OtherUserPartyInfo, false);
 			break;
 		}
@@ -34,12 +40,12 @@ public class AreanaRankingPanel : PanelBase {
 		m_userMainCharacter = transform.FindChild ("user_info").GetComponent<UISprite> ();
 
 		m_labels = new UILabel[14];
-		m_labels [0] = transform.FindChild ("other_user_info_1/lbl_info1").GetComponent<UILabel> ();
-		m_labels [1] = transform.FindChild ("other_user_info_1/lbl_info2").GetComponent<UILabel> ();
-		m_labels [2] = transform.FindChild ("other_user_info_2/lbl_info1").GetComponent<UILabel> ();
-		m_labels [3] = transform.FindChild ("other_user_info_2/lbl_info2").GetComponent<UILabel> ();
-		m_labels [4] = transform.FindChild ("other_user_info_3/lbl_info1").GetComponent<UILabel> ();
-		m_labels [5] = transform.FindChild ("other_user_info_3/lbl_info2").GetComponent<UILabel> ();
+		m_labels [0] = transform.FindChild ("other_user_info_0/lbl_info1").GetComponent<UILabel> ();
+		m_labels [1] = transform.FindChild ("other_user_info_0/lbl_info2").GetComponent<UILabel> ();
+		m_labels [2] = transform.FindChild ("other_user_info_1/lbl_info1").GetComponent<UILabel> ();
+		m_labels [3] = transform.FindChild ("other_user_info_1/lbl_info2").GetComponent<UILabel> ();
+		m_labels [4] = transform.FindChild ("other_user_info_2/lbl_info1").GetComponent<UILabel> ();
+		m_labels [5] = transform.FindChild ("other_user_info_2/lbl_info2").GetComponent<UILabel> ();
 
 		m_labels [6] = transform.FindChild ("other_user_info_x/scv_oui_scroll_view/wrap_content/spr_cell_0/lbl_info_1").GetComponent<UILabel> ();
 		m_labels [7] = transform.FindChild ("other_user_info_x/scv_oui_scroll_view/wrap_content/spr_cell_0/lbl_info_2").GetComponent<UILabel> ();
@@ -51,9 +57,9 @@ public class AreanaRankingPanel : PanelBase {
 		m_labels [13] = transform.FindChild ("other_user_info_x/scv_oui_scroll_view/wrap_content/spr_cell_3/lbl_info_2").GetComponent<UILabel> ();
 
 		m_sprites = new UISprite[7];//3];
-		m_sprites [0] = transform.FindChild ("other_user_info_1/btn_other_user_party_info_1").GetComponent<UISprite> ();
-		m_sprites [1] = transform.FindChild ("other_user_info_2/btn_other_user_party_info_2").GetComponent<UISprite> ();
-		m_sprites [2] = transform.FindChild ("other_user_info_3/btn_other_user_party_info_3").GetComponent<UISprite> ();
+		m_sprites [0] = transform.FindChild ("other_user_info_0/btn_other_user_party_info_0").GetComponent<UISprite> ();
+		m_sprites [1] = transform.FindChild ("other_user_info_1/btn_other_user_party_info_1").GetComponent<UISprite> ();
+		m_sprites [2] = transform.FindChild ("other_user_info_2/btn_other_user_party_info_2").GetComponent<UISprite> ();
 		m_sprites [3] = transform.FindChild ("other_user_info_x/scv_oui_scroll_view/wrap_content/spr_cell_0/spr_character/spr_character_thumbnail").GetComponent<UISprite> ();
 		m_sprites [4] = transform.FindChild ("other_user_info_x/scv_oui_scroll_view/wrap_content/spr_cell_1/spr_character/spr_character_thumbnail").GetComponent<UISprite> ();
 		m_sprites [5] = transform.FindChild ("other_user_info_x/scv_oui_scroll_view/wrap_content/spr_cell_2/spr_character/spr_character_thumbnail").GetComponent<UISprite> ();
@@ -70,12 +76,14 @@ public class AreanaRankingPanel : PanelBase {
 	void OnEnable() {
 		StringBuilder sb = new StringBuilder ();
 
-		User userInfo = GlobalApp.Inst.userData.m_user;
+		User userInfo = GlobalApp.Inst.userData.GetUser();
 		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.GetPartyFightingPower(PARTY_TYPE.AreanaAtk));
 		m_userInfo.text = sb.ToString ();
-		m_userMainCharacter.spriteName = userInfo.m_mainCharacterName;
+		m_userMainCharacter.spriteName = userInfo.GetCharSet (PARTY_TYPE.AreanaAtk)[0].spriteName;
+		//otherUserInfos [i].GetCharSet (PARTY_TYPE.AreanaDef)[0].spriteName;
 
-		User[] users = GlobalApp.Inst.commData.m_highRankUsers;
+
+		User[] users = GlobalApp.Inst.commData.GetHighRankUsers();
 		for (int i = 0; i < 3 * 2; i+=2) {
 			sb.Length = 0;
 			sb.AppendFormat ("Level {0} {1}", users [i/2].m_nLevel, users [i/2].m_nickName);
@@ -83,7 +91,7 @@ public class AreanaRankingPanel : PanelBase {
 			sb.Length = 0;
 			sb.AppendFormat ("Power {0}", users[i/2].GetPartyFightingPower(PARTY_TYPE.AreanaDef));
 			m_labels [i + 1].text = sb.ToString ();
-			m_sprites [i / 2].spriteName = users[i/2].m_mainCharacterName;
+			m_sprites [i / 2].spriteName = users[i/2].GetCharSet (PARTY_TYPE.AreanaDef)[0].spriteName;
 		}
 
 		for (int i = 6; i < 14; i += 2) {
@@ -93,7 +101,7 @@ public class AreanaRankingPanel : PanelBase {
 			sb.Length = 0;
 			sb.AppendFormat ("Power {0}\nGuild {1}", users[i/2].GetPartyFightingPower(PARTY_TYPE.AreanaDef), users[i/2].m_guildName);
 			m_labels [i + 1].text = sb.ToString ();
-			m_sprites [i / 2].spriteName = users [i / 2].m_mainCharacterName;
+			m_sprites [i / 2].spriteName = users [i / 2].GetCharSet (PARTY_TYPE.AreanaDef)[0].spriteName;
 		}
 	}
 

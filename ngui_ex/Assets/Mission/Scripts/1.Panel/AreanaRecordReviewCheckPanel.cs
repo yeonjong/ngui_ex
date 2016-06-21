@@ -53,7 +53,7 @@ public class AreanaRecordReviewCheckPanel : PanelBase {
 	void OnEnable() {
 		StringBuilder sb = new StringBuilder ();
 
-		RecordInfo record = GlobalApp.Inst.commData.recordList[0]; // TODO: get real index from pnl_areana_record!!!
+		RecordInfo record = GlobalApp.Inst.commData.GetRecordList()[0]; // TODO: get real index from pnl_areana_record!!!
 
 		User user = record.m_userInfo;
 		sb.AppendFormat ("Level {0} {1}", user.m_nLevel, user.m_nickName);

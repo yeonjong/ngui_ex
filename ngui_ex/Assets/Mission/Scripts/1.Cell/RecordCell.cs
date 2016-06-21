@@ -24,7 +24,7 @@ public class RecordCell : MonoBehaviour {
 			Awake ();
 
 		m_sprites [0].spriteName = recordInfo.m_isWin ? "UISliderHandle" : "Unity - Check Mark";
-		m_sprites [1].spriteName = recordInfo.m_otherUserInfo.m_mainCharacterName;
+		m_sprites [1].spriteName = recordInfo.m_otherUserInfo.GetCharSet (PARTY_TYPE.AreanaDef)[0].spriteName;
 
 		StringBuilder sb = new StringBuilder ();
 		sb.AppendFormat ("Level {0} {1}\nGuild {2}\nPower {3}",

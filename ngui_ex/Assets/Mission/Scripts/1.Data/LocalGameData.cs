@@ -5,12 +5,32 @@ using System.Collections.Generic;
 
 /* common data */
 public partial class LocalGameData {
-	public User[] m_areanaUsers;
-	public User[] m_highRankUsers;		//TODO: convert to list?
-	public User[] m_strHighRankUsers;	//TODO: convert to list?
+	private User[] m_areanaUsers;
+	public User[] GetAreanaUsers() {
+		Debug.Log ("!!Get areana other user");
+		return m_areanaUsers;
+	}
+	private User[] m_highRankUsers;		//TODO: convert to list?
+	public User[] GetHighRankUsers() {
+		Debug.Log ("!!Get high rank other user");
+		return m_highRankUsers;
+	}
+	private User[] m_strHighRankUsers;	//TODO: convert to list?
+	public User[] GetStrHighRankUsers() {
+		Debug.Log ("!!Get str high rank other user");
+		return m_strHighRankUsers;
+	}
 
-	public List<RecordInfo> recordList;
-	public List<RecordInfo> strRecordList;
+	private List<RecordInfo> recordList;
+	public List<RecordInfo> GetRecordList() {
+		Debug.Log ("!!Get record list");
+		return recordList;
+	}
+	private List<RecordInfo> strRecordList;
+	public List<RecordInfo> GetStrRecordList() {
+		Debug.Log ("!!Get str record list");
+		return strRecordList;
+	}
 
 	public Dictionary<int, RewardInfo> rewardDicByScore = new Dictionary<int, RewardInfo>();
 
@@ -32,6 +52,7 @@ public partial class LocalGameData {
 	public User[] GetAreanaUsers(bool reset) {// = false) {
 		if (reset)
 			ResetAreanaUsers ();
+		Debug.Log ("!!Get areana other user");
 		return m_areanaUsers;
 	}
 
@@ -45,7 +66,7 @@ public partial class LocalGameData {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 		 
 		for (int i = 0; i < FixedConstantValue.AREANA_USER_NUM; i++) {
-			m_areanaUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			m_areanaUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21));
 
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaDefParty = new Party ();
@@ -91,7 +112,7 @@ public partial class LocalGameData {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 		for (int i = 0; i < m_highRankUsers.Length; i++) {
-			m_highRankUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			m_highRankUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21));
 
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaDefParty = new Party ();
@@ -123,7 +144,7 @@ public partial class LocalGameData {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 		for (int i = 0; i < m_strHighRankUsers.Length; i++) {
-			m_strHighRankUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			m_strHighRankUsers [i] = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21));
 
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party strAreanaDefParty = new Party ();
@@ -169,7 +190,7 @@ public partial class LocalGameData {
 		string[] randomCharacterNames = { "IconHellephant", "IconPlayer", "IconZomBear", "IconZomBunny" };
 
 		for (int i = 0; i < 6; i++) {
-			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21));
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaAtkParty = new Party ();
 			for (int j = 0; j < 1; j++) {
@@ -186,7 +207,7 @@ public partial class LocalGameData {
 			user.SetPartyDic (partyDic);
 
 
-			User otheruser = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			User otheruser = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21));
 			Dictionary<PARTY_TYPE, Party> otherUserPartyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaDefParty = new Party ();
 			for (int j = 0; j < 1; j++) {
@@ -206,7 +227,7 @@ public partial class LocalGameData {
 		}
 
 		for (int i = 0; i < 6; i++) {
-			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			User user = new User ("jipsa", UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21));
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party strAreanaAtkParty = new Party ();
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
@@ -222,7 +243,7 @@ public partial class LocalGameData {
 			partyDic.Add (PARTY_TYPE.StrAreanaAtk, strAreanaAtkParty);
 			user.SetPartyDic (partyDic);
 
-			User otheruser = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21), randomCharacterNames[UnityEngine.Random.Range(0,4)]);
+			User otheruser = new User (UnityEngine.Random.Range(10000,20000).ToString(), UnityEngine.Random.Range(1,101), UnityEngine.Random.Range(1,21));
 			Dictionary<PARTY_TYPE, Party> otherUserPartyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party strAreanaDefParty = new Party ();
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {

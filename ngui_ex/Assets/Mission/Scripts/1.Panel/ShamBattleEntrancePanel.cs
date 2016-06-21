@@ -14,9 +14,15 @@ public class ShamBattleEntrancePanel : PanelBase {
 			GuiMgr.GetInst ().PopPnl ();
 			break;
 		case "btn_attack_party_edit":
+			
+			GlobalApp.Inst.SetCachedParties (shamAtk, shamDef);
+
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AttackPartyEdit);
 			break;
 		case "btn_defense_party_edit":
+
+			GlobalApp.Inst.SetCachedParties (shamDef);
+
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.DefensePartyEdit);
 			break;
 		case "btn_map_choice":
@@ -38,10 +44,15 @@ public class ShamBattleEntrancePanel : PanelBase {
 		case "btn_atk_party_character_info5":
 		case "btn_atk_party_character_info6":
 		case "btn_atk_party_character_info7":
-			GlobalApp.Inst.SetCachedParties (shamAtk);
-			GlobalApp.Inst.SetBtnIndex (Int32.Parse (btnName.Substring (btnName.Length - 1)));
-			//charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
-			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
+
+			int index = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			if (!m_atkPartySprites [index].spriteName.Equals (FixedConstantValue.EMPTY_SPRITE_NAME)) {
+				GlobalApp.Inst.SetCachedParties (shamAtk);
+				GlobalApp.Inst.SetBtnIndex (Int32.Parse (btnName.Substring (btnName.Length - 1)));
+				//charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+				GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
+			}
+
 			break;
 
 		case "btn_def_party_formation_info":
@@ -56,10 +67,13 @@ public class ShamBattleEntrancePanel : PanelBase {
 		case "btn_def_party_character_info5":
 		case "btn_def_party_character_info6":
 		case "btn_def_party_character_info7":
-			GlobalApp.Inst.SetCachedParties (shamDef);
-			GlobalApp.Inst.SetBtnIndex (Int32.Parse (btnName.Substring (btnName.Length - 1)));
-			//GlobalApp.Inst.charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
-			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
+			int index2 = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			if (!m_atkPartySprites [index2].spriteName.Equals (FixedConstantValue.EMPTY_SPRITE_NAME)) {
+				GlobalApp.Inst.SetCachedParties (shamDef);
+				GlobalApp.Inst.SetBtnIndex (Int32.Parse (btnName.Substring (btnName.Length - 1)));
+				//GlobalApp.Inst.charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+				GuiMgr.GetInst ().PushPnl (PANEL_TYPE.CharacterInfo, false);
+			}
 			break;
 		}
 	}
@@ -103,9 +117,13 @@ public class ShamBattleEntrancePanel : PanelBase {
 	Party shamAtk;
 	Party shamDef;
 	void OnEnable() {
-		User user = GlobalApp.Inst.userData.m_user;
+		User user = GlobalApp.Inst.userData.GetUser();
 		shamAtk = user.GetParty (PARTY_TYPE.ShamAtk);
-		shamDef = user.GetParty (PARTY_TYPE.ShamAtk);
+		shamDef = user.GetParty (PARTY_TYPE.ShamDef);
+
+
+		StringBuilder sb = new StringBuilder ();
+		sb.Append ("atk ");
 
 		/* atk party */
 		CharInfo[] charSet = shamAtk.m_charSetList [0];
@@ -113,6 +131,8 @@ public class ShamBattleEntrancePanel : PanelBase {
 		int fightingPower = 0;
 		for (int i = 0; i < FixedConstantValue.PARTY_MAX_CHAR_NUM; i++) {
 			if (charSet [i] != null) {
+				sb.AppendFormat ("{0}, ", charSet [i].spriteName);
+
 				cost += charSet [i].cost;
 				fightingPower += charSet [i].fightingPower;
 				m_atkPartySprites [i].spriteName = charSet [i].spriteName;
@@ -120,7 +140,10 @@ public class ShamBattleEntrancePanel : PanelBase {
 				m_atkPartySprites [i].spriteName = FixedConstantValue.EMPTY_SPRITE_NAME;
 			}
 		}
-		StringBuilder sb = new StringBuilder ();
+		Debug.Log (sb.ToString());
+
+		//StringBuilder sb = new StringBuilder ();
+		sb.Length = 0;
 		sb.AppendFormat ("Power {0}", fightingPower);
 		m_atkPartyLabels [0].text = sb.ToString ();
 		sb.Length = 0;
@@ -130,10 +153,14 @@ public class ShamBattleEntrancePanel : PanelBase {
 
 		/* def party */
 		charSet = shamDef.m_charSetList [0];
+		sb.Length = 0;
+		sb.Append ("def ");
 		cost = 0;
 		fightingPower = 0;
 		for (int i = 0; i < FixedConstantValue.PARTY_MAX_CHAR_NUM; i++) {
 			if (charSet [i] != null) {
+				sb.AppendFormat ("{0}, ", charSet [i].spriteName);
+
 				cost += charSet [i].cost;
 				fightingPower += charSet [i].fightingPower;
 				m_defPartySprites [i].spriteName = charSet [i].spriteName;
@@ -141,6 +168,8 @@ public class ShamBattleEntrancePanel : PanelBase {
 				m_defPartySprites [i].spriteName = FixedConstantValue.EMPTY_SPRITE_NAME;
 			}
 		}
+		Debug.Log (sb.ToString());
+
 		sb.Length = 0;
 		sb.AppendFormat ("Power {0}", fightingPower);
 		m_defPartyLabels [0].text = sb.ToString ();

@@ -15,13 +15,36 @@ public class AreanaEntrancePanel : PanelBase {
 		case "btn_other_user_party_info1":
 		case "btn_other_user_party_info2":
 		case "btn_other_user_party_info3":
-			GlobalApp.Inst.userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			GlobalApp.Inst.userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1)); //delete.
+
+
+			int userIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			User otherUser = GlobalApp.Inst.commData.GetAreanaUsers() [userIndex];
+			Party otherUserAreanaDefParty = otherUser.GetParty (PARTY_TYPE.AreanaDef);
+			GlobalApp.Inst.SetCachedParties (otherUserAreanaDefParty);
+
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.OtherUserPartyInfo, false);
 			break;
-		case "btn_attack_party_edit":
+		case "btn_attack_party_edit_0":
+		case "btn_attack_party_edit_1":
+		case "btn_attack_party_edit_2":
+		case "btn_attack_party_edit_3":
+
+			int userIndex2 = Int32.Parse (btnName.Substring (btnName.Length - 1));
+			User otherUser2 = GlobalApp.Inst.commData.GetAreanaUsers() [userIndex2];
+			Party otherUserAreanaDefParty2 = otherUser2.GetParty (PARTY_TYPE.AreanaDef);
+			User user2 = GlobalApp.Inst.userData.GetUser();
+			Party userAreanaAtkParty2 = user2.GetParty (PARTY_TYPE.AreanaAtk);
+			GlobalApp.Inst.SetCachedParties (userAreanaAtkParty2, otherUserAreanaDefParty2);
+
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AttackPartyEdit);
 			break;
 		case "btn_defense_party_edit":
+
+			User user3 = GlobalApp.Inst.userData.GetUser();
+			Party userAreanaDefParty3 = user3.GetParty (PARTY_TYPE.AreanaDef);
+			GlobalApp.Inst.SetCachedParties (userAreanaDefParty3);
+
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.DefensePartyEdit);
 			break;
 		case "btn_reset":
@@ -85,10 +108,15 @@ public class AreanaEntrancePanel : PanelBase {
 		StringBuilder sb = new StringBuilder ();
 		//sb.Length = 0;
 
-		User userInfo = GlobalApp.Inst.userData.m_user;
+		User userInfo = GlobalApp.Inst.userData.GetUser();
 		sb.AppendFormat ("Rank {0}\nPower {1}", userInfo.m_nAreanaRank, userInfo.GetPartyFightingPower(PARTY_TYPE.AreanaAtk));
 		m_userInfo.text = sb.ToString ();
-		m_userMainCharacter.spriteName = userInfo.m_mainCharacterName;
+
+		if (userInfo.GetCharSet (PARTY_TYPE.AreanaAtk) == null)
+			Debug.Log ("null");
+		else
+			Debug.Log ("not null");
+		m_userMainCharacter.spriteName = userInfo.GetCharSet (PARTY_TYPE.AreanaAtk)[0].spriteName;
 
 		Reset ();
 	}
