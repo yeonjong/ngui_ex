@@ -50,7 +50,7 @@ public partial class LocalGameData {
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaDefParty = new Party ();
 			for (int j = 0; j < 1; j++) {
-				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 				
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
@@ -62,7 +62,7 @@ public partial class LocalGameData {
 
 			Party strAreanaDefParty = new Party ();
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
-				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
@@ -96,7 +96,7 @@ public partial class LocalGameData {
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaDefParty = new Party ();
 			for (int j = 0; j < 1; j++) {
-				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
@@ -128,7 +128,7 @@ public partial class LocalGameData {
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party strAreanaDefParty = new Party ();
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
-				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
@@ -173,7 +173,7 @@ public partial class LocalGameData {
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaAtkParty = new Party ();
 			for (int j = 0; j < 1; j++) {
-				areanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				areanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
@@ -190,7 +190,7 @@ public partial class LocalGameData {
 			Dictionary<PARTY_TYPE, Party> otherUserPartyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party areanaDefParty = new Party ();
 			for (int j = 0; j < 1; j++) {
-				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				areanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
@@ -210,7 +210,7 @@ public partial class LocalGameData {
 			Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party strAreanaAtkParty = new Party ();
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
-				strAreanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				strAreanaAtkParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {
@@ -226,7 +226,7 @@ public partial class LocalGameData {
 			Dictionary<PARTY_TYPE, Party> otherUserPartyDic = new Dictionary<PARTY_TYPE, Party> ();
 			Party strAreanaDefParty = new Party ();
 			for (int j = 0; j < FixedConstantValue.STRONG_ARENA_PARTY_NUM; j++) {
-				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+				strAreanaDefParty.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
 				for (int k = 0; k < charSet.Length; k++) {

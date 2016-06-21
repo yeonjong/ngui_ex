@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -25,22 +26,50 @@ public partial class LocalSaveData {
 		/* character dictionary */
 		Dictionary<int, CharInfo> characterDic = new Dictionary<int, CharInfo> ();
 		for (int i = 0; i < FixedConstantValue.IMSI_USER_CHAR_GEN_NUM; i++) { // this user have 48 characters;
-			CharInfo character = new CharInfo(i * 10 + i, randomCharacterNames[Random.Range(0, 4)], Random.Range(1, 8), 1);
+			CharInfo character = new CharInfo(i * 10 + i, randomCharacterNames[UnityEngine.Random.Range(0, 4)], UnityEngine.Random.Range(1, 8), 1);
 			characterDic.Add (character.id, character);
 		}
 		m_user.SetCharacterDic (characterDic);
 
 		/* party dictionary */
 		Dictionary<PARTY_TYPE, Party> partyDic = new Dictionary<PARTY_TYPE, Party> ();
-		for (int i = 0; i < 7; i++) {
+
+		for (int i = 0; i < Enum.GetNames(typeof(PARTY_TYPE)).Length; i++) {
 			Party party = new Party ();
-			for (int j = 0; j < FixedConstantValue.DUNGEION_PARTY_NUM; j++) {
-				party.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (1, 9)) );
+
+			int max;
+			if (i == (int)PARTY_TYPE.Dungeon)
+				max = FixedConstantValue.DUNGEION_PARTY_NUM;
+			else if (i == (int)PARTY_TYPE.StrAreanaAtk || i == (int)PARTY_TYPE.StrAreanaDef)
+				max = FixedConstantValue.STRONG_ARENA_PARTY_NUM;
+			else
+				max = FixedConstantValue.OTHER_PARTY_NUM;
+
+			for (int j = 0; j < max; j++) {
+				party.m_formList.Add( FormInfo.GetFormInfo (UnityEngine.Random.Range (0, 8)) );
 
 				CharInfo[] charSet = new CharInfo[FixedConstantValue.PARTY_MAX_CHAR_NUM];
+				List<int> duplicationCheckList = new List<int> ();
 				for (int k = 0; k < charSet.Length; k++) {
-					int randomCharID = Random.Range (0, FixedConstantValue.IMSI_USER_CHAR_GEN_NUM + 1);
-					if (randomCharID == FixedConstantValue.IMSI_USER_CHAR_GEN_NUM) {
+					int randomCharID;
+					while (true) {
+						bool isDuplication = false;
+						randomCharID = UnityEngine.Random.Range (0, FixedConstantValue.IMSI_USER_CHAR_GEN_NUM + 3);
+
+						for (int l = 0; l < duplicationCheckList.Count; l++) {
+							if (duplicationCheckList [l] == randomCharID) {
+								isDuplication = true;
+								break;
+							}
+						}
+
+						if (isDuplication == false) {
+							duplicationCheckList.Add (randomCharID);
+							break;
+						}
+					}
+
+					if (randomCharID >= FixedConstantValue.IMSI_USER_CHAR_GEN_NUM) {
 						charSet [k] = null;
 					} else {
 						randomCharID = randomCharID * 10 + randomCharID;
@@ -58,10 +87,7 @@ public partial class LocalSaveData {
 		m_key = new Key (5, 4);
 	}
 }
-
-
-
-
+	
 
 
 
@@ -86,14 +112,96 @@ public partial class User {
 	}
 }
 
+public class CharInfoCompare : IComparer {
+
+	int IComparer.Compare(object x, object y)
+	{
+		CharInfo charX = (CharInfo)x;
+		CharInfo charY = (CharInfo)y;
+		int returnValue;
+
+		if (charX.cost == charY.cost) {
+			returnValue = 0;
+		} else if (charX.cost > charY.cost) {
+			returnValue = 1;
+		} else {
+			returnValue = -1;
+		}
+
+
+		//x.cost;
+		//x.starRank;
+		//x.upgradeRank;
+		//x.fightingPower;
+
+		return returnValue; // -1(x < y?), 0(x == y), 1(x > y?)
+	}
+}
+
 public partial class User {
 	/* all character */
 	public void SetCharacterDic(Dictionary<int, CharInfo>  characterDic) {
 		m_charDicByID = characterDic;
 	}
+	/*
 	public List<int> GetCharacterIDList() {
-		return new List<int>(m_charDicByID.Keys);
+		return DoHardSort (new List<int>(m_charDicByID.Keys));
 	}
+	*/
+	public List<CharInfo> GetCharacterList() {
+		return DoHardSort (new List<CharInfo> (m_charDicByID.Values));
+	}
+
+	private static int CompareDinosByLength(CharInfo x, CharInfo y) {
+		int returnValue;
+
+		if (x.cost == y.cost) {									//1. cost
+
+			if (x.starRank == y.starRank) {						//2. starRank
+
+				if (x.upgradeRank == y.upgradeRank) {			//3. upgradeRank
+					
+					if (x.fightingPower == y.fightingPower) {	//4. fightingPower
+						returnValue = 0;
+					} else if (x.fightingPower > y.fightingPower) {
+						returnValue = -1;
+					} else {
+						returnValue = 1;
+					}
+
+				} else if (x.upgradeRank > y.upgradeRank) {
+					returnValue = -1;
+				} else {
+					returnValue = 1;
+				}
+			
+			} else if (x.starRank > y.starRank) {
+				returnValue = -1;
+			} else {
+				returnValue = 1;
+			}
+
+		} else if (x.cost > y.cost) {
+			returnValue = -1;
+		} else {
+			returnValue = 1;
+		}
+
+		return returnValue;
+	}
+
+	private List<CharInfo> DoHardSort(List<CharInfo> origin) {
+		//show before
+
+		//CharInfoCompare compare = (IComparer) new CharInfoCompare ();
+		origin.Sort (CompareDinosByLength);
+
+		//show after
+
+		return origin;
+	}
+
+
 
 	/* party */
 	public void SetPartyDic (Dictionary<PARTY_TYPE, Party> partyDic) {
@@ -131,15 +239,6 @@ public partial class User {
 	}
 }
 
-public enum PARTY_TYPE {
-	Dungeon,
-	AreanaAtk,
-	AreanaDef,
-	StrAreanaAtk,
-	StrAreanaDef,
-	ShamAtk,
-	ShamDef,
-}
 
 public class Party {
 	public List<FormInfo> m_formList = new List<FormInfo> ();

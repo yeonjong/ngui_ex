@@ -117,7 +117,7 @@ public class ShamBattleEntrancePanel : PanelBase {
 				fightingPower += charSet [i].fightingPower;
 				m_atkPartySprites [i].spriteName = charSet [i].spriteName;
 			} else {
-				m_atkPartySprites [i].spriteName = FixedConstantValue.EMPTY_CHAR_SPRITE_NAME;
+				m_atkPartySprites [i].spriteName = FixedConstantValue.EMPTY_SPRITE_NAME;
 			}
 		}
 		StringBuilder sb = new StringBuilder ();
@@ -138,7 +138,7 @@ public class ShamBattleEntrancePanel : PanelBase {
 				fightingPower += charSet [i].fightingPower;
 				m_defPartySprites [i].spriteName = charSet [i].spriteName;
 			} else {
-				m_defPartySprites [i].spriteName = FixedConstantValue.EMPTY_CHAR_SPRITE_NAME;
+				m_defPartySprites [i].spriteName = FixedConstantValue.EMPTY_SPRITE_NAME;
 			}
 		}
 		sb.Length = 0;

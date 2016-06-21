@@ -23,6 +23,6 @@
 
 	public static int IMSI_USER_CHAR_GEN_NUM = 46;//9;//5;//1;
 
-	public const string EMPTY_CHAR_SPRITE_NAME = "btn_9slice_pressed";
+	public const string EMPTY_SPRITE_NAME = "btn_9slice_pressed";
 	public const string BLOCK_SPRITE_NAME = "UISliderBG";
 }

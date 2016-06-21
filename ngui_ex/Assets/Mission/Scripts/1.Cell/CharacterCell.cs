@@ -21,7 +21,8 @@ public class CharacterCell : MonoBehaviour {
 
 		if (current == null && UICamera.currentTouchID != -2 && UICamera.currentTouchID != -3) {
 			current = this;
-			m_panelBase.OnClickXXXCell (m_cellType, m_cellIndex);
+			if (m_cellIndex != -1)
+				m_panelBase.OnClickXXXCell (m_cellType, m_cellIndex);
 			current = null;
 		}
 	}
@@ -44,9 +45,7 @@ public class CharacterCell : MonoBehaviour {
 		m_sprites [2] = transform.FindChild ("spr_character_star_rank").GetComponent<UISprite> ();
 	}
 
-	public void Set(CharInfo charInfo, int cellIndex, bool belongFormation = false) {
-		m_cellIndex = cellIndex;
-
+	public void Set(CharInfo charInfo, int cellIndex, bool belongFormation) {
 		if (m_labels == null)
 			Awake ();
 
@@ -57,6 +56,8 @@ public class CharacterCell : MonoBehaviour {
 		}
 
 		if (charInfo == null) {
+			m_cellIndex = -1;
+
 			m_labels [0].text = "";
 			m_labels [1].text = "";
 			m_labels [2].text = "";
@@ -65,6 +66,8 @@ public class CharacterCell : MonoBehaviour {
 			m_sprites [1].color = Color.clear;
 			m_sprites [2].color = Color.clear;
 		} else {
+			m_cellIndex = cellIndex;
+
 			m_labels [0].text = charInfo.cost.ToString();
 			m_labels [1].text = charInfo.classKind;
 			m_labels [2].text = charInfo.level.ToString();
