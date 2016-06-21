@@ -76,7 +76,10 @@ public partial class LocalSaveData {
 					}
 
 					if (randomCharID >= FixedConstantValue.IMSI_USER_CHAR_GEN_NUM) {
-						charSet [k] = null;
+						if (k == 0)
+							k--;
+						else
+							charSet [k] = null;
 					} else {
 						randomCharID = randomCharID * 10 + randomCharID;
 						charSet [k] = characterDic [randomCharID];

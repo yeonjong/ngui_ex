@@ -15,7 +15,7 @@ public class ShamBattleEntrancePanel : PanelBase {
 			break;
 		case "btn_attack_party_edit":
 			
-			GlobalApp.Inst.SetCachedParties (shamAtk, shamDef);
+			GlobalApp.Inst.SetCachedParties (shamDef, shamAtk);
 
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AttackPartyEdit);
 			break;
@@ -68,7 +68,7 @@ public class ShamBattleEntrancePanel : PanelBase {
 		case "btn_def_party_character_info6":
 		case "btn_def_party_character_info7":
 			int index2 = Int32.Parse (btnName.Substring (btnName.Length - 1));
-			if (!m_atkPartySprites [index2].spriteName.Equals (FixedConstantValue.EMPTY_SPRITE_NAME)) {
+			if (!m_defPartySprites [index2].spriteName.Equals (FixedConstantValue.EMPTY_SPRITE_NAME)) {
 				GlobalApp.Inst.SetCachedParties (shamDef);
 				GlobalApp.Inst.SetBtnIndex (Int32.Parse (btnName.Substring (btnName.Length - 1)));
 				//GlobalApp.Inst.charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));

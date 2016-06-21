@@ -28,10 +28,6 @@ public class AttackPartyEditPanel : PanelBase {
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.FormationInfo, false);
 			break;
 		
-			/*
-		case "btn_character_info":
-			Debug.LogError ("..");
-			break;
 		case "btn_character_info_0":
 		case "btn_character_info_1":
 		case "btn_character_info_2":
@@ -47,7 +43,7 @@ public class AttackPartyEditPanel : PanelBase {
 			}
 			//GlobalApp.Inst.charIndex = Int32.Parse (btnName.Substring (btnName.Length - 1));
 			break;
-		*/
+
 		default:
 			int formNum = Int32.Parse (btnName);
 			ChangeFormation (formNum);
@@ -104,6 +100,11 @@ public class AttackPartyEditPanel : PanelBase {
 
 	private int selectedParty = 0; //TODO: maybe add ui tab and use this variable.
 
+
+	private UILabel m_otherTeamFightingPower;
+	private UISprite[] m_otherTeamFormation;
+
+
 	void Awake() {
 		// set wrap character list.
 		Transform wrapContent = transform.FindChild ("party/scv_party_scroll_view/wrap_content");
@@ -136,7 +137,21 @@ public class AttackPartyEditPanel : PanelBase {
 		// set tween item.
 		tweenPrefab = transform.FindChild("pnl_tween_item").gameObject;
 		tweenQueue = new Queue<GameObject> ();
+
+		// set def team.
+		m_otherTeamFightingPower = transform.FindChild ("other_user_party_info/lbl_def_team_power").GetComponent<UILabel> ();
+
+		m_otherTeamFormation = new UISprite[FixedConstantValue.PARTY_MAX_CHAR_NUM];
+		m_otherTeamFormation [0] = transform.FindChild ("other_user_party_info/btn_character_info_0/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherTeamFormation [1] = transform.FindChild ("other_user_party_info/btn_character_info_1/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherTeamFormation [2] = transform.FindChild ("other_user_party_info/btn_character_info_2/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherTeamFormation [3] = transform.FindChild ("other_user_party_info/btn_character_info_3/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherTeamFormation [4] = transform.FindChild ("other_user_party_info/btn_character_info_4/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherTeamFormation [5] = transform.FindChild ("other_user_party_info/btn_character_info_5/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherTeamFormation [6] = transform.FindChild ("other_user_party_info/btn_character_info_6/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherTeamFormation [7] = transform.FindChild ("other_user_party_info/btn_character_info_7/spr_thumbnail").GetComponent<UISprite> ();
 	}
+
 
 	void OnEnable() {
 		// set real character list.
@@ -182,8 +197,7 @@ public class AttackPartyEditPanel : PanelBase {
 
 		// set formation cell list.
 		Party[] partys = GlobalApp.Inst.GetCachedParties();
-		Party mainParty = partys [0];
-		//Party subParty = partys [1];
+		Party mainParty = partys [1];
 
 		//Party dungeonParty = GlobalApp.Inst.userData.GetUser().GetParty(PARTY_TYPE.Dungeon);
 		if (mainParty == null)
@@ -230,11 +244,33 @@ public class AttackPartyEditPanel : PanelBase {
 		for (int i = 0; i < form.m_Form.Length; i++) {
 			SetFormCell (i);
 		}
+
+		// set def team.
+		Party subParty = partys [0];
+		StringBuilder sb = new StringBuilder ();
+
+		int fightingPower = 0;
+		charSet = subParty.m_charSetList[0];
+		for (int i = 0; i < charSet.Length; i++) {
+			if (charSet[i] != null)
+				fightingPower += charSet [i].fightingPower;
+		}
+		sb.AppendFormat ("Power {0}", fightingPower);
+		m_otherTeamFightingPower.text = sb.ToString ();
+
+		for (int i = 0; i < m_otherTeamFormation.Length; i++) {
+			if (charSet [i] != null) {
+				m_otherTeamFormation [i].spriteName = charSet [i].spriteName;
+			} else
+				m_otherTeamFormation [i].spriteName = "btn_9slice_pressed";
+		}
+
+
 	}
 
 	public void ChangeFormation(int formNum) {
 		Party[] partys = GlobalApp.Inst.GetCachedParties();
-		Party mainParty = partys [0];
+		Party mainParty = partys [1];
 		//Party subParty = partys [1];
 		PARTY_TYPE type = mainParty.type;
 
@@ -288,7 +324,7 @@ public class AttackPartyEditPanel : PanelBase {
 			int charSetIndex = form.m_Form[cellIndex];
 
 			Party[] partys = GlobalApp.Inst.GetCachedParties();
-			Party mainParty = partys [0];
+			Party mainParty = partys [1];
 			PARTY_TYPE type = mainParty.type;
 			GlobalApp.Inst.userData.GetUser().GetParty(type).m_charSetList [selectedParty][charSetIndex] = null;
 			charSet[charSetIndex] = null;
@@ -319,7 +355,7 @@ public class AttackPartyEditPanel : PanelBase {
 			int charSetIndex = form.m_Form [formCellListIndex];
 
 			Party[] partys = GlobalApp.Inst.GetCachedParties();
-			Party mainParty = partys [0];
+			Party mainParty = partys [1];
 			PARTY_TYPE type = mainParty.type;
 			GlobalApp.Inst.userData.GetUser().GetParty(type).m_charSetList [selectedParty][charSetIndex] = null;
 			charSet[charSetIndex] = null;
@@ -378,7 +414,7 @@ public class AttackPartyEditPanel : PanelBase {
 				CharInfo character = realCharList[cellIndex];
 
 				Party[] partys = GlobalApp.Inst.GetCachedParties();
-				Party mainParty = partys [0];
+				Party mainParty = partys [1];
 				PARTY_TYPE type = mainParty.type;
 
 				GlobalApp.Inst.userData.GetUser().GetParty(type).m_charSetList [selectedParty][charSetIndex] = character;
@@ -400,8 +436,8 @@ public class AttackPartyEditPanel : PanelBase {
 					x => tweenObj.GetComponentInChildren<UISprite> ().color = x,
 					0f,
 					0.3f).SetEase (Ease.InQuad).OnComplete (()=>OnTweenFinished (charID, formCellListIndex, cellIndex));
-				//tweenObj.transform.DOLocalMove (formationTweenPosList [targetPos], 0.3f);
-				tweenObj.transform.DOMove (formCellPosList[formCellListIndex], 0.3f).OnComplete(DestroyTweenObj);
+				tweenObj.transform.DOLocalMove (formCellPosList[formCellListIndex], 0.3f).OnComplete(DestroyTweenObj);
+				//tweenObj.transform.DOMove (formCellPosList[formCellListIndex], 0.3f).OnComplete(DestroyTweenObj);
 				//
 				/*
 				formCellListIndexByCharID.Add (charID, formCellListIndex); //.Remove (charID);

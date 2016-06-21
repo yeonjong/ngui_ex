@@ -334,17 +334,38 @@ public class PartyEditPanel : PanelBase {
 				wrapRow = Mathf.Abs (wrapRow + minRowIndex % 4) % 4;
 				int wrapIndex = wrapRow * 4 + cellIndex % 4;
 
-				GameObject tweenObj = gameObject.AddChild(tweenPrefab);
+
+
+
+
+				GameObject tweenObj = gameObject.AddChild(tweenPrefab);//gameObject.AddChild(tweenPrefab);
 				tweenObj.GetComponentInChildren<UISprite> ().spriteName = realCharList[cellIndex].spriteName;
 				tweenQueue.Enqueue (tweenObj);
 				tweenObj.transform.position = wrapCharList [wrapIndex].transform.position;
-				tweenObj.transform.DOScale (new Vector3(112f/240f, 112f/240f, 0f), 0.3f);
+
+				float time = 0.3f;
+				tweenObj.transform.DOScale (new Vector3 (112f / 240f, 112f / 240f, 0f), time);//0.3f);
 				DOTween.ToAlpha (() => tweenObj.GetComponentInChildren<UISprite> ().color,
 					x => tweenObj.GetComponentInChildren<UISprite> ().color = x,
 					0f,
-					0.3f).SetEase (Ease.InQuad).OnComplete (()=>OnTweenFinished (charID, formCellListIndex, cellIndex));
-				//tweenObj.transform.DOLocalMove (formationTweenPosList [targetPos], 0.3f);
-				tweenObj.transform.DOMove (formCellPosList[formCellListIndex], 0.3f).OnComplete(DestroyTweenObj);
+					time).SetEase (Ease.InQuad).OnComplete (()=>OnTweenFinished (charID, formCellListIndex, cellIndex));
+
+				Debug.Log (formCellPosList[formCellListIndex]);
+				tweenObj.transform.DOLocalMove (formCellPosList[formCellListIndex], time).OnComplete(DestroyTweenObj);
+				//tweenObj.transform.DOMove (formCellPosList[formCellListIndex], time).OnComplete(DestroyTweenObj);
+				/*
+				Sequence seq = DOTween.Sequence ();
+				seq.Append (tweenObj.transform.DOScale (new Vector3 (112f / 240f, 112f / 240f, 0f), 0.3f))
+					.Insert (0f, tweenObj.transform.DOMove (formCellPosList [formCellListIndex], 0.3f))
+					.Insert (0f, DOTween.ToAlpha (() => tweenObj.GetComponentInChildren<UISprite> ().color,
+					x => tweenObj.GetComponentInChildren<UISprite> ().color = x,
+					0f,
+					0.3f));
+				seq.OnComplete (()=>OnTweenFinished (charID, formCellListIndex, cellIndex));
+				*/
+
+
+
 
 				//
 				/*
@@ -372,7 +393,6 @@ public class PartyEditPanel : PanelBase {
 		charCellListIndexByCharID.Add (charID, charCellListIndex);//Remove (charID);
 
 		checkDic.Remove (charCellListIndex);
-
 	}
 
 	private void DestroyTweenObj() {

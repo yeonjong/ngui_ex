@@ -35,7 +35,7 @@ public class AreanaEntrancePanel : PanelBase {
 			Party otherUserAreanaDefParty2 = otherUser2.GetParty (PARTY_TYPE.AreanaDef);
 			User user2 = GlobalApp.Inst.userData.GetUser();
 			Party userAreanaAtkParty2 = user2.GetParty (PARTY_TYPE.AreanaAtk);
-			GlobalApp.Inst.SetCachedParties (userAreanaAtkParty2, otherUserAreanaDefParty2);
+			GlobalApp.Inst.SetCachedParties (otherUserAreanaDefParty2, userAreanaAtkParty2);
 
 			GuiMgr.GetInst ().PushPnl (PANEL_TYPE.AttackPartyEdit);
 			break;
@@ -95,10 +95,10 @@ public class AreanaEntrancePanel : PanelBase {
 		m_otherUserInfos[7] = transform.FindChild ("other_user_info4/lbl_info2").GetComponent<UILabel> ();
 
 		m_otherUserMainCharacters = new UISprite[FixedConstantValue.AREANA_USER_NUM];
-		m_otherUserMainCharacters [0] = transform.FindChild ("other_user_info1/btn_other_user_party_info0").GetComponent<UISprite> ();
-		m_otherUserMainCharacters [1] = transform.FindChild ("other_user_info2/btn_other_user_party_info1").GetComponent<UISprite> ();
-		m_otherUserMainCharacters [2] = transform.FindChild ("other_user_info3/btn_other_user_party_info2").GetComponent<UISprite> ();
-		m_otherUserMainCharacters [3] = transform.FindChild ("other_user_info4/btn_other_user_party_info3").GetComponent<UISprite> ();
+		m_otherUserMainCharacters [0] = transform.FindChild ("other_user_info1/btn_other_user_party_info0/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherUserMainCharacters [1] = transform.FindChild ("other_user_info2/btn_other_user_party_info1/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherUserMainCharacters [2] = transform.FindChild ("other_user_info3/btn_other_user_party_info2/spr_thumbnail").GetComponent<UISprite> ();
+		m_otherUserMainCharacters [3] = transform.FindChild ("other_user_info4/btn_other_user_party_info3/spr_thumbnail").GetComponent<UISprite> ();
 	
 		m_areanaKey = transform.FindChild ("lbl_areana_key").GetComponent<UILabel>();
 	}
@@ -116,6 +116,7 @@ public class AreanaEntrancePanel : PanelBase {
 			Debug.Log ("null");
 		else
 			Debug.Log ("not null");
+		
 		m_userMainCharacter.spriteName = userInfo.GetCharSet (PARTY_TYPE.AreanaAtk)[0].spriteName;
 
 		Reset ();
